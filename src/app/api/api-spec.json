@@ -193,24 +193,28 @@
                                         }
                                     }
                                 },
-                                "example": [
-                                    {
-                                        "userID": "zirrah123",
-                                        "accountID": "uniqueAccountID",
-                                        "type": "income",
-                                        "amount": 50000,
-                                        "date": "timestamp",
-                                        "description": "transfer"
+                                "examples": {
+                                    "income": {
+                                        "value": {
+                                            "userID": "zirrah123",
+                                            "accountID": "uniqueAccountID",
+                                            "type": "income",
+                                            "amount": 50000,
+                                            "date": "timestamp",
+                                            "description": "transfer"
+                                        }
                                     },
-                                    {
-                                        "userID": "zirrah123",
-                                        "accountID": "uniqueAccountID",
-                                        "type": "expense",
-                                        "amount": 10000,
-                                        "date": "timestamp",
-                                        "description": "beli uduk"
+                                    "expense": {
+                                        "value": {
+                                            "userID": "zirrah123",
+                                            "accountID": "uniqueAccountID",
+                                            "type": "expense",
+                                            "amount": 10000,
+                                            "date": "timestamp",
+                                            "description": "beli uduk"
+                                        }
                                     }
-                                ]
+                                }
                             }
                         }
                     },
