@@ -16,10 +16,11 @@
     "paths": {
         "/dashboard": {
             "get": {
+                "description": "Getting accountID/wallet users data",
                 "tags": ["dashboard"],
                 "responses": {
                     "200": {
-                        "description": "",
+                        "description": "success getting data",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -69,11 +70,11 @@
                         }
                     },
                     "400": {
-                        "description": "...",
+                        "description": "bad request",
                         "content": {
                             "application/json": {
                                 "example": {
-                                    "errors": "Failed to get the data"
+                                    "errors": "bad request"
                                 }
                             }
                         }
@@ -99,7 +100,7 @@
                                                 "type": "string",
                                                 "nullable": false
                                             },
-                                            "userID": {
+                                            "accountID": {
                                                 "type": "string",
                                                 "nullable": false
                                             },
@@ -125,7 +126,7 @@
                                 "example": [
                                     {
                                         "transactionID": "qwertyuiop",
-                                        "userID": "zirrah123",
+                                        "accountID": "uniqueAccountID",
                                         "type": "income",
                                         "amount": 100000,
                                         "date": "timestamp",
@@ -133,7 +134,7 @@
                                     },
                                     {
                                         "transactionID": "zxcvbnm",
-                                        "userID": "zirrah123",
+                                        "accountID": "uniqueAccountID",
                                         "type": "expense",
                                         "amount": 50000,
                                         "date": "timestamp",
@@ -170,6 +171,10 @@
                                             "type": "string",
                                             "nullable": false
                                         },
+                                        "accountID": {
+                                            "type": "string",
+                                            "nullable": false
+                                        },
                                         "type": {
                                             "type": "string",
                                             "nullable": false
@@ -191,6 +196,7 @@
                                 "example": [
                                     {
                                         "userID": "zirrah123",
+                                        "accountID": "uniqueAccountID",
                                         "type": "income",
                                         "amount": 50000,
                                         "date": "timestamp",
@@ -198,6 +204,7 @@
                                     },
                                     {
                                         "userID": "zirrah123",
+                                        "accountID": "uniqueAccountID",
                                         "type": "expense",
                                         "amount": 10000,
                                         "date": "timestamp",
@@ -209,6 +216,81 @@
                     },
                     "400": {
                         "description": "Failed to create new transaction",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "errors": "Bad request"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/reports": {          
+            "get": {
+                "description": "Getting reports income and expense data",
+                "tags": ["reports"],
+                "responses": {
+                    "200": {
+                        "description": "Success getting data",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "transactionID": {
+                                                "type": "string",
+                                                "nullable": false
+                                            },
+                                            "accountID": {
+                                                "type": "string",
+                                                "nullable": false
+                                            },
+                                            "type": {
+                                                "type": "string",
+                                                "nullable": false
+                                            },
+                                            "amount": {
+                                                "type": "number",
+                                                "nullable": false
+                                            },
+                                            "date": {
+                                                "type": "string",
+                                                "nullable": false
+                                            },
+                                            "description": {
+                                                "type": "string",
+                                                "nullable": true
+                                            }
+                                        }
+                                    }
+                                },
+                                "example": [
+                                    {
+                                        "transactionID": "qwertyuiop",
+                                        "accountID": "uniqueAccountID",
+                                        "type": "income",
+                                        "amount": 100000,
+                                        "date": "timestamp",
+                                        "description": "Transfer mamah"
+                                    },
+                                    {
+                                        "transactionID": "zxcvbnm",
+                                        "accountID": "uniqueAccountID",
+                                        "type": "expense",
+                                        "amount": 50000,
+                                        "date": "timestamp",
+                                        "description": "Beli hotwheel"
+                                    }
+                                ]
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "bad request",
                         "content": {
                             "application/json": {
                                 "example": {
