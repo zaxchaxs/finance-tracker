@@ -9,13 +9,12 @@ const Register = () => {
     const handleSubmit = async (e) => {
       e.preventDefault();
       try {
-        const user = await registerWithEmailAndPassword(email, password);
-        console.log('Registration successful:', user);
+        await registerWithEmailAndPassword(email, password);
       } catch (error) {
         console.error('Registration failed:', error.message);
       }
     };
-  
+
     return (
       <form onSubmit={handleSubmit}>
         <input className='text-black' type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email" required />
