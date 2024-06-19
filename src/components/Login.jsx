@@ -3,11 +3,13 @@ import { useEffect, useState } from 'react';
 import { loginWithEmailAndPassword, logout } from '../../utils/auth';
 import { auth, db } from '../../utils/firebase';
 import { DocumentReference, collection, doc, getDoc, getDocs, query, where } from 'firebase/firestore';
+import { useRouter } from 'next/navigation';
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [user, setUser] = useState("");
+  const router = useRouter();
 
   useEffect(() => {
     setUser(auth.currentUser)
@@ -66,6 +68,7 @@ const Login = () => {
           required
         />
         <button type="submit">Login</button>
+        <button className='mx-10' onClick={() => router.back()}>back</button>
       </form>
     <button onClick={handleLogout} className={`${auth ? "" : "hidden"}`}>Logout</button>
     </>
