@@ -1,6 +1,8 @@
+'use server'
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "firebase/auth";
 import { auth, db } from "./firebase";
 import { doc, setDoc } from "firebase/firestore";
+import { cookies } from "next/headers";
 
 export const registerWithEmailAndPassword = async (email, password) => {
     try{
@@ -17,13 +19,15 @@ export const registerWithEmailAndPassword = async (email, password) => {
         const userRef = doc(db, "users", `${user.uid}`);
         await setDoc(userRef, newData);
     } catch(e) {
-        console.error(e.message);
+        console.error(`${e.message} line 22`);
     }
 };
 
 export const loginWithEmailAndPassword = async (email, password) => {
     try{
         const userCredential = await signInWithEmailAndPassword(auth, email, password);
+        const token = await userCredential.user.getIdToken();
+        cookies().set("userToken", token);
         return userCredential.user;
     } catch(e) {
         console.error(e);
@@ -31,9 +35,10 @@ export const loginWithEmailAndPassword = async (email, password) => {
     }
 };
 
-export const logout = async => {
+export const logout = async () => {
     try {
-        signOut(auth)
+        await signOut(auth)
+        cookies().delete('userToken')
         console.log("success logout");
     } catch(error) {
         console.error(error.message);

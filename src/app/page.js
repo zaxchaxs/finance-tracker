@@ -8,11 +8,12 @@ export default function Home() {
   const router = useRouter();
 
   useEffect(() => {
-    if(!auth.currentUser) {
-      console.log("Belum login");
-    } else {
-      console.log(`Sudah login ${auth.currentUser.email}`);
-    }
+    // if(!auth.currentUser) {
+    //   console.log("Belum login");
+    // } else {
+    //   console.log(`Sudah login ${auth.currentUser.email}`);
+    // }
+
   })
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
