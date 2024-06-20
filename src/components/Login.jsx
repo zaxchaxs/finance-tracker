@@ -1,10 +1,10 @@
 "use client";
 import { useEffect, useState } from "react";
-import { loginWithEmailAndPassword, logout } from "../../utils/auth";
-import { auth, db } from "../../utils/firebase";
+import { auth, db } from "../../libs/firebase";
 import {doc,
   getDoc,} from "firebase/firestore";
 import { useRouter } from "next/navigation";
+import { loginWithEmailAndPassword, logout } from "../../libs/auth";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -13,34 +13,30 @@ const Login = () => {
   const router = useRouter();
 
   useEffect(() => {
-    if (auth.currentUser) console.log("Sudah login brow");
+    if (auth.currentUser) {
+      console.log(`user : ${auth.currentUser.email}`)
+      setUser(auth.currentUser)
+    };
   }, []);
 
   const handleLoginSubmit = async (e) => {
     e.preventDefault();
-
     try {
       setEmail("");
       setPassword("");
 
       // firebase auth
       const currUser = await loginWithEmailAndPassword(email, password);
-      if (!currUser) throw Error;
-      // cookies.set("token", token);
-      // const token = await currUser.getIdToken();
-      // cookies().set("UserToken", token);
+      console.log(currUser.email);
 
       // checking user from firestore
-      const userRef = doc(db, "users", currUser.uid);
-      const docSnap = await getDoc(userRef);
-      if (!docSnap.exists()) {
-        console.log("Kosong");
-      } else {
-        console.log("ada");
-      }
-
-
-      console.log("Token:" + token);
+      // const userRef = doc(db, "users", currUser.uid);
+      // const docSnap = await getDoc(userRef);
+      // if (!docSnap.exists()) {
+      //   console.log("Kosong");
+      // } else {
+      //   console.log("ada");
+      // }
     } catch (error) {
       console.error("Login failed:", error.message);
     }
@@ -49,7 +45,6 @@ const Login = () => {
   const handleLogout = async () => {
     try {
       logout();
-      
     } catch (error) {
       console.error(error.message);
     }
@@ -57,7 +52,7 @@ const Login = () => {
 
   return (
     <>
-      <form onSubmit={handleLoginSubmit}>
+      <form onSubmit={e => handleLoginSubmit(e)}>
         <input
           className="text-black"
           type="email"
@@ -79,7 +74,7 @@ const Login = () => {
           back
         </button>
       </form>
-      <button onClick={handleLogout} className={`${auth ? "" : "hidden"}`}>
+      <button onClick={handleLogout} className={`${auth.currentUser ? "" : "hidden"}`}>
         Logout
       </button>
     </>

@@ -1,8 +1,7 @@
-'use server'
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "firebase/auth";
-import { auth, db } from "./firebase";
+import {  auth, db } from "./firebase";
 import { doc, setDoc } from "firebase/firestore";
-import { cookies } from "next/headers";
+import { deleteTokenCookie, setTokenCookie } from "./cookiesToken";
 
 export const registerWithEmailAndPassword = async (email, password) => {
     try{
@@ -27,19 +26,18 @@ export const loginWithEmailAndPassword = async (email, password) => {
     try{
         const userCredential = await signInWithEmailAndPassword(auth, email, password);
         const token = await userCredential.user.getIdToken();
-        cookies().set("userToken", token);
+        setTokenCookie(token);
         return userCredential.user;
     } catch(e) {
         console.error(e);
-        alert("email atau password salah!")
     }
 };
 
 export const logout = async () => {
     try {
-        await signOut(auth)
-        cookies().delete('userToken')
-        console.log("success logout");
+        await signOut(auth);
+        deleteTokenCookie();
+        console.log("success logout : " + auth.currentUser);
     } catch(error) {
         console.error(error.message);
     }
