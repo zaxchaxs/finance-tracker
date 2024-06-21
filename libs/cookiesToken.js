@@ -18,8 +18,17 @@ export const setTokenCookie = (userToken) => {
 
 export const deleteTokenCookie = () => {
     try {
-        Cookies.remove('userToken')
+        cookies().delete('__session');
     } catch(e) {
         console.error(`Failed to delete token : ${e.message}`);
+    }
+}
+
+export const getTokenCookie = async () => {
+    try {
+        const token = cookies().get('__session')?.value;
+        return token;
+    } catch(e) {
+        console.error(e.message);
     }
 }
