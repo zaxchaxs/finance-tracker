@@ -5,7 +5,6 @@ import { getTokenCookie } from "../libs/cookiesToken";
 export const middleware = async (req) => {
   try {
     const token = await getTokenCookie();
-    console.log(`authorization : ${token}`);
 
     if(!token) {
       const url = req.nextUrl.clone();

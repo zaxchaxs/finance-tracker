@@ -5,18 +5,23 @@ import {doc,
   getDoc,} from "firebase/firestore";
 import { useRouter } from "next/navigation";
 import { loginWithEmailAndPassword, logout } from "../../libs/auth";
+import { getTokenCookie } from "../../libs/cookiesToken";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [user, setUser] = useState("");
   const router = useRouter();
 
   useEffect(() => {
-    if (auth.currentUser) {
-      console.log(`user : ${auth.currentUser.email}`)
-      setUser(auth.currentUser)
+    const getToken = async () => {
+      const token = await getTokenCookie();
+      if(token) {
+        alert('You are already login');
+        router.push('/dashboard');
+      }
     };
+
+    getToken();
   }, []);
 
   const handleLoginSubmit = async (e) => {
@@ -30,13 +35,13 @@ const Login = () => {
       console.log(currUser.email);
 
       // checking user from firestore
-      // const userRef = doc(db, "users", currUser.uid);
-      // const docSnap = await getDoc(userRef);
-      // if (!docSnap.exists()) {
-      //   console.log("Kosong");
-      // } else {
-      //   console.log("ada");
-      // }
+      const userRef = doc(db, "users", currUser.uid);
+      const docSnap = await getDoc(userRef);
+      if (!docSnap.exists()) {
+        console.log("Kosong");
+      } else {
+        console.log("ada");
+      }
     } catch (error) {
       console.error("Login failed:", error.message);
     }
