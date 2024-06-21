@@ -1,5 +1,16 @@
-const { doc, getDoc, collection, query, where, getDocs, addDoc, setDoc } = require("firebase/firestore")
+const { doc, getDoc, collection, query, where, getDocs, addDoc, setDoc, and } = require("firebase/firestore")
 const { db } = require("./firebase");
+
+const addUser = async (idUser, newData) => {
+    try {
+        const docRef = doc(db, 'users', idUser);
+        await setDoc(docRef, newData)
+        return 'success adding user'
+    } catch (error) {
+        console.error(error.message);
+        return error.message
+    }
+};
 
 const getDocUserById = async (idUser) => {
     try {
@@ -14,6 +25,16 @@ const getDocUserById = async (idUser) => {
         console.error(e.message);
     }
 }
+
+const addDocWallet = async (newData) => {
+    try {
+        const docRef = doc(db, 'user-wallets');
+        await addDoc(docRef, newData);
+    } catch (error) {
+        console.error(error.message);
+    }
+};
+
 
 const getDocUserWallet = async (idUser) => {
     try {
@@ -47,28 +68,26 @@ const addDocTransaction = async (idUser, newData) => {
     try {
         const docRef = doc(db, `user-transactions/${idUser}/transactions`);
         await addDoc(docRef, newData);
+
+        // adding amount of wallet
+        const q = query(collection(db, 'user-wallets'), where("userId", "==", idUser), where("accountId", "==", newData.accountId));
+
+        if(newData.type == "income") {
+            await setDoc(q, {
+                amount: amount + newData.amount
+            })
+        } else {
+            await setDoc(q, {
+                amount: amount + newData.amount
+            })
+        };
+        
     } catch (error) {
         console.error(e.message);
     }
 };
 
-const addDocWallet = async (newData) => {
-    try {
-        const docRef = doc(db, 'user-wallets');
-        await addDoc(docRef, newData);
-    } catch (error) {
-        console.error(error.message);
-    }
-};
 
-const addUser = async (idUser, newData) => {
-    try {
-        const docRef = doc(db, 'users', idUser);
-        await setDoc(userRef, newData)
-    } catch (error) {
-        console.error(error.message);
-    }
-};
 
 
 export {

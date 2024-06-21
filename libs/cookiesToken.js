@@ -1,7 +1,5 @@
 'use server'
 import { cookies } from "next/headers"
-import Cookies from "js-cookie";
-
 
 export const setTokenCookie = (userToken) => {
     try{
