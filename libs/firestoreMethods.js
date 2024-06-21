@@ -1,14 +1,14 @@
-const { doc, getDoc, collection, query, where, getDocs, addDoc, setDoc, and } = require("firebase/firestore")
-const { db } = require("./firebase");
+'use client'
+
+import { addDoc, collection, doc, getDoc, getDocs, query, setDoc, updateDoc, where } from "firebase/firestore";
+import { db } from "./firebase";
 
 const addUser = async (idUser, newData) => {
     try {
-        const docRef = doc(db, 'users', idUser);
-        await setDoc(docRef, newData)
-        return 'success adding user'
+        const userRef = doc(db, "users", `${idUser}`);
+        await setDoc(userRef, newData);
     } catch (error) {
         console.error(error.message);
-        return error.message
     }
 };
 
@@ -28,7 +28,7 @@ const getDocUserById = async (idUser) => {
 
 const addDocWallet = async (newData) => {
     try {
-        const docRef = doc(db, 'user-wallets');
+        const docRef = collection(db, 'user-wallets');
         await addDoc(docRef, newData);
     } catch (error) {
         console.error(error.message);
@@ -38,7 +38,7 @@ const addDocWallet = async (newData) => {
 
 const getDocUserWallet = async (idUser) => {
     try {
-        const q = query(collection(db, 'user-wallets'), where("id", "==", idUser));
+        const q = query(collection(db, 'user-wallets'), where("userId", "==", `${idUser}`));
         const docsSnap = await getDocs(q);
         if(docsSnap.empty) {
             throw new Error("Wallet gaada");
@@ -57,7 +57,7 @@ const getDocUserTransactions = async (idUser) => {
         if(docsSnap.empty) {
             throw new Error("Belum ada transaksi");
         } else {
-            return docsSnap.docs;
+            return docsSnap;
         }
     } catch (error) {
         console.log(error.message);
@@ -66,24 +66,29 @@ const getDocUserTransactions = async (idUser) => {
 
 const addDocTransaction = async (idUser, newData) => {
     try {
-        const docRef = doc(db, `user-transactions/${idUser}/transactions`);
+        const docRef = collection(db, `user-transactions/${idUser}/transactions`);
         await addDoc(docRef, newData);
 
-        // adding amount of wallet
-        const q = query(collection(db, 'user-wallets'), where("userId", "==", idUser), where("accountId", "==", newData.accountId));
+        // updating amount of wallet
+        const q = query(collection(db, 'user-wallets'), where("userId", "==", idUser));
+
+        const docSnapshot = await getDocs(q);
+        const currWallet = docSnapshot.docs.find(el => el.data().userId === idUser && el.data().accountId === newData.accountId);
+        const walletRef = currWallet.ref;
+        // console.log(updateRef);
 
         if(newData.type == "income") {
-            await setDoc(q, {
-                amount: amount + newData.amount
+            await updateDoc(walletRef, {
+                amount: currWallet.data().amount + newData.amount
             })
         } else {
-            await setDoc(q, {
-                amount: amount + newData.amount
+            await updateDoc(walletRef, {
+                amount: currWallet.data().amount - newData.amount
             })
         };
-        
+
     } catch (error) {
-        console.error(e.message);
+        console.error(error.message);
     }
 };
 
