@@ -71,11 +71,9 @@ const addDocTransaction = async (idUser, newData) => {
 
         // updating amount of wallet
         const q = query(collection(db, 'user-wallets'), where("userId", "==", idUser));
-
         const docSnapshot = await getDocs(q);
         const currWallet = docSnapshot.docs.find(el => el.data().userId === idUser && el.data().accountId === newData.accountId);
         const walletRef = currWallet.ref;
-        // console.log(updateRef);
 
         if(newData.type == "income") {
             await updateDoc(walletRef, {
@@ -91,8 +89,6 @@ const addDocTransaction = async (idUser, newData) => {
         console.error(error.message);
     }
 };
-
-
 
 
 export {

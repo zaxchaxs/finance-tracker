@@ -1,6 +1,8 @@
 import { Inter } from "next/font/google";
 import "./globals.css";
 import Link from "next/link";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faHouse } from "@fortawesome/free-solid-svg-icons";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -13,8 +15,11 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className={inter.className}>
-        <div className="w-full bg-slate-300 text-black flex gap-4 justify-center">
-          <Link href={"/"} >Home</Link>
+        <div className="fixed bg-secondary p-3 rounded-md text-black flex flex-col top-1/2 -translate-y-1/2 gap-4">
+
+          <Link href={"/"} >
+            <FontAwesomeIcon icon={faHouse} color="#BBF7D0" />
+          </Link>
           <Link href={"/dashboard"} >Dashboard</Link>
           <Link href={"/transaction"} >Transactions</Link>
           <Link href={"/report"} >Reports</Link>
