@@ -1,5 +1,6 @@
 'use server'
 import { cookies } from "next/headers"
+import { auth } from "./firebase";
 
 export const setTokenCookie = (userToken) => {
     try{
@@ -24,9 +25,11 @@ export const deleteTokenCookie = () => {
 
 export const getTokenCookie = async () => {
     try {
-        const token = cookies().get('__session')?.value;
+        const token = cookies().get('authorization')?.value;
+        // const token = auth.currentUser
+        console.log(token);
         return token;
     } catch(e) {
-        console.error(e.message);
+        console.error(`Error getting token : ${e.message}`);
     }
 }

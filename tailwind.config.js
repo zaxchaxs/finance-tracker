@@ -20,6 +20,10 @@ module.exports = {
         "primary": "#052E16",
         "secondary": "#15803D"
       },
+      fontFamily: {
+        'passionOne': ['var(--font-passion-one)'],
+        'lilitaOne': ['var(--font-lilita-one)']
+      }
     },
   },
   plugins: [],

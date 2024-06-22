@@ -1,10 +1,27 @@
-import { Inter } from "next/font/google";
+import { Lilita_One, Passion_One } from "next/font/google";
 import "./globals.css";
 import Link from "next/link";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHouse } from "@fortawesome/free-solid-svg-icons";
+import {
+  faArrowRight,
+  faChartColumn,
+  faChartSimple,
+  faHouse,
+  faMoneyBillAlt,
+  faMoneyBillTransfer,
+} from "@fortawesome/free-solid-svg-icons";
+import { AuthProvider } from "../../contexts/AuthContext";
 
-const inter = Inter({ subsets: ["latin"] });
+const lilitaOne = Lilita_One({
+  subsets: ["latin"],
+  variable: "--font-lilita-one",
+  weight: "400",
+});
+const passionOne = Passion_One({
+  subsets: ["latin"],
+  variable: "--font-passion-one",
+  weight: "400",
+});
 
 export const metadata = {
   title: "Create Next App",
@@ -14,17 +31,50 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className={inter.className}>
-        <div className="fixed bg-secondary p-3 rounded-md text-black flex flex-col top-1/2 -translate-y-1/2 gap-4">
-
-          <Link href={"/"} >
-            <FontAwesomeIcon icon={faHouse} color="#BBF7D0" />
-          </Link>
-          <Link href={"/dashboard"} >Dashboard</Link>
-          <Link href={"/transaction"} >Transactions</Link>
-          <Link href={"/report"} >Reports</Link>
-        </div>
-        {children}
+      <head></head>
+      <body className={`${lilitaOne.variable} ${passionOne.variable}`}>
+        <AuthProvider>
+          <div className="fixed top-1/2 -translate-y-1/2">
+            <div className="bg-secondary rounded-r-2xl flex flex-col p-4 gap-8 py-5">
+              <Link href={"/"}>
+                <FontAwesomeIcon
+                  icon={faHouse}
+                  color="#BBF7D0"
+                  className="w-9"
+                />
+              </Link>
+              <Link href={"/dashboard"}>
+                <FontAwesomeIcon
+                  icon={faMoneyBillAlt}
+                  color="#BBF7D0"
+                  className="w-9"
+                />
+              </Link>
+              <Link href={"/transaction"}>
+                <FontAwesomeIcon
+                  icon={faMoneyBillTransfer}
+                  color="#BBF7D0"
+                  className="w-9"
+                />
+              </Link>
+              <Link href={"/report"}>
+                <FontAwesomeIcon
+                  icon={faChartColumn}
+                  color="#BBF7D0"
+                  className="w-9"
+                />
+              </Link>
+            </div>
+            <button className="p-4">
+              <FontAwesomeIcon
+                icon={faArrowRight}
+                color="#15803D"
+                className="w-6"
+              />
+            </button>
+          </div>
+          {children}
+        </AuthProvider>
       </body>
     </html>
   );
