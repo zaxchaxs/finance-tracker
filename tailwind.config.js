@@ -18,7 +18,8 @@ module.exports = {
       },
       textColor: {
         "primary": "#052E16",
-        "secondary": "#15803D"
+        "secondary": "#15803D",
+        "lightGreen": "#BBF7D0"
       },
       fontFamily: {
         'passionOne': ['var(--font-passion-one)'],
