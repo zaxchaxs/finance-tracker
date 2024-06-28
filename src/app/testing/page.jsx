@@ -5,7 +5,7 @@ import {
   addDocWallet,
   getDocUserWallet,
   addDocTransaction,
-} from "../../../libs/firestoreMethods";
+} from "@/libs/firestoreMethods";
 
 const TestingPage = () => {
 

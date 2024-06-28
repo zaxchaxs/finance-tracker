@@ -1,13 +1,13 @@
 "use client"
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { getTokenCookie } from "../../libs/cookiesToken";
-import { logout } from "../../libs/auth";
-import { useAuth } from "../../contexts/AuthContext";
+import { getTokenCookie } from "@/libs/cookiesToken";
+import { logout } from "@/libs/auth";
 import Image from "next/image";
 import homeIcon from '../../public/homeIcon.svg'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGoogle } from "@fortawesome/free-brands-svg-icons";
+import { useAuth } from "@/contexts/AuthContext";
 
 export default function Home() {
   const { currUser, loading, isUserLogged } = useAuth();
@@ -23,8 +23,8 @@ export default function Home() {
 
   useEffect(() => {
     console.log(isUserLogged);
-    console.log("user: " + currUser);
-  }, [])
+    console.log(currUser);
+  }, [isUserLogged, currUser])
 
   const handlerToken = async () => {
     const token = await getTokenCookie();
@@ -40,10 +40,13 @@ export default function Home() {
       <div className="text-center text-lg font-semibold p-4">
         <h1>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Delectus nisi, exercitationem</h1>
       </div>
-      <div className="gap-4 flex p-4">
-        <button className="p-2 px-4 rounded-xl font-lilitaOne bg-secondary hover:bg-emerald-400 text-lightGreen">Login</button>
-        <button className="p-2 px-4 flex items-center gap-2 rounded-xl font-lilitaOne hover:bg-emerald-400 bg-secondary text-lightGreen" ><FontAwesomeIcon icon={faGoogle} className="w-4" /> Login With Google
+      <div onClick={() => router.push("/login")} className={`gap-4 flex p-4 ${currUser ? "hidden" : ""}`}>
+        <button className="p-2 px-4 rounded-xl font-lilitaOne bg-secondary hover:bg-secondary-hover text-lightGreen">Login</button>
+        <button className="p-2 px-4 flex items-center gap-2 rounded-xl font-lilitaOne hover:bg-secondary-hover bg-secondary text-lightGreen" ><FontAwesomeIcon icon={faGoogle} className="w-4" /> Login With Google
         </button>
+      </div>
+      <div onClick={logout} className={`gap-4 flex p-4 ${currUser ? "" : "hidden"}`}>
+        <button className="p-2 px-4 rounded-xl font-lilitaOne bg-secondary hover:bg-secondary-hover text-lightGreen">Logout</button>
       </div>
     </main>
   );

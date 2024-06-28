@@ -1,6 +1,6 @@
 "use client"
 import { useState } from "react"
-import { registerWithEmailAndPassword } from "../../libs/auth";
+import { registerWithEmailAndPassword } from "../libs/auth";
 import { useRouter } from "next/navigation";
 
 const Register = () => {

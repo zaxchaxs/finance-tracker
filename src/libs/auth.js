@@ -1,13 +1,13 @@
+
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "firebase/auth";
 import {  auth, db } from "./firebase";
 import { doc, setDoc } from "firebase/firestore";
-import { deleteTokenCookie, setTokenCookie } from "./cookiesToken";
+import { useState } from "react";
 
 export const registerWithEmailAndPassword = async (email, password) => {
     try{
         // firebase auth
         const { user } = await createUserWithEmailAndPassword(auth, email, password);
-
         // add user to firestore
         const newData = {
             userId: user.uid,
@@ -25,8 +25,6 @@ export const registerWithEmailAndPassword = async (email, password) => {
 export const loginWithEmailAndPassword = async (email, password) => {
     try{
         const userCredential = await signInWithEmailAndPassword(auth, email, password);
-        const token = await userCredential.user.getIdToken();
-        setTokenCookie(token);
         return userCredential.user;
     } catch(e) {
         console.error(e);
@@ -36,8 +34,6 @@ export const loginWithEmailAndPassword = async (email, password) => {
 export const logout = async () => {
     try {
         await signOut(auth);
-        deleteTokenCookie();
-        console.log("success logout : " + auth.currentUser);
     } catch(error) {
         console.error(error.message);
     }

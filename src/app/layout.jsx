@@ -11,7 +11,7 @@ import {
   faMoneyBillAlt,
   faMoneyBillTransfer,
 } from "@fortawesome/free-solid-svg-icons";
-import { AuthProvider } from "../../contexts/AuthContext";
+import { AuthProvider } from "@/contexts/AuthContext";
 import { motion } from "framer-motion";
 import { useState } from "react";
 
