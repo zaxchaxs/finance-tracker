@@ -1,4 +1,5 @@
 "use client"
+import Unauthenticate from "@/components/Unauthenticate";
 import CurrentTransaction from "@/components/dahsboard/currentTransaction";
 import NewTransactionSec from "@/components/dahsboard/newTransaction";
 import { useAuth } from "@/contexts/AuthContext";
@@ -114,7 +115,7 @@ const DashboardPage = () => {
         <CurrentTransaction isShowed={isShowCurrTransac} />
       </main>
     ) : (
-      <></>
+     <Unauthenticate />
     )
 };
 
