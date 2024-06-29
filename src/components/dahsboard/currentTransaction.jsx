@@ -7,36 +7,40 @@ const CurrentTransaction = ({ isShowed }) => {
       transactionId: "transacid1",
       userId: "user123",
       accountId: "walletid1",
+      name: "wallet 1",
       amount: 10000,
       type: "expanse",
-      date: new Date(),
+      date: "2024-06-26",
       desc: "belu nasi padang asdjas akjdas ks asdasi Lorem, ipsum dolor sit amet consectetur adipisicing elit. Obcaecati corrupti saepe nihil quos nemo culpa, voluptates natus sapiente veniam inventore nobis qui ipsam sint illum dignissimos nostrum quae, harum magni.",
     },
     {
       transactionId: "transacid2",
       userId: "user123",
       accountId: "walletid1",
+      name: "wallet 1",
       amount: 5000,
       type: "expanse",
-      date: new Date(),
+      date: "2024-06-26",
       desc: "esteh",
     },
     {
       transactionId: "transacid3",
       userId: "user123",
       accountId: "walletid1",
+      name: "wallet 1",
       amount: 50000,
       type: "income",
-      date: new Date(),
+      date: "2024-06-26",
       desc: "transfer mamah",
     },
     {
       transactionId: "transacid4",
       userId: "user123",
       accountId: "walletid2",
+      name: "dompet 2",
       amount: 150000,
       type: "income",
-      date: new Date(),
+      date: "2024-06-26",
       desc: "transfer papah",
     },
   ];
@@ -74,7 +78,7 @@ const ColItem = ({ data }) => {
         >{`${data.type === "expanse" ? "-" : "+"} ${amount}`}</p>
       </div>
       <div className="w-full text-justify">
-        <p>{`${data.type === "expanse" ? `From` : "To"}: ${data.accountId}`}</p>
+        <p>{`${data.type === "expanse" ? `From` : "To"}: ${data.name}`}</p>
         <p>{`Description: ${data.desc}`}</p>
       </div>
     </div>

@@ -8,9 +8,10 @@ export const converTimeStampToDate = (seconds, nanoseconds) => {
 };
 
 export const testingDate = (date) => {
-    const day = date.getDate();
-    const month = date.getMonth();
-    const year = date.getFullYear();
+    const newData = new Date(date)
+    const day = newData.getDate();
+    const month = newData.getMonth();
+    const year = newData.getFullYear();
 
     return `${day}/${month}/${year}`
 }

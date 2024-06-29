@@ -1,6 +1,7 @@
 "use client"
 import CurrentTransaction from "@/components/dahsboard/currentTransaction";
 import NewTransactionSec from "@/components/dahsboard/newTransaction";
+import { formatRupiah } from "@/utils/formatRupiah";
 import { faCaretDown, faCaretRight, faUser, faUserAlt, faUserCircle, faUserLarge } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
@@ -85,7 +86,7 @@ const DashboardPage = () => {
             className="w-2"
             size="1x"
             icon={faCaretRight}
-            rotation={isShowTransac && 90}
+            rotation={isShowCurrTransac && 90}
           />
           <h1>Current Transactions</h1>
         </div>
@@ -97,10 +98,11 @@ const DashboardPage = () => {
 export default DashboardPage;
 
 const Wallet = ({name, amount}) => {
+  const amountConverted = formatRupiah(amount)
     return(
         <div className="flex justify-between border-b-2 p-2 rounded-md border-secondary w-full">
             <h1>{name}</h1>
-            <p>{`${amount} IDR`}</p>
+            <p>{`${amountConverted}`}</p>
       </div>
     )
 }
