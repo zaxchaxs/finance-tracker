@@ -12,7 +12,6 @@ const LoginPage = () => {
         <button onClick={() => route.push("/")}>Sudah Login</button>
       </div>
     ) : (
-      //  isUserLogged ? <div>
       <Login />
     );
 }

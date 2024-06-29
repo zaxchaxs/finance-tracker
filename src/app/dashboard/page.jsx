@@ -1,6 +1,7 @@
 "use client"
 import CurrentTransaction from "@/components/dahsboard/currentTransaction";
 import NewTransactionSec from "@/components/dahsboard/newTransaction";
+import { useAuth } from "@/contexts/AuthContext";
 import { formatRupiah } from "@/utils/formatRupiah";
 import { faCaretDown, faCaretRight, faUser, faUserAlt, faUserCircle, faUserLarge } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -10,16 +11,17 @@ const DashboardPage = () => {
     const [isShowWallet, setIsShowWallet] = useState(true);
     const [isShowTransac, setIsShowTransac] = useState(false);
     const [ isShowCurrTransac, setIsShowCurrTransac] = useState(false);
+    const { currUser } = useAuth();
 
     const tempWalletData = [
         {
-            accounId: "walletid1",
+            accountId: "walletid1",
             userId: "user123",
             name: "wallet 1",
             amount: 100000,
         },
         {
-            accounId: "walletid2",
+            accountId: "walletid2",
             userId: "user123",
             name: "dompet 2",
             amount: 500000,
@@ -36,7 +38,7 @@ const DashboardPage = () => {
             <FontAwesomeIcon icon={faUserAlt} />
           </button>
         </div>
-
+      
         <div
           className="pt-4 py-2  w-full text-primary flex items-center gap-2 cursor-pointer border-b-2 border-green-950"
           onClick={() => setIsShowWallet(!isShowWallet)}
@@ -75,6 +77,7 @@ const DashboardPage = () => {
         <NewTransactionSec
           isShowed={isShowTransac}
           walletAcountData={tempWalletData}
+          user={currUser}
         />
 
         {/* Current Transaction Section */}

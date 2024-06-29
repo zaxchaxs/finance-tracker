@@ -17,7 +17,7 @@ module.exports = {
         "secondary": "#059669",
         "danger": "#EF4444",
         "danger-hover": "#DC2626",
-        "secondary-hover": "#34D399"
+        "secondary-hover": "#047857"
       },
       textColor: {
         "primary": "#052E16",
