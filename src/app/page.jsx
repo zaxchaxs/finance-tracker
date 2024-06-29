@@ -21,11 +21,6 @@ export default function Home() {
     }
   };
 
-  useEffect(() => {
-    console.log(isUserLogged);
-    console.log(currUser);
-  }, [isUserLogged, currUser])
-
   const handlerToken = async () => {
     const token = await getTokenCookie();
     console.log((`Token : ${token}`).slice(0,30));

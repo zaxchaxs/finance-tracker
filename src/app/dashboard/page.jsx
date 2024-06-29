@@ -2,16 +2,34 @@
 import CurrentTransaction from "@/components/dahsboard/currentTransaction";
 import NewTransactionSec from "@/components/dahsboard/newTransaction";
 import { useAuth } from "@/contexts/AuthContext";
+import { getSnapshotUserWallet } from "@/libs/firestoreMethods";
 import { formatRupiah } from "@/utils/formatRupiah";
 import { faCaretDown, faCaretRight, faUser, faUserAlt, faUserCircle, faUserLarge } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const DashboardPage = () => {
     const [isShowWallet, setIsShowWallet] = useState(true);
     const [isShowTransac, setIsShowTransac] = useState(false);
     const [ isShowCurrTransac, setIsShowCurrTransac] = useState(false);
+    const [userWalletData, setUserWalletData] = useState();
     const { currUser } = useAuth();
+
+    useEffect(() => {
+      try {
+
+        if(currUser) {
+          const getUserWallet = async () => {
+            const walletData = await getSnapshotUserWallet(currUser?.uid);
+            setUserWalletData(walletData);
+          }
+          getUserWallet();
+        }
+
+      } catch (error) {
+        
+      }
+    }, [])
 
     const tempWalletData = [
         {
@@ -28,7 +46,7 @@ const DashboardPage = () => {
         }
     ]
 
-    return (
+    return currUser ? (
       <main className="min-h-screen text-xl  p-6 font-passionOne bg-primary w-full py-4 flex flex-col gap-5">
         
         {/* Nav */}
@@ -95,7 +113,9 @@ const DashboardPage = () => {
         </div>
         <CurrentTransaction isShowed={isShowCurrTransac} />
       </main>
-    );
+    ) : (
+      <></>
+    )
 };
 
 export default DashboardPage;

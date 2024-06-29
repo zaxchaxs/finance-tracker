@@ -1,6 +1,6 @@
 'use client'
 
-import { addDoc, collection, doc, getDoc, getDocs, query, setDoc, updateDoc, where } from "firebase/firestore";
+import { addDoc, collection, doc, getDoc, getDocs, onSnapshot, query, setDoc, updateDoc, where } from "firebase/firestore";
 import { db } from "./firebase";
 
 const addUser = async (idUser, newData) => {
@@ -35,20 +35,56 @@ const addDocWallet = async (newData) => {
     }
 };
 
-
-const getDocUserWallet = async (idUser) => {
+const getSnapshotUserWallet = async (idUser) => {
+    let data = [];
+  
     try {
-        const q = query(collection(db, 'user-wallets'), where("userId", "==", `${idUser}`));
-        const docsSnap = await getDocs(q);
-        if(docsSnap.empty) {
-            throw new Error("Wallet gaada");
-        } else {
-            return docsSnap;
-        }
-    } catch(e) {
-        console.error(e.message);
-    };
-};
+      const q = query(collection(db, 'user-wallets'), where("userId", "==", idUser));
+      
+      return new Promise((resolve, reject) => {
+        const unsubscribe = onSnapshot(q, snapshot => {
+          data = snapshot.docs.map(doc => doc.data());
+          
+          unsubscribe(); // Unsubscribe pas udh dapet data
+          resolve(data);
+        }, (error) => {
+          console.error(error);
+          unsubscribe(); // Unsubscribe pas udh dapet data
+          reject(error);
+        });
+      });
+  
+    } catch (e) {
+      console.error(e.message);
+      throw e; // Lempar error agar bisa ditangani di luar fungsi
+    }
+  };
+
+// const getSnapshotUserWallet = async (idUser) => {
+//     let data = [];
+    
+//     try {
+//         const q = query(collection(db, 'user-wallets'), where("userId", "==", `${idUser}`));
+//         const unsubscribe = onSnapshot(q, snapshot => {
+//             data = snapshot.docs.map(doc => doc.data());
+//             console.log(data);
+//             // return data;
+
+//             () => unsubscribe();
+//         })
+        
+//         console.log(data);
+//         return data;
+//         // const docsSnap = await getDocs(q);
+//         // if(docsSnap.empty) {
+//         //     throw new Error("Wallet gaada");
+//         // } else {
+//         //     return docsSnap;
+//         // }
+//     } catch(e) {
+//         console.error(e.message);
+//     };
+// };
 
 const getDocUserTransactions = async (idUser) => {
     try {
@@ -93,7 +129,7 @@ const addDocTransaction = async (idUser, newData) => {
 
 export {
     getDocUserById,
-    getDocUserWallet,
+    getSnapshotUserWallet,
     getDocUserTransactions,
     addDocTransaction,
     addDocWallet,

@@ -9,7 +9,7 @@ const NewTransactionSec = ({user, isShowed, walletAcountData}) => {
     const [selectedWallet, setSelectedWallet] = useState("");
     const [selectedType, setSelectedType] = useState("");
     const [description, setDescription] = useState("");
-    const [amount, setAmount] = useState();
+    const [amount, setAmount] = useState("");
 
     // handleFunctions
     const handleDateChange = (e) => {
@@ -27,6 +27,9 @@ const NewTransactionSec = ({user, isShowed, walletAcountData}) => {
     };
     const handleAmountChange = (e) => {
         setAmount(e.target.value);
+    };
+    const handleSubmit = () => {
+      sweetAlertAddTransac(newData, setSelectedDate, setSelectedWallet, setSelectedType, setDescription, setAmount);
     }
 
     const newData = {
@@ -105,7 +108,7 @@ const NewTransactionSec = ({user, isShowed, walletAcountData}) => {
               value={description}
               onChange={handleDescChange}
             />
-            <button onClick={() => sweetAlertAddTransac(newData)} className={`${selectedDate && selectedWallet && selectedType && amount > 0 ? "" : "hidden"} p-1 px-2 bg-secondary rounded-lg text-green-200 hover:bg-secondary-hover`}>
+            <button onClick={handleSubmit} className={`${selectedDate && selectedWallet && selectedType && amount > 0 ? "" : "hidden"} p-1 px-2 bg-secondary rounded-lg text-green-200 hover:bg-secondary-hover`}>
               Submit
             </button>
           </div>

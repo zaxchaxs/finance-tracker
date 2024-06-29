@@ -1,7 +1,7 @@
 import { formatRupiah } from "@/utils/formatRupiah";
 import Swal from "sweetalert2"
 
-export const sweetAlertAddTransac = (newData) => {
+export const sweetAlertAddTransac = (newData, setSelectedDate, setSelectedWallet, setSelectedType, setDescription, setAmount ) => {
     const convertedAmount = formatRupiah(newData.amount);
     
     Swal.fire({
@@ -9,15 +9,16 @@ export const sweetAlertAddTransac = (newData) => {
       color: "#BBF7D0",
       background: "#059669",
       showCancelButton: true,
+      reverseButtons: true,
       confirmButtonText: "Submit",
       confirmButtonColor: "#052E16",
       cancelButtonText: "Cancel",
       cancelButtonColor: "#EF4444",
       html: `
-      <p><strong>${newData.type === 'income' ? 'Income: +' : 'Expanse: -'}</strong>${convertedAmount}</p>
-      <p><strong>${newData.type === 'income' ? 'To:' : 'From:'}</strong>  ${newData.name}</p>
-      <p><strong>"${newData.description}"</strong></p>
-      <p><strong>${newData.date}</strong></p>
+        <p><strong>${newData.type === 'income' ? 'Income: +' : 'Expanse: -'}</strong>${convertedAmount}</p>
+        <p><strong>${newData.type === 'income' ? 'To:' : 'From:'}</strong>  ${newData.name}</p>
+        <p><strong>"${newData.description}"</strong></p>
+        <p><strong>${newData.date}</strong></p>
       `,
       text: newData.name,
       text: newData.amount,
@@ -31,6 +32,11 @@ export const sweetAlertAddTransac = (newData) => {
             background: "#059669",
             confirmButtonColor: "#052E16",
         });
+        setSelectedDate("");
+        setSelectedWallet("");
+        setSelectedType("");
+        setDescription("");
+        setAmount("");
       }
     });
 }
