@@ -42,7 +42,7 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body className={`${lilitaOne.variable} ${passionOne.variable}`}>
         <AuthProvider>
-          <div className="fixed top-1/2 -translate-y-1/2">
+          <div className={`fixed top-1/2 -translate-y-1/2 ${isNavOpen ? "z-50" : "z-0"}`}>
             <motion.div
               animate={{ x: isNavOpen ? 1 : -70, opacity: isNavOpen ? 1 : 0.1 }}
               transition={{ type: "spring", bounce: 0.6 }}
@@ -55,7 +55,7 @@ export default function RootLayout({ children }) {
             </motion.div>
             
             <motion.button
-              className="p-3" onClick={handleClickNav}
+              className="p-3 z-50" onClick={handleClickNav}
               transition={{ repeat: Infinity, ease: 'easeInOut', duration: 1.2 }}
             >
               <FontAwesomeIcon

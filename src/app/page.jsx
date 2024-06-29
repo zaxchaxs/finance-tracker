@@ -46,7 +46,7 @@ export default function Home() {
         </button>
       </div>
       <div onClick={logout} className={`gap-4 flex p-4 ${currUser ? "" : "hidden"}`}>
-        <button className="p-2 px-4 rounded-xl font-lilitaOne bg-secondary hover:bg-secondary-hover text-lightGreen">Logout</button>
+        <button className="p-2 px-4 rounded-xl font-lilitaOne bg-danger hover:bg-danger-hover hover:bg-secondary-hover text-lightGreen">Logout</button>
       </div>
     </main>
   );

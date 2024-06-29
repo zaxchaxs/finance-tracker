@@ -15,11 +15,14 @@ module.exports = {
       colors: {
         "primary": "#BBF7D0",
         "secondary": "#059669",
+        "danger": "#EF4444",
+        "danger-hover": "#DC2626",
         "secondary-hover": "#34D399"
       },
       textColor: {
         "primary": "#052E16",
-        "secondary": "#15803D",
+        // "secondary": "#15803D",
+        "secondary": "#2E2E2E",
         "lightGreen": "#BBF7D0"
       },
       fontFamily: {
