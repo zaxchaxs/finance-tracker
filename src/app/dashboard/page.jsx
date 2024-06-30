@@ -68,7 +68,7 @@ const DashboardPage = () => {
         />
         <h1>My wallet account</h1>
       </div>
-      <UserWalletAccount isShowed={isShowWallet} userWallets={userWalletData} user={currUser} />
+      <UserWalletAccount isShowed={isShowWallet} userWallets={tempWalletData} user={currUser} />
 
       {/* New Transaction Section */}
       <div

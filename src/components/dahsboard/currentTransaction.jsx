@@ -47,15 +47,21 @@ const CurrentTransaction = ({ isShowed }) => {
 
   return (
     <div
-      className={`w-full text-lg px-2 flex flex-col gap-1 ${
+      className={`w-full text-lg text-secondary px-2 flex flex-col gap-1 ${
         isShowed ? "" : "hidden"
       }`}
     >
-      <div className="w-full text-secondary">
-        {tempCurrTransac.map((data, idx) => {
-          return <ColItem key={idx} data={data} />;
-        })}
-      </div>
+      {tempCurrTransac.length === 0 || !tempCurrTransac ? (
+        <div className="flex justify-center items-end w-full text-center">
+          <p>{`No transactions yet.`}</p>
+        </div>
+      ) : (
+        <div className="w-full text-secondary">
+          {tempCurrTransac.map((data, idx) => {
+            return <ColItem key={idx} data={data} />;
+          })}
+        </div>
+      )}
     </div>
   );
 };
