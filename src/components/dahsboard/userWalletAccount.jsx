@@ -47,7 +47,7 @@ const UserWalletAccount = ({ isShowed, userWallets, user, isGettingData }) => {
               </div>
             ) : (
               userWallets?.map((e, i) => (
-                <Wallet key={i} name={e.name} amount={e.amount} />
+                <Wallet key={i} data={e} />
               ))
             )}
           </div>

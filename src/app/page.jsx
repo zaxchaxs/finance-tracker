@@ -28,10 +28,9 @@ export default function Home() {
           className="w-[25vh] p-4"
         />
       </div>
-      <div className="text-center text-lg font-semibold p-4">
+      <div className="text-center text-lg font-semibold p-4 font-lilitaOne text-secondary">
         <h1>
-          Lorem ipsum dolor, sit amet consectetur adipisicing elit. Delectus
-          nisi, exercitationem
+         Easily manage your finances, track your incomes and expenses. Take control of your money and make informed decisions for a better financial future.
         </h1>
       </div>
       <div
