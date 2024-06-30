@@ -20,9 +20,6 @@ export const sweetAlertAddTransac = (newData, setSelectedDate, setSelectedWallet
         <p><strong>"${newData.description}"</strong></p>
         <p><strong>${newData.date}</strong></p>
       `,
-      text: newData.name,
-      text: newData.amount,
-      text: newData.description,
     }).then((result) => {
       if (result.isConfirmed) {
         Swal.fire({
@@ -39,4 +36,37 @@ export const sweetAlertAddTransac = (newData, setSelectedDate, setSelectedWallet
         setAmount("");
       }
     });
+}
+
+export const sweetAlertAddWallet = (newData, setIsAddWalletBtnClicked, setWalletName, setwalletAmount) => {
+  const convertedAmount = formatRupiah(newData.amount);
+
+  Swal.fire({
+    title: "Are you sure?",
+    color: "#BBF7D0",
+    background: "#059669",
+    showCancelButton: true,
+    reverseButtons: true,
+    confirmButtonText: "Submit",
+    confirmButtonColor: "#052E16",
+    cancelButtonText: "Cancel",
+    cancelButtonColor: "#EF4444",
+    html: `
+        <p><strong>Name: </strong> ${newData.name}</p>
+        <p><strong>Amount: </strong>${convertedAmount}</p>
+    `
+  }).then(result => {
+    if(result.isConfirmed) {
+      Swal.fire({
+        title: "Success",
+        color: "#BBF7D0",
+        icon: "success",
+        background: "#059669",
+        confirmButtonColor: "#052E16",
+      });
+      setIsAddWalletBtnClicked(false);
+      setWalletName("");
+      setwalletAmount("");
+    }
+  }) 
 }
