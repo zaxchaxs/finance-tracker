@@ -1,6 +1,7 @@
 import { useState } from "react";
 import Wallet from "./wallet"
 import { sweetAlertAddWallet } from "@/libs/sweetAlert";
+import { v4 as uuidv4 } from 'uuid';
 
 const UserWalletAccount = ({isShowed, userWallets, user}) => {
   const [isAddWalletBtnClicked, setIsAddWalletBtnClicked] = useState(false);
@@ -10,13 +11,15 @@ const UserWalletAccount = ({isShowed, userWallets, user}) => {
 //   handler functions
 const handleSubmit = (e) => {
     e.preventDefault();
+    const accountId = uuidv4();
     if(walletName && walletAmount > 0) {
         const newData = {
             userId: user.uid,
+            accountId,
             name: walletName,
-            amount: walletAmount
+            amount: walletAmount,
+            createdAt: new Date()
         };
-        // console.log(newData);
         sweetAlertAddWallet(newData, setIsAddWalletBtnClicked, setWalletName, setwalletAmount);
     }
 };
@@ -47,7 +50,7 @@ const handleSubmit = (e) => {
                 
             <input type="text" placeholder="Name" className="focus:outline-none rounded-md p-1" value={walletName} onChange={(e) => setWalletName(e.target.value)} />
             <div className="flex gap-2 justify-between">
-                <input type="text" placeholder="Amount" className="focus:outline-none rounded-md p-1 w-full" value={walletAmount} onChange={(e) => setwalletAmount(e.target.value)} />
+                <input type="text" placeholder="Amount" className="focus:outline-none rounded-md p-1 w-full" value={walletAmount} onChange={(e) => setwalletAmount(Number(e.target.value))} />
                 <button
                 onClick={(e) => handleSubmit(e)}
                 className={`${

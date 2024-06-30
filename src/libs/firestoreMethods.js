@@ -1,7 +1,8 @@
 'use client'
 
-import { addDoc, collection, doc, getDoc, getDocs, onSnapshot, query, setDoc, updateDoc, where } from "firebase/firestore";
+import { addDoc, collection, doc, getDoc, getDocs, limit, onSnapshot, orderBy, query, setDoc, updateDoc, where } from "firebase/firestore";
 import { db } from "./firebase";
+import { useAuth } from "@/contexts/AuthContext";
 
 const addUser = async (idUser, newData) => {
     try {
@@ -35,28 +36,21 @@ const addDocWallet = async (newData) => {
     }
 };
 
-const getSnapshotUserWallet = async (idUser) => {
-    let data = [];
-  
+const getSnapshotUserWallet = async (idUser, setUserWalletData) => {
     try {
       const q = query(collection(db, 'user-wallets'), where("userId", "==", idUser));
-      
-      return new Promise((resolve, reject) => {
-        const unsubscribe = onSnapshot(q, snapshot => {
-          data = snapshot.docs.map(doc => doc.data());
-          
-          unsubscribe(); // Unsubscribe pas udh dapet data
-          resolve(data);
-        }, (error) => {
-          console.error(error);
-          unsubscribe(); // Unsubscribe pas udh dapet data
-          reject(error);
-        });
+    
+      const unsubscribe = onSnapshot(q, snapshot => {
+        const newData = snapshot.docs.map(doc => ({
+            ...doc.data()
+        }));
+        setUserWalletData(newData);
+        // unsubscribe();
       });
   
     } catch (e) {
       console.error(e.message);
-      throw e; // Lempar error agar bisa ditangani di luar fungsi
+      throw e; // Lempar error biar bisa ditangani di luar fungsi
     }
   };
 
@@ -86,17 +80,25 @@ const getSnapshotUserWallet = async (idUser) => {
 //     };
 // };
 
-const getDocUserTransactions = async (idUser) => {
+const getSnapshotUserTransaction = async (idUser, setCurrTransaction) => {
     try {
-        const docRef = doc(db, `user-transactions/${idUser}/transactions`);
-        const docsSnap = await getDocs(docRef);
-        if(docsSnap.empty) {
-            throw new Error("Belum ada transaksi");
-        } else {
-            return docsSnap;
-        }
+        const q = query(collection(db, `user-transactions/${idUser}/transactions`), orderBy("createdAt", "desc"), limit(5));
+
+        const unsubscribe = onSnapshot(q, snapshot => {
+            const data = snapshot.docs.map(e => ({
+                ...e.data()
+            }))
+            setCurrTransaction(data);
+        } )
+
+        // const docsSnap = await getDocs(docRef);
+        // if(docsSnap.empty) {
+        //     throw new Error("Belum ada transaksi");
+        // } else {
+        //     return docsSnap;
+        // }
     } catch (error) {
-        console.log(error.message);
+        console.error(error.message);
     }
 };
 
@@ -123,6 +125,7 @@ const addDocTransaction = async (idUser, newData) => {
 
     } catch (error) {
         console.error(error.message);
+        throw new Error("Failed to Add Transaction");
     }
 };
 
@@ -130,7 +133,7 @@ const addDocTransaction = async (idUser, newData) => {
 export {
     getDocUserById,
     getSnapshotUserWallet,
-    getDocUserTransactions,
+    getSnapshotUserTransaction,
     addDocTransaction,
     addDocWallet,
     addUser

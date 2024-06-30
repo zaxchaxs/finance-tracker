@@ -26,7 +26,7 @@ const NewTransactionSec = ({ user, isShowed, walletAcountData }) => {
     setDescription(e.target.value);
   };
   const handleAmountChange = (e) => {
-    setAmount(e.target.value);
+    setAmount(Number(e.target.value));
   };
   const handleSubmit = (e) => {
     if (selectedDate && selectedWallet && selectedType && amount > 0) {
@@ -50,6 +50,7 @@ const NewTransactionSec = ({ user, isShowed, walletAcountData }) => {
     type: selectedType,
     amount,
     date: selectedDate,
+    createdAt: new Date(),
     description,
   };
 
@@ -99,14 +100,10 @@ const NewTransactionSec = ({ user, isShowed, walletAcountData }) => {
           </div>
 
           <div
-            className={`text-secondary font-passionOne ${
+            className={`text-secondary font-passionOne w-full justify-between flex flex-col gap-2 ${
               selectedWallet ? "" : "hidden"
             }`}
           >
-            <form
-              onSubmit={(e) => handleSubmit(e)}
-              className="w-full justify-between flex flex-col gap-2"
-            >
               <input
                 className="bg-transparent py-2 focus:outline-none"
                 type="date"
@@ -142,7 +139,7 @@ const NewTransactionSec = ({ user, isShowed, walletAcountData }) => {
                 onChange={handleAmountChange}
               />
 
-              <div className="flex justify-between items-center py-2">
+              <form className="flex justify-between items-center py-2" onSubmit={(e) => handleSubmit(e)}>
                 <input
                   placeholder="Descriptions"
                   className="focus:outline-none rounded-md p-1"
@@ -160,8 +157,7 @@ const NewTransactionSec = ({ user, isShowed, walletAcountData }) => {
                 >
                   Submit
                 </button>
-              </div>
-            </form>
+              </form>
           </div>
         </>
       )}

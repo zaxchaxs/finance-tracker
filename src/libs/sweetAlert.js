@@ -1,5 +1,7 @@
 import { formatRupiah } from "@/utils/formatRupiah";
 import Swal from "sweetalert2"
+import { addDocTransaction, addDocWallet } from "./firestoreMethods";
+import { useState } from "react";
 
 export const sweetAlertAddTransac = (newData, setSelectedDate, setSelectedWallet, setSelectedType, setDescription, setAmount ) => {
     const convertedAmount = formatRupiah(newData.amount);
@@ -20,20 +22,34 @@ export const sweetAlertAddTransac = (newData, setSelectedDate, setSelectedWallet
         <p><strong>"${newData.description}"</strong></p>
         <p><strong>${newData.date}</strong></p>
       `,
-    }).then((result) => {
+    }).then( async (result) => {
       if (result.isConfirmed) {
-        Swal.fire({
-            title: "Success",
-            color: "#BBF7D0",
-            icon: "success",
-            background: "#059669",
-            confirmButtonColor: "#052E16",
-        });
-        setSelectedDate("");
-        setSelectedWallet("");
-        setSelectedType("");
-        setDescription("");
-        setAmount("");
+        try {
+          await addDocTransaction(newData.userId, newData)
+          Swal.fire({
+              title: "Success",
+              color: "#BBF7D0",
+              icon: "success",
+              background: "#059669",
+              confirmButtonColor: "#052E16",
+          });
+        } catch (error) {
+          console.error(error.message);
+          Swal.fire({
+            title: "Failed",
+            color: "#052E16",
+            icon: "error",
+            background: "#BBF7D0",
+            text: error.message,
+            confirmButtonColor: "#059669",
+          });
+        } finally {
+          setSelectedDate("");
+          setSelectedWallet("");
+          setSelectedType("");
+          setDescription("");
+          setAmount("");
+        }
       }
     });
 }
@@ -55,15 +71,28 @@ export const sweetAlertAddWallet = (newData, setIsAddWalletBtnClicked, setWallet
         <p><strong>Name: </strong> ${newData.name}</p>
         <p><strong>Amount: </strong>${convertedAmount}</p>
     `
-  }).then(result => {
+  }).then(async result => {
     if(result.isConfirmed) {
-      Swal.fire({
-        title: "Success",
-        color: "#BBF7D0",
-        icon: "success",
-        background: "#059669",
-        confirmButtonColor: "#052E16",
-      });
+      try {
+        await addDocWallet(newData);
+        Swal.fire({
+          title: "Success",
+          color: "#BBF7D0",
+          icon: "success",
+          background: "#059669",
+          confirmButtonColor: "#052E16",
+        });
+      } catch (error) {
+        Swal.fire({
+          title: "Failed",
+          color: "#052E16",
+          icon: "error",
+          background: "#BBF7D0",
+          text: error.message,
+          confirmButtonColor: "#059669",
+        });
+        
+      }
       setIsAddWalletBtnClicked(false);
       setWalletName("");
       setwalletAmount("");

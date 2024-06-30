@@ -4,6 +4,7 @@ import CurrentTransaction from "@/components/dahsboard/currentTransaction";
 import NewTransactionSec from "@/components/dahsboard/newTransaction";
 import UserWalletAccount from "@/components/dahsboard/userWalletAccount";
 import { useAuth } from "@/contexts/AuthContext";
+import { getSnapshotUserWallet } from "@/libs/firestoreMethods";
 import {
   faCaretRight,
   faUserAlt,
@@ -37,8 +38,7 @@ const DashboardPage = () => {
     try {
       if (currUser) {
         const getUserWallet = async () => {
-          // const walletData = await getSnapshotUserWallet(currUser?.uid);
-          // setUserWalletData(walletData);
+          await getSnapshotUserWallet(currUser?.uid, setUserWalletData);
         };
         getUserWallet();
       }
@@ -68,7 +68,7 @@ const DashboardPage = () => {
         />
         <h1>My wallet account</h1>
       </div>
-      <UserWalletAccount isShowed={isShowWallet} userWallets={tempWalletData} user={currUser} />
+      <UserWalletAccount isShowed={isShowWallet} userWallets={userWalletData} user={currUser} />
 
       {/* New Transaction Section */}
       <div
@@ -85,7 +85,7 @@ const DashboardPage = () => {
       </div>
       <NewTransactionSec
         isShowed={isShowTransac}
-        walletAcountData={tempWalletData}
+        walletAcountData={userWalletData}
         user={currUser}
       />
 
@@ -102,7 +102,7 @@ const DashboardPage = () => {
         />
         <h1>Current Transactions</h1>
       </div>
-      <CurrentTransaction isShowed={isShowCurrTransac} />
+      <CurrentTransaction isShowed={isShowCurrTransac} user={currUser} />
     </main>
   ) : (
     <Unauthenticate />

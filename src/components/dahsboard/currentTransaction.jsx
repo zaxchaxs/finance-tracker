@@ -1,7 +1,10 @@
+import { getSnapshotUserTransaction } from "@/libs/firestoreMethods";
 import { testingDate } from "@/utils/converTimeStamp";
 import { formatRupiah } from "@/utils/formatRupiah";
+import { useEffect, useState } from "react";
 
-const CurrentTransaction = ({ isShowed }) => {
+const CurrentTransaction = ({ isShowed, user }) => {
+  const [currTransaction, setCurrTransaction] = useState(null);
   const tempCurrTransac = [
     {
       transactionId: "transacid1",
@@ -45,19 +48,25 @@ const CurrentTransaction = ({ isShowed }) => {
     },
   ];
 
+  useEffect(() => {
+    const getCurrTransac = async () => {
+      await getSnapshotUserTransaction(user?.uid, setCurrTransaction);
+    };
+    getCurrTransac();
+  })
   return (
     <div
       className={`w-full text-lg text-secondary px-2 flex flex-col gap-1 ${
         isShowed ? "" : "hidden"
       }`}
     >
-      {tempCurrTransac.length === 0 || !tempCurrTransac ? (
+      {currTransaction?.length === 0 || !currTransaction ? (
         <div className="flex justify-center items-end w-full text-center">
           <p>{`No transactions yet.`}</p>
         </div>
       ) : (
         <div className="w-full text-secondary">
-          {tempCurrTransac.map((data, idx) => {
+          {currTransaction?.map((data, idx) => {
             return <ColItem key={idx} data={data} />;
           })}
         </div>
@@ -85,7 +94,7 @@ const ColItem = ({ data }) => {
       </div>
       <div className="w-full text-justify">
         <p>{`${data.type === "expanse" ? `From` : "To"}: ${data.name}`}</p>
-        <p>{`Description: ${data.desc}`}</p>
+        <p>{`Description: ${data.description}`}</p>
       </div>
     </div>
   );
