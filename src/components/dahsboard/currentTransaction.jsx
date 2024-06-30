@@ -2,9 +2,11 @@ import { getSnapshotUserTransaction } from "@/libs/firestoreMethods";
 import { testingDate } from "@/utils/converTimeStamp";
 import { formatRupiah } from "@/utils/formatRupiah";
 import { useEffect, useState } from "react";
+import LoaderSection from "../loaders/loaderSection";
 
 const CurrentTransaction = ({ isShowed, user }) => {
   const [currTransaction, setCurrTransaction] = useState(null);
+  const [isGettingDate, setIsGettingData] = useState(false);
   const tempCurrTransac = [
     {
       transactionId: "transacid1",
@@ -49,27 +51,41 @@ const CurrentTransaction = ({ isShowed, user }) => {
   ];
 
   useEffect(() => {
-    const getCurrTransac = async () => {
-      await getSnapshotUserTransaction(user?.uid, setCurrTransaction);
-    };
-    getCurrTransac();
-  })
+    try {
+      setIsGettingData(true);
+      const getCurrTransac = async () => {
+        await getSnapshotUserTransaction(user?.uid, setCurrTransaction);
+      };
+      getCurrTransac();
+    } catch (error) {
+      console.error(error.message);
+    } finally {
+      setIsGettingData(false);
+    }
+  }, []);
+
   return (
     <div
       className={`w-full text-lg text-secondary px-2 flex flex-col gap-1 ${
         isShowed ? "" : "hidden"
       }`}
     >
-      {currTransaction?.length === 0 || !currTransaction ? (
-        <div className="flex justify-center items-end w-full text-center">
-          <p>{`No transactions yet.`}</p>
-        </div>
+      {isGettingDate ? (
+        <LoaderSection width={"w-14"} />
       ) : (
-        <div className="w-full text-secondary">
-          {currTransaction?.map((data, idx) => {
-            return <ColItem key={idx} data={data} />;
-          })}
-        </div>
+        <>
+          {currTransaction?.length === 0 || !currTransaction ? (
+            <div className="flex justify-center items-end w-full text-center">
+              <p>{`No transactions yet.`}</p>
+            </div>
+          ) : (
+            <div className="w-full text-secondary">
+              {currTransaction?.map((data, idx) => {
+                return <ColItem key={idx} data={data} />;
+              })}
+            </div>
+          )}
+        </>
       )}
     </div>
   );

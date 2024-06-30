@@ -2,8 +2,14 @@ import { sweetAlertAddTransac } from "@/libs/sweetAlert";
 import { faCaretDown } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect, useState } from "react";
+import LoaderSection from "../loaders/loaderSection";
 
-const NewTransactionSec = ({ user, isShowed, walletAcountData }) => {
+const NewTransactionSec = ({
+  user,
+  isShowed,
+  walletAcountData,
+  isGettingData,
+}) => {
   const [isShowWallet, setIsShowWallet] = useState(false);
   const [selectedDate, setSelectedDate] = useState("");
   const [selectedWallet, setSelectedWallet] = useState("");
@@ -60,105 +66,119 @@ const NewTransactionSec = ({ user, isShowed, walletAcountData }) => {
         isShowed ? "" : "hidden"
       }`}
     >
-      {walletAcountData?.length === 0 || !walletAcountData ? (
-        <div className="flex justify-center items-end w-full text-center">
-          <p>{`It seem you don't have a wallet account yet, try creating one.`}</p>
-        </div>
+      {isGettingData ? (
+        <LoaderSection width={"w-14"} />
       ) : (
         <>
-          <div
-            className="w-full p-1 px-2 flex items-center cursor-pointer gap-2"
-            onClick={() => setIsShowWallet(!isShowWallet)}
-          >
-            <FontAwesomeIcon
-              icon={faCaretDown}
-              rotation={!isShowWallet && 270}
-            />
-            <h1>To:</h1>
-          </div>
-          <div
-            className={`${isShowWallet ? "" : "hidden"} flex flex-col gap-2`}
-          >
-            {walletAcountData.map((e, i) => {
-              const detailsWallet = {
-                accountId: e.accountId,
-                name: e.name,
-              };
-
-              return (
-                <div
-                  onClick={() => handleSelectedWallet(detailsWallet)}
-                  key={i}
-                  className="cursor-pointer border-y-2 w-full border-secondary rounded-md p-1 px-3 group"
-                >
-                  <button className="group-hover:translate-x-3 transition-all ease-in-out duration-200">
-                    {e.name}
-                  </button>
-                </div>
-              );
-            })}
-          </div>
-
-          <div
-            className={`text-secondary font-passionOne w-full justify-between flex flex-col gap-2 ${
-              selectedWallet ? "" : "hidden"
-            }`}
-          >
-              <input
-                className="bg-transparent py-2 focus:outline-none"
-                type="date"
-                value={selectedDate}
-                onChange={handleDateChange}
-                name="Test"
-              />
-              <button
-                className={`${
-                  selectedType === "income" ? "scale-105" : ""
-                } p-1 px-2 bg-secondary hover:bg-secondary-hover rounded-lg text-green-200`}
-                value={"income"}
-                onClick={handleSelectedType}
+          {walletAcountData?.length === 0 || !walletAcountData ? (
+            <div className="flex justify-center items-end w-full text-center">
+              <p>{`It seem you don't have a wallet account yet, try creating one.`}</p>
+            </div>
+          ) : (
+            <>
+              <div
+                className="w-full p-1 px-2 flex items-center cursor-pointer gap-2"
+                onClick={() => setIsShowWallet(!isShowWallet)}
               >
-                Income
-              </button>
-              <button
+                <FontAwesomeIcon
+                  icon={faCaretDown}
+                  rotation={!isShowWallet && 270}
+                />
+                <h1>To:</h1>
+              </div>
+              <div
                 className={`${
-                  selectedType === "expanse" ? "scale-105" : ""
-                } p-1 px-2 rounded-lg text-green-200 bg-danger hover:bg-danger-hover`}
-                value={"expanse"}
-                onClick={handleSelectedType}
+                  isShowWallet ? "" : "hidden"
+                } flex flex-col gap-2`}
               >
-                Expanse
-              </button>
-              <input
-                type="text"
-                name=""
-                id=""
-                placeholder="Amount"
-                className="focus:outline-none rounded-md p-1 my-4"
-                value={amount}
-                onChange={handleAmountChange}
-              />
+                {walletAcountData.map((e, i) => {
+                  const detailsWallet = {
+                    accountId: e.accountId,
+                    name: e.name,
+                  };
 
-              <form className="flex justify-between items-center py-2" onSubmit={(e) => handleSubmit(e)}>
+                  return (
+                    <div
+                      onClick={() => handleSelectedWallet(detailsWallet)}
+                      key={i}
+                      className="cursor-pointer border-y-2 w-full border-secondary rounded-md p-1 px-3 group"
+                    >
+                      <button className="group-hover:translate-x-3 transition-all ease-in-out duration-200">
+                        {e.name}
+                      </button>
+                    </div>
+                  );
+                })}
+              </div>
+
+              <div
+                className={`text-secondary font-passionOne w-full justify-between flex flex-col gap-2 ${
+                  selectedWallet ? "" : "hidden"
+                }`}
+              >
                 <input
-                  placeholder="Descriptions"
-                  className="focus:outline-none rounded-md p-1"
-                  type="text"
-                  value={description}
-                  onChange={handleDescChange}
+                  className="bg-transparent py-2 focus:outline-none"
+                  type="date"
+                  value={selectedDate}
+                  onChange={handleDateChange}
+                  name="Test"
                 />
                 <button
-                  onClick={(e) => handleSubmit(e)}
                   className={`${
-                    selectedDate && selectedWallet && selectedType && amount > 0
-                      ? ""
-                      : "hidden"
-                  } p-1 px-2 bg-secondary rounded-lg text-green-200 hover:bg-secondary-hover`}
+                    selectedType === "income" ? "scale-105" : ""
+                  } p-1 px-2 bg-secondary hover:bg-secondary-hover rounded-lg text-green-200`}
+                  value={"income"}
+                  onClick={handleSelectedType}
                 >
-                  Submit
+                  Income
                 </button>
-              </form>
-          </div>
+                <button
+                  className={`${
+                    selectedType === "expanse" ? "scale-105" : ""
+                  } p-1 px-2 rounded-lg text-green-200 bg-danger hover:bg-danger-hover`}
+                  value={"expanse"}
+                  onClick={handleSelectedType}
+                >
+                  Expanse
+                </button>
+                <input
+                  type="text"
+                  name=""
+                  id=""
+                  placeholder="Amount"
+                  className="focus:outline-none rounded-md p-1 my-4"
+                  value={amount}
+                  onChange={handleAmountChange}
+                />
+
+                <form
+                  className="flex justify-between items-center py-2"
+                  onSubmit={(e) => handleSubmit(e)}
+                >
+                  <input
+                    placeholder="Descriptions"
+                    className="focus:outline-none rounded-md p-1"
+                    type="text"
+                    value={description}
+                    onChange={handleDescChange}
+                  />
+                  <button
+                    onClick={(e) => handleSubmit(e)}
+                    className={`${
+                      selectedDate &&
+                      selectedWallet &&
+                      selectedType &&
+                      amount > 0
+                        ? ""
+                        : "hidden"
+                    } p-1 px-2 bg-secondary rounded-lg text-green-200 hover:bg-secondary-hover`}
+                  >
+                    Submit
+                  </button>
+                </form>
+              </div>
+            </>
+          )}
         </>
       )}
     </div>

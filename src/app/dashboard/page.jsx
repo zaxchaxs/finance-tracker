@@ -16,7 +16,8 @@ const DashboardPage = () => {
   const [isShowWallet, setIsShowWallet] = useState(true);
   const [isShowTransac, setIsShowTransac] = useState(false);
   const [isShowCurrTransac, setIsShowCurrTransac] = useState(false);
-  const [userWalletData, setUserWalletData] = useState();
+  const [userWalletData, setUserWalletData] = useState([]);
+  const [loading, setLoading] = useState(false);
   const { currUser } = useAuth();
 
   const tempWalletData = [
@@ -37,13 +38,20 @@ const DashboardPage = () => {
   useEffect(() => {
     try {
       if (currUser) {
+        setLoading(true);
         const getUserWallet = async () => {
           await getSnapshotUserWallet(currUser?.uid, setUserWalletData);
         };
         getUserWallet();
       }
-    } catch (error) {}
-  }, []);
+    } catch (error) {
+      console.error(error.message);
+    } finally {
+      setTimeout(() => {
+        setLoading(false);
+      }, 300);
+    }
+  }, [currUser]);
 
 
   return currUser ? (
@@ -68,7 +76,7 @@ const DashboardPage = () => {
         />
         <h1>My wallet account</h1>
       </div>
-      <UserWalletAccount isShowed={isShowWallet} userWallets={userWalletData} user={currUser} />
+      <UserWalletAccount isShowed={isShowWallet} userWallets={userWalletData} user={currUser} isGettingData={loading} />
 
       {/* New Transaction Section */}
       <div
@@ -87,6 +95,7 @@ const DashboardPage = () => {
         isShowed={isShowTransac}
         walletAcountData={userWalletData}
         user={currUser}
+        isGettingData={loading}
       />
 
       {/* Current Transaction Section */}

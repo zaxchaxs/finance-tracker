@@ -90,13 +90,6 @@ const getSnapshotUserTransaction = async (idUser, setCurrTransaction) => {
             }))
             setCurrTransaction(data);
         } )
-
-        // const docsSnap = await getDocs(docRef);
-        // if(docsSnap.empty) {
-        //     throw new Error("Belum ada transaksi");
-        // } else {
-        //     return docsSnap;
-        // }
     } catch (error) {
         console.error(error.message);
     }
