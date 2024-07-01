@@ -36,6 +36,22 @@ const addDocWallet = async (newData) => {
     }
 };
 
+const updateWalletDoc = async (accountId, newData) => {
+    try {
+        const q = query(collection(db, 'user-wallets'), where('accountId', '==', accountId));
+        const querySnapshot = await getDocs(q);
+
+        if(querySnapshot.empty) throw new Error('Wallet Account Not Found')
+
+        querySnapshot.forEach( async document => {
+            const docRef = doc(db, 'user-wallets', document.id);
+            await updateDoc(docRef, newData);
+        });
+    } catch (error) {
+        throw new Error(`Failed to update: ${error.message}`)
+    }
+}
+
 const getSnapshotUserWallet = async (idUser, setUserWalletData) => {
     try {
       const q = query(collection(db, 'user-wallets'), where("userId", "==", idUser));
@@ -129,5 +145,6 @@ export {
     getSnapshotUserTransaction,
     addDocTransaction,
     addDocWallet,
-    addUser
+    addUser,
+    updateWalletDoc
 };

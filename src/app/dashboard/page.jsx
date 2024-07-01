@@ -5,10 +5,7 @@ import NewTransactionSec from "@/components/dahsboard/newTransaction";
 import UserWalletAccount from "@/components/dahsboard/userWalletAccount";
 import { useAuth } from "@/contexts/AuthContext";
 import { getSnapshotUserWallet } from "@/libs/firestoreMethods";
-import {
-  faCaretRight,
-  faUserAlt,
-} from "@fortawesome/free-solid-svg-icons";
+import { faCaretRight, faUserAlt } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect, useState } from "react";
 
@@ -36,23 +33,22 @@ const DashboardPage = () => {
   ];
 
   useEffect(() => {
-    try {
-      if (currUser) {
-        setLoading(true);
-        const getUserWallet = async () => {
-          await getSnapshotUserWallet(currUser?.uid, setUserWalletData);
-        };
-        getUserWallet();
-      }
-    } catch (error) {
-      console.error(error.message);
-    } finally {
-      setTimeout(() => {
+    const getUserWallet = async () => {
+      setLoading(true);
+      try {
+        await getSnapshotUserWallet(currUser?.uid, setUserWalletData);
+      } catch (error) {
+        console.error(error.message);
+      } finally {
         setLoading(false);
-      }, 300);
+      }
+    };
+
+    if (currUser) {
+      getUserWallet();
     }
   }, [currUser]);
-
+  
 
   return currUser ? (
     <main className="min-h-screen text-xl  p-6 font-passionOne bg-primary w-full py-4 flex flex-col gap-5">
@@ -76,7 +72,12 @@ const DashboardPage = () => {
         />
         <h1>My wallet account</h1>
       </div>
-      <UserWalletAccount isShowed={isShowWallet} userWallets={userWalletData} user={currUser} isGettingData={loading} />
+      <UserWalletAccount
+        isShowed={isShowWallet}
+        userWallets={userWalletData}
+        user={currUser}
+        isGettingData={loading}
+      />
 
       {/* New Transaction Section */}
       <div
@@ -119,4 +120,3 @@ const DashboardPage = () => {
 };
 
 export default DashboardPage;
-
