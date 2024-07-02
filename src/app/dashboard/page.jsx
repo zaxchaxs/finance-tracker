@@ -3,9 +3,10 @@ import Unauthenticate from "@/components/Unauthenticate";
 import CurrentTransaction from "@/components/dahsboard/currentTransaction";
 import NewTransactionSec from "@/components/dahsboard/newTransaction";
 import UserWalletAccount from "@/components/dahsboard/userWalletAccount";
+import NavbarPage from "@/components/navpage/NavPage";
 import { useAuth } from "@/contexts/AuthContext";
 import { getSnapshotUserWallet } from "@/libs/firestoreMethods";
-import { faCaretRight, faUserAlt } from "@fortawesome/free-solid-svg-icons";
+import { faCaretRight } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect, useState } from "react";
 
@@ -53,12 +54,7 @@ const DashboardPage = () => {
   return currUser ? (
     <main className="min-h-screen text-xl  p-6 font-passionOne bg-primary w-full py-4 flex flex-col gap-5">
       {/* Nav */}
-      <div className="z-10 w-full border-b-2 text-primary border-secondary p-2 font-lilitaOne text-2xl flex justify-between">
-        <h1 className="">Dashboard</h1>
-        <button>
-          <FontAwesomeIcon icon={faUserAlt} />
-        </button>
-      </div>
+      <NavbarPage title={"Dashboard"} />
 
       <div
         className="pt-4 py-2  w-full text-primary flex items-center gap-2 cursor-pointer border-b-2 border-green-950"

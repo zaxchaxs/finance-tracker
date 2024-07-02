@@ -1,11 +1,9 @@
 
 const TransactionPage = () => {
     return(
-        <>
-            <div className="w-full flex justify-center">
-            <h1 className="">Transactions</h1>
-            </div>
-        </>
+        <main className="min-h-screen text-xl p-6 font-passionOne bg-primary w-full py-4 flex flex-col gap-5">
+
+        </main>
     )
 };
 

@@ -32,7 +32,7 @@ const NewTransactionSec = ({
     setDescription(e.target.value);
   };
   const handleAmountChange = (e) => {
-    setAmount(Number(e.target.value));
+    setAmount(e.target.value);
   };
   const handleSubmit = (e) => {
     if (selectedDate && selectedWallet && selectedType && amount > 0) {
@@ -54,7 +54,7 @@ const NewTransactionSec = ({
     accountId: selectedWallet?.accountId,
     name: selectedWallet?.name,
     type: selectedType,
-    amount,
+    amount: Number(amount),
     date: selectedDate,
     createdAt: new Date(),
     description,

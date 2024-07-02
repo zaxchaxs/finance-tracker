@@ -70,31 +70,6 @@ const getSnapshotUserWallet = async (idUser, setUserWalletData) => {
     }
   };
 
-// const getSnapshotUserWallet = async (idUser) => {
-//     let data = [];
-    
-//     try {
-//         const q = query(collection(db, 'user-wallets'), where("userId", "==", `${idUser}`));
-//         const unsubscribe = onSnapshot(q, snapshot => {
-//             data = snapshot.docs.map(doc => doc.data());
-//             console.log(data);
-//             // return data;
-
-//             () => unsubscribe();
-//         })
-        
-//         console.log(data);
-//         return data;
-//         // const docsSnap = await getDocs(q);
-//         // if(docsSnap.empty) {
-//         //     throw new Error("Wallet gaada");
-//         // } else {
-//         //     return docsSnap;
-//         // }
-//     } catch(e) {
-//         console.error(e.message);
-//     };
-// };
 
 const getSnapshotUserTransaction = async (idUser, setCurrTransaction) => {
     try {

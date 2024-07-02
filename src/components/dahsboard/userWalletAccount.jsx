@@ -18,7 +18,7 @@ const UserWalletAccount = ({ isShowed, userWallets, user, isGettingData }) => {
         userId: user.uid,
         accountId,
         name: walletName,
-        amount: walletAmount,
+        amount: Number(walletAmount),
         createdAt: new Date(),
       };
       sweetAlertAddWallet(
@@ -82,7 +82,7 @@ const UserWalletAccount = ({ isShowed, userWallets, user, isGettingData }) => {
                   placeholder="Amount"
                   className="focus:outline-none rounded-md p-1 w-full"
                   value={walletAmount}
-                  onChange={(e) => setwalletAmount(Number(e.target.value))}
+                  onChange={(e) => setwalletAmount(e.target.value)}
                 />
                 <button
                   onClick={(e) => handleSubmit(e)}
