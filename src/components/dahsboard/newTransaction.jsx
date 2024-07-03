@@ -62,7 +62,7 @@ const NewTransactionSec = ({
 
   return (
     <div
-      className={`w-full px-4 flex text-secondary flex-col gap-2 ${
+      className={`w-full px-4 flex text-lg text-secondary flex-col gap-2 ${
         isShowed ? "" : "hidden"
       }`}
     >
@@ -141,40 +141,40 @@ const NewTransactionSec = ({
                 >
                   Expanse
                 </button>
-                <input
-                  type="text"
-                  name=""
-                  id=""
-                  placeholder="Amount"
-                  className="focus:outline-none rounded-md p-1 my-4"
-                  value={amount}
-                  onChange={handleAmountChange}
-                />
 
                 <form
-                  className="flex justify-between items-center py-2"
+                  className="flex flex-col items-center py-2"
                   onSubmit={(e) => handleSubmit(e)}
                 >
                   <input
-                    placeholder="Descriptions"
-                    className="focus:outline-none rounded-md p-1"
                     type="text"
-                    value={description}
-                    onChange={handleDescChange}
+                    placeholder="Amount"
+                    className="focus:outline-none rounded-md p-1 my-4 w-full"
+                    value={amount}
+                    onChange={handleAmountChange}
                   />
-                  <button
-                    onClick={(e) => handleSubmit(e)}
-                    className={`${
-                      selectedDate &&
-                      selectedWallet &&
-                      selectedType &&
-                      amount > 0
-                        ? ""
-                        : "hidden"
-                    } p-1 px-2 bg-secondary rounded-lg text-green-200 hover:bg-secondary-hover`}
-                  >
-                    Submit
-                  </button>
+                  <div className="flex justify-between gap-3 w-full">
+                    <input
+                      placeholder="Descriptions"
+                      className="focus:outline-none w-full rounded-md p-1"
+                      type="text"
+                      value={description}
+                      onChange={handleDescChange}
+                    />
+                    <button
+                      onClick={(e) => handleSubmit(e)}
+                      className={`${
+                        selectedDate &&
+                        selectedWallet &&
+                        selectedType &&
+                        amount > 0
+                          ? ""
+                          : "hidden"
+                      } p-1 px-2 bg-secondary rounded-lg text-green-200 hover:bg-secondary-hover`}
+                    >
+                      Submit
+                    </button>
+                  </div>
                 </form>
               </div>
             </>

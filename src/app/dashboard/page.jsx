@@ -57,7 +57,7 @@ const DashboardPage = () => {
       <NavbarPage title={"Dashboard"} />
 
       <div
-        className="pt-4 py-2  w-full text-primary flex items-center gap-2 cursor-pointer border-b-2 border-green-950"
+        className="pt-4 py-2 w-full text-primary flex items-center gap-2 cursor-pointer border-b-2 border-green-950"
         onClick={() => setIsShowWallet(!isShowWallet)}
       >
         <FontAwesomeIcon

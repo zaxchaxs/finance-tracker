@@ -166,6 +166,10 @@ const ReportPage = () => {
         {/* nav */}
         <NavbarPage title={"Reports"} />
 
+        <div className="w-full">
+          
+        </div>
+
         <div className="w-full rounded-lg shadow-md p-2 flex flex-col justify-center items-center">
             <Chart data={exampleData} />
             <div className="flex w-full justify-center gap-4 text-sm">

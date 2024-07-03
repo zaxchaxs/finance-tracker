@@ -26,7 +26,7 @@ module.exports = {
         "lightGreen": "#BBF7D0"
       },
       fontFamily: {
-        'passionOne': ['var(--font-passion-one)'],
+        'passionOne': ['var(--font-patua-one)'],
         'lilitaOne': ['var(--font-lilita-one)']
       }
     },

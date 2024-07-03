@@ -32,7 +32,7 @@ const UserWalletAccount = ({ isShowed, userWallets, user, isGettingData }) => {
 
   return (
     <div
-      className={`w-full px-4 flex text-secondary flex-col ${
+      className={`w-full px-4 flex text-secondary text-lg flex-col ${
         isShowed ? "" : "hidden"
       }`}
     >

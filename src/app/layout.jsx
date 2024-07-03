@@ -1,5 +1,5 @@
 'use client'
-import { Lilita_One, Passion_One } from "next/font/google";
+import { Bree_Serif, Lilita_One, Passion_One, Patua_One } from "next/font/google";
 import "./globals.css";
 import Link from "next/link";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -20,11 +20,24 @@ const lilitaOne = Lilita_One({
   variable: "--font-lilita-one",
   weight: "400",
 });
+
 const passionOne = Passion_One({
   subsets: ["latin"],
   variable: "--font-passion-one",
   weight: "400",
 });
+
+const breeSerif = Bree_Serif({
+  subsets: ['latin'],
+  variable: '--font-bree-serif',
+  weight: '400'
+})
+
+const patuaOne = Patua_One({
+  subsets: ['latin'],
+  variable: '--font-patua-one',
+  weight: '400'
+})
 
 // export const metadata = {
 //   title: "Create Next App",
@@ -40,7 +53,7 @@ export default function RootLayout({ children }) {
 
   return (
     <html lang="en">
-      <body className={`${lilitaOne.variable} ${passionOne.variable}`}>
+      <body className={`${lilitaOne.variable} ${passionOne.variable} ${breeSerif.variable} ${patuaOne.variable}`}>
         <AuthProvider>
           <div className={`fixed top-1/2 -translate-y-1/2 ${isNavOpen ? "z-50" : "z-10"}`}>
             <motion.div

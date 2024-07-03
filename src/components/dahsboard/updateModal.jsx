@@ -1,9 +1,10 @@
-import { updateWalletDoc } from "@/libs/firestoreMethods";
+import { deleteWalletDoc, updateWalletDoc } from "@/libs/firestoreMethods";
 import { faSquareXmark } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { motion } from "framer-motion";
 import { useState } from "react";
 import LoaderSection from "../loaders/loaderSection";
+import { sweetAlertDeleteWallet } from "@/libs/sweetAlert";
 
 const UpdateModal = ({data, isInfoClicked, setIsInfoClicked}) => {
     const [name, setName] = useState("");
@@ -14,12 +15,12 @@ const UpdateModal = ({data, isInfoClicked, setIsInfoClicked}) => {
         amount: amount ? amount : data.amount
     };
 
+
+    // handler funtions
     const handleUpdate = async () => {
         if(name || amount) {
             setLoadingUpdate(true);
             try {
-                console.log(newData);
-                console.log(data);
                 await updateWalletDoc(data.accountId, newData)
             } catch (error) {
                 console.error(error.message);
@@ -31,6 +32,19 @@ const UpdateModal = ({data, isInfoClicked, setIsInfoClicked}) => {
             }
         }
     };
+    const handleDelete = async () => {
+      setLoadingUpdate(true);
+      try {
+        // console.log(data.accountId);
+        // await deleteWalletDoc(data.accountId, data.userId);
+        sweetAlertDeleteWallet(data);
+      } catch (error) {
+        console.error(error.message);
+      } finally {
+        setLoadingUpdate(false);
+        setIsInfoClicked(false);
+      }
+    }
 
     return (
         <div 
@@ -79,7 +93,7 @@ const UpdateModal = ({data, isInfoClicked, setIsInfoClicked}) => {
                 </div>
                 :
                 <>
-                    <button className="p-1 px-2 rounded-md bg-danger hover:bg-danger-hover">Delete</button>
+                    <button className="p-1 px-2 rounded-md bg-danger hover:bg-danger-hover" onClick={handleDelete}>Delete</button>
                     <button className={`p-1 px-2 rounded-md bg-blue-500 hover:bg-blue-600`} onClick={handleUpdate}>Update</button>
                 </>
 
