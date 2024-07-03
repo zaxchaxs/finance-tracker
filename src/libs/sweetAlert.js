@@ -49,7 +49,6 @@ export const sweetAlertAddTransac = (
           confirmButtonColor: "#052E16",
         });
       } catch (error) {
-        console.error(error.message);
         Swal.fire({
           title: "Failed",
           color: "#052E16",

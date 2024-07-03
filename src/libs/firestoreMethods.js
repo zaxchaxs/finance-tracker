@@ -46,6 +46,7 @@ const addDocWallet = async (newData) => {
     await addDoc(docRef, newData);
   } catch (error) {
     console.error(error.message);
+    throw new Error(`Something wrong: ${error.message}`);
   }
 };
 
@@ -57,14 +58,15 @@ const updateWalletDoc = async (accountId, newData) => {
     );
     const querySnapshot = await getDocs(q);
 
-    if (querySnapshot.empty) throw new Error("Wallet Account Not Found");
+    if (querySnapshot.empty) throw new Error("Wallet Account ID Not Found");
 
     querySnapshot.forEach(async (document) => {
       const docRef = doc(db, "user-wallets", document.id);
       await updateDoc(docRef, newData);
     });
   } catch (error) {
-    throw new Error(`Failed to update: ${error.message}`);
+    console.error(error.message);
+    throw new Error(`${error.message}`);
   }
 };
 
@@ -72,35 +74,38 @@ const deleteWalletDoc = async (accountId, userId) => {
   try {
     // Deleting transactions history of the wallet first
     const queryTransac = query(
-        collection(db, "user-transactions", userId, "transactions"),
-        where('accountId', "==", accountId)
-      );
-      const querySnapshotTransac = await getDocs(queryTransac);
+      collection(db, "user-transactions", userId, "transactions"),
+      where("accountId", "==", accountId)
+    );
+    const querySnapshotTransac = await getDocs(queryTransac);
 
-      if(!querySnapshotTransac.empty) {
-          querySnapshotTransac.forEach(async (document) => {
-            const docRef = doc(
-              db,
-              "user-transactions",
-              userId,
-              "transactions",
-              document.id
-            );
-            await deleteDoc(docRef);
-          });
-      };
+    if (!querySnapshotTransac.empty) {
+      querySnapshotTransac.forEach(async (document) => {
+        const docRef = doc(
+          db,
+          "user-transactions",
+          userId,
+          "transactions",
+          document.id
+        );
+        await deleteDoc(docRef);
+      });
+    }
 
     //   and delete doc wallet
-    const queryWallet = query(collection(db, 'user-wallets'), where('accountId', '==', accountId));
+    const queryWallet = query(
+      collection(db, "user-wallets"),
+      where("accountId", "==", accountId)
+    );
     const querySnapshotWallet = await getDocs(queryWallet);
 
-    if(querySnapshotWallet.empty) throw new Error('Wallet Account ID Not Found')
+    if (querySnapshotWallet.empty)
+      throw new Error("Wallet Account ID Not Found");
 
     querySnapshotWallet.forEach(async (document) => {
       const docRef = doc(db, "user-wallets", document.id);
       await deleteDoc(docRef);
     });
-
   } catch (error) {
     console.error(error.message);
     throw new Error(`${error.message}`);
@@ -147,19 +152,19 @@ const getSnapshotUserTransaction = async (idUser, setCurrTransaction) => {
 };
 
 const addDocTransaction = async (idUser, newData) => {
+  // updating amount of wallet
   try {
-    const docRef = collection(db, `user-transactions/${idUser}/transactions`);
-    await addDoc(docRef, newData);
-
-    // updating amount of wallet
     const q = query(
       collection(db, "user-wallets"),
       where("userId", "==", idUser)
     );
     const docSnapshot = await getDocs(q);
+    if (docSnapshot.empty) throw Error;
+
     const currWallet = docSnapshot.docs.find(
       (el) =>
-        el.data().userId === idUser && el.data().accountId === newData.accountId
+        el.data().userId === idUser &&
+        el.data().accountId === newData.accountId
     );
     const walletRef = currWallet.ref;
 
@@ -174,7 +179,16 @@ const addDocTransaction = async (idUser, newData) => {
     }
   } catch (error) {
     console.error(error.message);
-    throw new Error("Failed to Add Transaction");
+    throw new Error(`Failed to update amount wallet`);
+  }
+
+  // addingDoc
+  try {
+    const docRef = collection(db, `user-transactions/${idUser}/transactions`);
+    await addDoc(docRef, newData);
+  } catch (error) {
+    console.error(error.message);
+    throw new Error(`Failed to add transaction`);
   }
 };
 

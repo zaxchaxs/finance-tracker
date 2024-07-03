@@ -35,8 +35,8 @@ const NewTransactionSec = ({
     setAmount(e.target.value);
   };
   const handleSubmit = (e) => {
+    e.preventDefault();
     if (selectedDate && selectedWallet && selectedType && amount > 0) {
-      e.preventDefault();
       sweetAlertAddTransac(
         newData,
         setSelectedDate,
