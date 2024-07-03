@@ -1,7 +1,7 @@
-export const yearDataFilter = (data, month, year) => {
+export const yearDataFilter = (data, year) => {
     const yearFiltered = data.filter(obj => {
-        const newDate = new Date(obj.date);
-        return year === newDate.getFullYear();
+        const date = new Date(obj.date);
+        return year === date.getFullYear();
     });
 
     const monthNames = [
@@ -11,7 +11,7 @@ export const yearDataFilter = (data, month, year) => {
 
     // buat 12 custom array of object
     const newData = Array(12).fill(null).map((_, idx) => ({
-        month: monthNames[idx],
+        name: monthNames[idx],
         income: 0,
         expanse: 0
 
@@ -30,6 +30,35 @@ export const yearDataFilter = (data, month, year) => {
     return newData;
 };
 
-export const monthDataFilter  = (data, months, year) => {
-    // console.log("month");
+export const monthDataFilter  = (data, month, year) => {
+
+    const monthFiltered = data.filter(obj => {
+        const date = new Date(obj.date);
+        return date.getMonth() === month && date.getFullYear() === year;
+    });
+
+    // create days in every month. anjai juga ini baru tau.
+    const getDaysInMonth = (inYear, inMonth) => {
+        return new Date(inYear, inMonth + 1, 0).getDate();
+    };
+    // console.log(getDaysInMonth(year, month));
+    const numOfDays = getDaysInMonth(year, month);
+    const newData = Array(numOfDays).fill(null).map((_, idx) => ({
+        name: idx+1,
+        income: 0,
+        expanse: 0
+    }));
+
+    monthFiltered.forEach(transac => {
+        const date = new Date(transac.date);
+        const dateIdx = date.getDate()-1;
+
+        if(transac.type === 'income') {
+            newData[dateIdx].income += transac.amount
+        } else if(transac.type === 'expanse') {
+            newData[dateIdx].expanse += transac.amount
+        }
+    });
+
+    return newData;
 };

@@ -2,7 +2,8 @@
 import Unauthenticate from "@/components/Unauthenticate";
 import NavbarPage from "@/components/navpage/NavPage";
 import Chart from "@/components/reports/BarChart";
-import FilterDropdown from "@/components/reports/FilterDropDown";
+import ReportStats from "@/components/reports/ReportStats";
+import tempTransaction from "@/components/tempTransactions";
 import { useAuth } from "@/contexts/AuthContext";
 
 const ReportPage = () => {
@@ -166,15 +167,16 @@ const ReportPage = () => {
         {/* nav */}
         <NavbarPage title={"Reports"} />
 
-        <FilterDropdown />
+        <div className="w-full">
+          <ReportStats datas={tempTransaction} />
 
-        <div className="w-full rounded-lg shadow-md p-2 flex flex-col justify-center items-center">
-            <Chart data={exampleData} />
+        </div>
+
+            {/* <Chart data={exampleData} />
             <div className="flex w-full justify-center gap-4 text-sm">
                 <h1 className="rounded-md p-1 px-2 bg-secondary">Income</h1>
                 <h1 className="rounded-md p-1 px-2 bg-danger">Expanse</h1>
-            </div>
-        </div>
+            </div> */}
       </main>
     ) : (
       <Unauthenticate />

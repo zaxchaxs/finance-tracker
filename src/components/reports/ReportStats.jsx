@@ -131,8 +131,9 @@ import { monthConvert } from '@/utils/monthConverting';
 import { useState, useRef, useEffect } from 'react';
 import tempTransaction from '../tempTransactions';
 import { monthDataFilter, yearDataFilter } from '@/utils/filteringData';
+import Chart from './BarChart';
 
-const FilterDropdown = () => {
+const ReportStats = ({datas}) => {
 //   const [isYearOpen, setIsYearOpen] = useState(false);
 //   const [isMonthOpen, setIsMonthOpen] = useState(false);
 //   const [selectedYear, setSelectedYear] = useState('');
@@ -171,9 +172,7 @@ const FilterDropdown = () => {
 //     };
 //   }, []);
 
-
-
-  const [data, setData] = useState(tempTransaction);
+  const [data, setData] = useState(datas);
   const [year, setYear] = useState();
   const [month, setMonth] = useState();
   const [selectedFilter, setSelectedFilter] = useState('year');
@@ -209,12 +208,13 @@ const FilterDropdown = () => {
 
   useEffect(() => {
     if(selectedFilter === 'year') {
-        const filteredData = yearDataFilter(tempTransaction, month, year);
+        const filteredData = yearDataFilter(datas, year);
         setData(filteredData);
     } else {
-        monthDataFilter(tempTransaction, month, year);
+        const filteredData = monthDataFilter(datas, month, year);
+        setData(filteredData);
     }
-  }, [month, year, selectedFilter])
+  }, [month, year, selectedFilter]);
 
   useEffect(() => {
     const currDate = new Date();
@@ -286,19 +286,21 @@ const FilterDropdown = () => {
     //     ))}
     //   </div>
     // </div>
-    <div className='w-full font-passionOne text-base flex justify-between items-center'>
-        <div className='flex'>
-            <button value={'year'} className={`${selectedFilter === 'year' ? 'bg-secondary hover:bg-secondary-hover' : 'hover:bg-green-300 text-secondary'} p-1 px-3 border-2 border-secondary rounded-md duration-200 ease-in-out transition-all`} onClick={handleSelectedFilter}>Year</button>
-            <button value={'month'} className={`${selectedFilter === 'month' ? 'bg-secondary hover:bg-secondary-hover' : 'hover:bg-green-300 text-secondary'} p-1 px-3 border-2 border-secondary rounded-md duration-200 ease-in-out transition-all`} onClick={handleSelectedFilter}>Month</button>
-        </div>
-        <div className='flex text-secondary'>
-            <button className={`p-1 px-3 border-2 border-secondary rounded-l-md hover:bg-green-300 transition-all ease-in-out duration-200`} onClick={handleLeftBtnClick}>{'<'}</button>
-            <button onClick={() => console.log(data)} className={`p-1 px-3 border-y-2 border-secondary`}>{selectedFilter === 'year' ? year : `${convertedMonth}, ${year}`}</button>
-            <button className={`p-1 px-3 border-2 border-secondary rounded-r-md hover:bg-green-300 transition-all ease-in-out duration-200`} onClick={handleRightBtnClick}>{'>'}</button>
-        </div>
-
-    </div>
+    <>
+      <div className='w-full font-passionOne text-base flex justify-between items-center'>
+          <div className='flex'>
+              <button value={'year'} className={`${selectedFilter === 'year' ? 'bg-secondary hover:bg-secondary-hover' : 'hover:bg-green-300 text-secondary'} p-1 px-3 border-2 border-secondary rounded-md duration-200 ease-in-out transition-all`} onClick={handleSelectedFilter}>Year</button>
+              <button value={'month'} className={`${selectedFilter === 'month' ? 'bg-secondary hover:bg-secondary-hover' : 'hover:bg-green-300 text-secondary'} p-1 px-3 border-2 border-secondary rounded-md duration-200 ease-in-out transition-all`} onClick={handleSelectedFilter}>Month</button>
+          </div>
+          <div className='flex text-secondary'>
+              <button className={`p-1 px-3 border-2 border-secondary rounded-l-md hover:bg-green-300 transition-all ease-in-out duration-200`} onClick={handleLeftBtnClick}>{'<'}</button>
+              <button onClick={() => console.log(data)} className={`p-1 px-3 border-y-2 border-secondary`}>{selectedFilter === 'year' ? year : `${convertedMonth}, ${year}`}</button>
+              <button className={`p-1 px-3 border-2 border-secondary rounded-r-md hover:bg-green-300 transition-all ease-in-out duration-200`} onClick={handleRightBtnClick}>{'>'}</button>
+          </div>
+      </div>
+      <Chart data={data} />
+    </>
   );
 };
 
-export default FilterDropdown;
+export default ReportStats;
