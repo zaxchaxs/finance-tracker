@@ -21,11 +21,11 @@ const Chart = ({ data }) => {
       >
         {/* <CartesianGrid strokeDasharray="3 3" /> */}
         <XAxis dataKey="name" />
-        {/* <YAxis /> */}
+        {/* <YAxis className="text-xs" /> */}
         <Tooltip />
         {/* <Legend  /> */}
         <Bar dataKey="income" fill="#059669" className="z-0" />
-        <Bar dataKey="expanse" fill="#EF4444" className="z-0" />
+        <Bar dataKey="expanse" fill="#EF4444" className="z-0" />  
       </BarChart>
     </div>
     // <ResponsiveContainer

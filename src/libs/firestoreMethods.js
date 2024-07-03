@@ -132,19 +132,21 @@ const getSnapshotUserWallet = async (idUser, setUserWalletData) => {
   }
 };
 
-const getSnapshotUserTransaction = async (idUser, setCurrTransaction) => {
+const getSnapshotUserTransaction = async (idUser, setTransaction, limitNum) => {
   try {
     const q = query(
       collection(db, `user-transactions/${idUser}/transactions`),
-      orderBy("createdAt", "desc"),
-      limit(5)
+      limitNum ? (orderBy("createdAt", "desc"), limit(limitNum))
+      :
+      orderBy('date', 'desc')
     );
 
     const unsubscribe = onSnapshot(q, (snapshot) => {
       const data = snapshot.docs.map((e) => ({
         ...e.data(),
       }));
-      setCurrTransaction(data);
+      setTransaction(data);
+      console.log(data);
     });
   } catch (error) {
     console.error(error.message);

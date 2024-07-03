@@ -53,8 +53,9 @@ const CurrentTransaction = ({ isShowed, user }) => {
   useEffect(() => {
     try {
       setIsGettingData(true);
+      const limit = 5;
       const getCurrTransac = async () => {
-        await getSnapshotUserTransaction(user?.uid, setCurrTransaction);
+        await getSnapshotUserTransaction(user?.uid, setCurrTransaction, limit);
       };
       getCurrTransac();
     } catch (error) {

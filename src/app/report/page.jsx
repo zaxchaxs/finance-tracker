@@ -2,6 +2,7 @@
 import Unauthenticate from "@/components/Unauthenticate";
 import NavbarPage from "@/components/navpage/NavPage";
 import Chart from "@/components/reports/BarChart";
+import FilterDropdown from "@/components/reports/FilterDropDown";
 import { useAuth } from "@/contexts/AuthContext";
 
 const ReportPage = () => {
@@ -160,14 +161,13 @@ const ReportPage = () => {
         }
       ]
 
-      console.log(exampleData.length);
     return currUser ? (
       <main className="min-h-screen text-xl p-6 font-passionOne bg-primary w-full py-4 flex flex-col gap-5">
         {/* nav */}
         <NavbarPage title={"Reports"} />
 
         <div className="w-full">
-          
+          <FilterDropdown />
         </div>
 
         <div className="w-full rounded-lg shadow-md p-2 flex flex-col justify-center items-center">
