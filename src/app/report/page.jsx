@@ -166,9 +166,7 @@ const ReportPage = () => {
         {/* nav */}
         <NavbarPage title={"Reports"} />
 
-        <div className="w-full">
-          <FilterDropdown />
-        </div>
+        <FilterDropdown />
 
         <div className="w-full rounded-lg shadow-md p-2 flex flex-col justify-center items-center">
             <Chart data={exampleData} />
