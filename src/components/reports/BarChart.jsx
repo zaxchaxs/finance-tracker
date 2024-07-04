@@ -17,7 +17,7 @@ const Chart = ({ data }) => {
           className="text-xs z-0"
           data={data}
           barGap={0}
-          width={1000}
+          width={900}
           height={400}
         >
           <CartesianGrid strokeDasharray="3 3" strokeWidth={2} />
@@ -25,8 +25,8 @@ const Chart = ({ data }) => {
           {/* <YAxis className="text-xs" /> */}
           <Tooltip />
           {/* <Legend  /> */}
-          <Bar dataKey="income" fill="#059669" className="z-0" />
-          <Bar dataKey="expanse" fill="#EF4444" className="z-0" />
+          <Bar dataKey="income" fill="#059669" className="z-0" radius={3} />
+          <Bar dataKey="expanse" fill="#EF4444" className="z-0" radius={3} />
         </BarChart>
       </div>
     </div>
