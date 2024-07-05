@@ -146,7 +146,6 @@ const getSnapshotUserTransaction = async (idUser, setTransaction, limitNum) => {
         ...e.data(),
       }));
       setTransaction(data);
-      console.log(data);
     });
   } catch (error) {
     console.error(error.message);

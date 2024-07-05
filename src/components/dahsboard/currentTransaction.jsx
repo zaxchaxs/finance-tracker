@@ -6,7 +6,7 @@ import LoaderSection from "../loaders/loaderSection";
 
 const CurrentTransaction = ({ isShowed, user }) => {
   const [currTransaction, setCurrTransaction] = useState(null);
-  const [isGettingDate, setIsGettingData] = useState(false);
+  const [isGettingData, setIsGettingData] = useState(false);
   const tempCurrTransac = [
     {
       transactionId: "transacid1",
@@ -51,8 +51,8 @@ const CurrentTransaction = ({ isShowed, user }) => {
   ];
 
   useEffect(() => {
-    try {
-      setIsGettingData(true);
+    setIsGettingData(true);
+    try { 
       const limit = 5;
       const getCurrTransac = async () => {
         await getSnapshotUserTransaction(user?.uid, setCurrTransaction, limit);
@@ -63,7 +63,7 @@ const CurrentTransaction = ({ isShowed, user }) => {
     } finally {
       setIsGettingData(false);
     }
-  }, []);
+  }, [user]);
 
   return (
     <div
@@ -71,7 +71,7 @@ const CurrentTransaction = ({ isShowed, user }) => {
         isShowed ? "" : "hidden"
       }`}
     >
-      {isGettingDate ? (
+      {isGettingData ? (
         <LoaderSection width={"w-14"} />
       ) : (
         <>

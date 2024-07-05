@@ -1,177 +1,59 @@
 "use client";
 import Unauthenticate from "@/components/Unauthenticate";
+import LoaderPage from "@/components/loaders/loaderPage";
 import NavbarPage from "@/components/navpage/NavPage";
 import ReportStats from "@/components/reports/ReportStats";
 import tempTransaction from "@/components/tempTransactions";
 import { useAuth } from "@/contexts/AuthContext";
+import { getSnapshotUserTransaction, getSnapshotUserWallet } from "@/libs/firestoreMethods";
+import { useEffect, useState } from "react";
 
 const ReportPage = () => {
-    const {currUser} = useAuth();
+  const [wallets, setWallets] = useState(null);
+  const [transactions, setTransactions] = useState(null);
+  const [filteredTransactions, setFilteredTransactions] = useState([]);
+  const [isGettingData, setIsGettingData] = useState(false);
+  const { currUser, loading } = useAuth();
 
-    const exampleData = [
-        {
-          "name": "1",
-          "income": 4000,
-          "expanse": 2400
-        },
-        {
-          "name": "2",
-          "income": 3000,
-          "expanse": 1398
-        },
-        {
-          "name": "3",
-          "income": 2000,
-          "expanse": 5000
-        },
-        {
-          "name": "4",
-          "income": 2780,
-          "expanse": 3908
-        },
-        {
-          "name": "5",
-          "income": 1890,
-          "expanse": 4800
-        },
-        {
-          "name": "6",
-          "income": 2390,
-          "expanse": 3800
-        },
-        {
-          "name": "7",
-          "income": 3490,
-          "expanse": 4300
-        },
-        {
-          "name": "D",
-          "income": 2780,
-          "expanse": 3908
-        },
-        {
-          "name": "E",
-          "income": 1890,
-          "expanse": 4800
-        },
-        {
-          "name": "F",
-          "income": 2390,
-          "expanse": 3800
-        },
-        {
-          "name": "G",
-          "income": 3490,
-          "expanse": 4300
-        },
-        {
-          "name": "D",
-          "income": 2780,
-          "expanse": 3908
-        },
-        {
-          "name": "E",
-          "income": 1890,
-          "expanse": 4800
-        },
-        {
-          "name": "F",
-          "income": 2390,
-          "expanse": 3800
-        },
-        {
-          "name": "G",
-          "income": 3490,
-          "expanse": 4300
-        },
-        {
-          "name": "F",
-          "income": 2390,
-          "expanse": 3800
-        },
-        {
-          "name": "G",
-          "income": 3490,
-          "expanse": 4300
-        },
-        {
-          "name": "F",
-          "income": 2390,
-          "expanse": 3800
-        },
-        {
-          "name": "G",
-          "income": 3490,
-          "expanse": 4300
-        },
-        {
-          "name": "F",
-          "income": 2390,
-          "expanse": 3800
-        },
-        {
-          "name": "G",
-          "income": 3490,
-          "expanse": 4300
-        },
-        {
-          "name": "F",
-          "income": 2390,
-          "expanse": 3800
-        },
-        {
-          "name": "G",
-          "income": 3490,
-          "expanse": 4300
-        },
-        {
-          "name": "F",
-          "income": 2390,
-          "expanse": 3800
-        },
-        {
-          "name": "G",
-          "income": 3490,
-          "expanse": 4300
-        },
-        {
-          "name": "F",
-          "income": 2390,
-          "expanse": 3800
-        },
-        {
-          "name": "G",
-          "income": 3490,
-          "expanse": 4300
-        },
-        {
-          "name": "F",
-          "income": 2390,
-          "expanse": 3800
-        },
-        {
-          "name": "G",
-          "income": 3490,
-          "expanse": 4300
-        },
-        {
-          "name": "F",
-          "income": 2390,
-          "expanse": 3800
-        }
-      ]
+  useEffect(() => {
+    setIsGettingData(true);
+    try {
+      const docSnapshotTransactions = async () => {
+        await getSnapshotUserTransaction(currUser?.uid, setTransactions);
+        await getSnapshotUserWallet(currUser?.uid, setWallets);
+      };
+      docSnapshotTransactions();
+    } catch (error) {
+      console.error(error.message);
+    } finally {
+      setIsGettingData(false);
+    }
+  }, [currUser]);
 
-    return currUser ? (
-      <main className="min-h-screen text-xl p-6 font-passionOne bg-primary w-full py-4 flex flex-col gap-5">
-        {/* nav */}
-        <NavbarPage title={"Reports"} />
+  const handleFilterData = (id) => {
+    setFilteredTransactions(transactions.filter(obj => obj.accountId == id));
+  };
 
-        <ReportStats datas={tempTransaction} />
+  return loading ? (
+    <>
+    <div className="flex gap-5">
+      <button onClick={() => console.log(filteredTransactions.length === 0 ? transactions : filteredTransactions)}>Testing</button>
+      <button onClick={() => handleFilterData('e5107081-e068-41f4-85d5-a0a42e3f0668')}>test 1</button>
+      <button onClick={() => handleFilterData('64b25906-38a6-4006-b21d-4631764b3d49')}>Test 2</button>
+      <button onClick={() => handleFilterData('all')}>Test 3</button>
+    </div>
+      <LoaderPage />
+    </>
+  ) : currUser ? (
+    <main className="min-h-screen text-xl p-6 font-passionOne bg-primary w-full py-4 flex flex-col gap-5">
+      {/* nav */}
+      <NavbarPage title={"Reports"} />
 
-      </main>
-    ) : (
-      <Unauthenticate />
-    );
+      <ReportStats transactions={filteredTransactions.length === 0 ? transactions : filteredTransactions} isGettingData={isGettingData} wallets={wallets} setDataFilter={handleFilterData} />
+    </main>
+  ) : (
+    <Unauthenticate />
+  );
 };
 
 export default ReportPage;

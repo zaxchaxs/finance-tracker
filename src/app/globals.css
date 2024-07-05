@@ -52,9 +52,9 @@ body {
 
 .loaderPage {
   --d:22px;
-  width: 4px;
-  height: 4px;
-  border-radius: 50%;
+  width: 5px;
+  height: 5px;
+  border-radius: 70%;
   color: #059669;
   box-shadow: 
     calc(1*var(--d))      calc(0*var(--d))     0 0,

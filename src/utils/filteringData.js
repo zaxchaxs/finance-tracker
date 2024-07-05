@@ -1,5 +1,5 @@
 export const yearDataFilter = (data, year) => {
-    const yearFiltered = data.filter(obj => {
+    const yearFiltered = data?.filter(obj => {
         const date = new Date(obj.date);
         return year === date.getFullYear();
     });
@@ -17,7 +17,7 @@ export const yearDataFilter = (data, year) => {
 
     }));
 
-    yearFiltered.forEach(transaction => {
+    yearFiltered?.forEach(transaction => {
         const date = new Date(transaction.date);
         const monthIdx = date.getMonth();
 
@@ -32,7 +32,7 @@ export const yearDataFilter = (data, year) => {
 
 export const monthDataFilter  = (data, month, year) => {
 
-    const monthFiltered = data.filter(obj => {
+    const monthFiltered = data?.filter(obj => {
         const date = new Date(obj.date);
         return date.getMonth() === month && date.getFullYear() === year;
     });
@@ -49,7 +49,7 @@ export const monthDataFilter  = (data, month, year) => {
         expanse: 0
     }));
 
-    monthFiltered.forEach(transac => {
+    monthFiltered?.forEach(transac => {
         const date = new Date(transac.date);
         const dateIdx = date.getDate()-1;
 
