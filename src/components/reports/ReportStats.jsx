@@ -8,6 +8,8 @@ import {
   faCaretLeft,
   faCaretRight,
 } from "@fortawesome/free-solid-svg-icons";
+import { sumTotalAmount } from "@/utils/sumAmount";
+import { formatRupiah } from "@/utils/formatRupiah";
 
 const ReportStats = ({ transactions, isGettingData, wallets, setDataFilter }) => {
   const [data, setData] = useState(transactions);
@@ -17,7 +19,9 @@ const ReportStats = ({ transactions, isGettingData, wallets, setDataFilter }) =>
   const [selectedFilter, setSelectedFilter] = useState("year");
   const [isWalletOpen, setIsWalletOpen] = useState(false);
   const dropdownRef = useRef(null);
+
   const convertedMonth = monthConvert(month);
+  const totalAmount = sumTotalAmount(data);
 
   useEffect(() => {
     if (!isGettingData) {
@@ -134,14 +138,13 @@ const ReportStats = ({ transactions, isGettingData, wallets, setDataFilter }) =>
               >
                 <FontAwesomeIcon icon={faCaretLeft} />
               </button>
-              <button
-                onClick={() => console.log(data)}
+              <h1
                 className={`p-1 px-3 border-y-2 border-secondary`}
               >
                 {selectedFilter === "year"
                   ? year
                   : `${convertedMonth}, ${year}`}
-              </button>
+              </h1>
               <button
                 className={`p-1 px-3 border-2 border-secondary rounded-r-md hover:bg-green-300 transition-all ease-in-out duration-200`}
                 onClick={handleRightBtnClick}
@@ -150,6 +153,17 @@ const ReportStats = ({ transactions, isGettingData, wallets, setDataFilter }) =>
               </button>
             </div>
           </div>
+          
+          <div className="text-secondary text-base">
+            <div className="flex justify-start items-center gap-1">
+              <h1>{`Total Income: `}</h1>
+              <h1 className="text-primary">{`${formatRupiah(totalAmount?.income)}`}</h1>
+            </div>
+            <div className="flex justify-start gap-1 items-center">
+              <h1>{`Total Expanse: `}</h1>
+              <h1 className="text-danger">{`${formatRupiah(totalAmount.expanse)}`}</h1>
+            </div>
+            </div>
 
           <div
             className="relative font-passionOne text-base w-fit "
@@ -186,7 +200,6 @@ const ReportStats = ({ transactions, isGettingData, wallets, setDataFilter }) =>
               </div>
             )}
           </div>
-
           <Chart data={data} />
         </>
       )}

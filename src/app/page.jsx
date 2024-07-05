@@ -9,7 +9,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import LoaderPage from "@/components/loaders/loaderPage";
 
 export default function Home() {
-  const { currUser, loading, isUserLogged } = useAuth();
+  const { currUser, loading } = useAuth();
   const router = useRouter();
 
   return loading ? (
