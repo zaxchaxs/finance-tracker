@@ -7,11 +7,17 @@ import {
   faCaretDown,
   faCaretLeft,
   faCaretRight,
+  faExclamationCircle,
 } from "@fortawesome/free-solid-svg-icons";
 import { sumTotalAmount } from "@/utils/sumAmount";
 import { formatRupiah } from "@/utils/formatRupiah";
 
-const ReportStats = ({ transactions, isGettingData, wallets, setDataFilter }) => {
+const ReportStats = ({
+  transactions,
+  isGettingData,
+  wallets,
+  setDataFilter,
+}) => {
   const [data, setData] = useState(transactions);
   const [year, setYear] = useState();
   const [month, setMonth] = useState();
@@ -89,7 +95,7 @@ const ReportStats = ({ transactions, isGettingData, wallets, setDataFilter }) =>
     if (e.target.name === selectedWallet) {
       setSelectedWallet("Specify Wallet");
       setIsWalletOpen(!isWalletOpen);
-      setDataFilter('all');
+      setDataFilter("all");
     } else {
       setSelectedWallet(e.target.name);
       setIsWalletOpen(!isWalletOpen);
@@ -100,10 +106,10 @@ const ReportStats = ({ transactions, isGettingData, wallets, setDataFilter }) =>
   return (
     <div className="w-full p-2 flex flex-col gap-5 text-slate-100">
       {isGettingData ? (
-      // <LoaderPage />
-      <div className="text-secondary w-full text-center flex items-center justify-center">
-        <h1>Wait a moment..</h1>
-      </div>
+        // <LoaderPage />
+        <div className="text-secondary w-full text-center flex items-center justify-center">
+          <h1>Wait a moment..</h1>
+        </div>
       ) : (
         <>
           <div className="w-full font-passionOne text-base flex justify-between items-center">
@@ -138,9 +144,7 @@ const ReportStats = ({ transactions, isGettingData, wallets, setDataFilter }) =>
               >
                 <FontAwesomeIcon icon={faCaretLeft} />
               </button>
-              <h1
-                className={`p-1 px-3 border-y-2 border-secondary`}
-              >
+              <h1 className={`p-1 px-3 border-y-2 border-secondary`}>
                 {selectedFilter === "year"
                   ? year
                   : `${convertedMonth}, ${year}`}
@@ -153,17 +157,21 @@ const ReportStats = ({ transactions, isGettingData, wallets, setDataFilter }) =>
               </button>
             </div>
           </div>
-          
+
           <div className="text-secondary text-base">
             <div className="flex justify-start items-center gap-1">
               <h1>{`Total Income: `}</h1>
-              <h1 className="text-primary">{`${formatRupiah(totalAmount?.income)}`}</h1>
+              <h1 className="text-primary">{`${formatRupiah(
+                totalAmount?.income
+              )}`}</h1>
             </div>
             <div className="flex justify-start gap-1 items-center">
               <h1>{`Total Expanse: `}</h1>
-              <h1 className="text-danger">{`${formatRupiah(totalAmount.expanse)}`}</h1>
+              <h1 className="text-danger-hover">{`${formatRupiah(
+                totalAmount?.expanse
+              )}`}</h1>
             </div>
-            </div>
+          </div>
 
           <div
             className="relative font-passionOne text-base w-fit "
@@ -201,6 +209,22 @@ const ReportStats = ({ transactions, isGettingData, wallets, setDataFilter }) =>
             )}
           </div>
           <Chart data={data} />
+
+          <div className="text-secondary text-lg flex flex-col justify-center items-center gap-4">
+            {totalAmount?.income === totalAmount?.expanse ? (
+              ""
+            ) : (
+              <FontAwesomeIcon icon={faExclamationCircle} />
+            )}
+
+            <h1 className="text-center">
+              {totalAmount?.income === totalAmount?.expanse
+                ? ""
+                : totalAmount?.income > totalAmount?.expanse
+                ? `Great, your expenses this ${selectedFilter} aren't bad. Keep it up!`
+                : "You should be more mindful of your spending. Stop wasting money on useless stuff."}
+            </h1>
+          </div>
         </>
       )}
     </div>

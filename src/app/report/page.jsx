@@ -18,11 +18,13 @@ const ReportPage = () => {
   useEffect(() => {
     setIsGettingData(true);
     try {
-      const docSnapshotTransactions = async () => {
-        await getSnapshotUserTransaction(currUser?.uid, setTransactions);
-        await getSnapshotUserWallet(currUser?.uid, setWallets);
-      };
-      docSnapshotTransactions();
+      if(!loading) {
+        const docSnapshotTransactions = async () => {
+          await getSnapshotUserTransaction(currUser?.uid, setTransactions);
+          await getSnapshotUserWallet(currUser?.uid, setWallets);
+        };
+        docSnapshotTransactions();
+      }
     } catch (error) {
       console.error(error.message);
     } finally {
