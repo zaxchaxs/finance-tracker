@@ -1,7 +1,6 @@
 
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, updateCurrentUser } from "firebase/auth";
-import {  auth, db } from "./firebase";
-import { addDoc, doc, setDoc } from "firebase/firestore";
+import { createUserWithEmailAndPassword, GithubAuthProvider, signInWithEmailAndPassword, signInWithPopup, signOut } from "firebase/auth";
+import {  auth } from "./firebase";
 import { addUser, getDocUserById } from "./firestoreMethods";
 import { successSweetAlert } from "./sweetAlert";
 
@@ -47,5 +46,15 @@ export const logout = async () => {
         await signOut(auth);
     } catch(error) {
         console.error(error.message);
+    }
+}
+
+export const loginWithGithub = async () => {
+    const provider = new GithubAuthProvider();
+    try {
+        await signInWithPopup(auth, provider);
+    } catch (error) {
+        console.error(error.message);
+        throw Error(error.message)
     }
 }

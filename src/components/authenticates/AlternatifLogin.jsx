@@ -1,3 +1,5 @@
+import { loginWithGithub } from "@/libs/auth";
+
 const AlternatifLogin = () => {
     return(
         <>
@@ -6,7 +8,7 @@ const AlternatifLogin = () => {
           <button className="p-2 px-7 rounded-full bg-danger hover:bg-danger-hover shadow-md">
             Google
           </button>
-          <button className="p-2 px-7 rounded-full bg-gray-700 hover:bg-gray-800 shadow-md">
+          <button onClick={loginWithGithub} className="p-2 px-7 rounded-full bg-gray-700 hover:bg-gray-800 shadow-md">
             Github
           </button>
         </div>

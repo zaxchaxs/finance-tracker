@@ -8,7 +8,7 @@ import { useState } from "react";
 
 const NavUserInfo = () => {
   const [isNavOpen, setIsNavOpen] = useState(false);
-  const {docUser} = useAuth();
+  const {docUser, currUser} = useAuth();
   const router = useRouter()
 
   const handleClickNav = () => {
@@ -38,7 +38,7 @@ const NavUserInfo = () => {
           className={`bg-secondary rounded-l-2xl flex flex-col p-4 gap-8 py-5 h-screen ${!isNavOpen && 'opacity-0'}`}
         >
             <div className="flex justify-between gap-6 text-slate-100 p-2 px-4 border-b-2 border-primary">
-                <h1>{`Hello ${docUser.name || 'there'}!`}</h1>
+                <h1>{`Hello ${docUser.name || currUser.displayName || 'there'}!`}</h1>
                 <button onClick={handleClickNav}>
                     <FontAwesomeIcon icon={faClose} />
                 </button>

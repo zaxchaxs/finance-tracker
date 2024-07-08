@@ -97,8 +97,7 @@ const FormAuthenticate = ({ typePage }) => {
             onClick={handleShowPassword}
           > */}
             <FontAwesomeIcon
-            className="absolute right-2 top-3 cursor-pointer"
-
+            className="absolute right-2 top-3 cursor-pointer w-4"
             onClick={handleShowPassword}
               color="#9F9F9F"
               icon={typeInput === "password" ? faEye : faEyeSlash}
@@ -142,7 +141,6 @@ const FormAuthenticate = ({ typePage }) => {
           </button>
         </div>
       )}
-      <button onClick={() => router.push("/login")}>Login</button>
     </div>
   );
 };

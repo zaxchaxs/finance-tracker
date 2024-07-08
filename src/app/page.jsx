@@ -3,8 +3,6 @@ import { useRouter } from "next/navigation";
 import { logout } from "@/libs/auth";
 import Image from "next/image";
 import homeIcon from "../../public/homeIcon.svg";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faGoogle } from "@fortawesome/free-brands-svg-icons";
 import { useAuth } from "@/contexts/AuthContext";
 import LoaderPage from "@/components/loaders/loaderPage";
 
@@ -39,9 +37,6 @@ export default function Home() {
       >
         <button className="p-2 px-4 rounded-xl font-lilitaOne bg-secondary hover:bg-secondary-hover text-lightGreen">
           Login
-        </button>
-        <button className="p-2 px-4 flex items-center gap-2 rounded-xl font-lilitaOne hover:bg-secondary-hover bg-secondary text-lightGreen">
-          <FontAwesomeIcon icon={faGoogle} className="w-4" /> Login With Google
         </button>
       </div>
       <div
