@@ -5,7 +5,6 @@ import {
   addDocWallet,
   deleteWalletDoc,
 } from "./firestoreMethods";
-import { useState } from "react";
 
 export const sweetAlertAddTransac = (
   newData,
@@ -159,3 +158,14 @@ export const sweetAlertDeleteWallet = (data) => {
     }
   });
 };
+
+export const failedSweetAlert = (message) => {
+  Swal.fire({
+    title: "Failed",
+    color: "#052E16",
+    icon: "error",
+    background: "#BBF7D0",
+    text: message,
+    confirmButtonColor: "#059669",
+  })
+}

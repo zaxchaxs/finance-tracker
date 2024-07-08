@@ -2,6 +2,7 @@
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "firebase/auth";
 import {  auth, db } from "./firebase";
 import { doc, setDoc } from "firebase/firestore";
+import { getDocUserById } from "./firestoreMethods";
 
 export const registerWithEmailAndPassword = async (email, password) => {
     try{
@@ -23,11 +24,14 @@ export const registerWithEmailAndPassword = async (email, password) => {
 
 export const loginWithEmailAndPassword = async (email, password) => {
     try{
-        const userCredential = await signInWithEmailAndPassword(auth, email, password);
-        return userCredential.user;
+        const { user } = await signInWithEmailAndPassword(auth, email, password);
+        if(user) await getDocUserById(user.uid);
+
+        return user;
     } catch(e) {
         console.error(e);
-    }
+        throw new Error("Email or password wrong.");
+    };
 };
 
 export const logout = async () => {

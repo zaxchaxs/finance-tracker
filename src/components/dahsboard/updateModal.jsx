@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { motion } from "framer-motion";
 import { useState } from "react";
 import LoaderSection from "../loaders/loaderSection";
-import { sweetAlertDeleteWallet } from "@/libs/sweetAlert";
+import { failedSweetAlert, sweetAlertDeleteWallet } from "@/libs/sweetAlert";
 import Swal from "sweetalert2";
 
 const UpdateModal = ({data, isInfoClicked, setIsInfoClicked}) => {
@@ -24,15 +24,7 @@ const UpdateModal = ({data, isInfoClicked, setIsInfoClicked}) => {
             try {
                 await updateWalletDoc(data.accountId, newData)
             } catch (error) {
-              Swal.fire({
-                title: "Failed",
-                color: "#052E16",
-                icon: "error",
-                background: "#BBF7D0",
-                text: error.message,
-                confirmButtonColor: "#059669",
-              })
-                // console.error(error.message);
+              failedSweetAlert(error.message);
             } finally {
                 setName("");
                 setAmount("");

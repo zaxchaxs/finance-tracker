@@ -31,12 +31,14 @@ const getDocUserById = async (idUser) => {
     const userRef = doc(db, "users", idUser);
     const docSnap = await getDoc(userRef);
     if (docSnap.exists()) {
+      console.log("test");
       return docSnap;
     } else {
-      throw new Error("User not found");
+      throw new Error("Email or password wrong.");
     }
   } catch (e) {
     console.error(e.message);
+    throw e.message;
   }
 };
 

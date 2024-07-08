@@ -7,24 +7,32 @@ const lilitaOne = Lilita_One({
   subsets: ["latin"],
   variable: "--font-lilita-one",
   weight: "400",
+  display: 'swap',
+  adjustFontFallback: false
 });
 
 const passionOne = Passion_One({
   subsets: ["latin"],
   variable: "--font-passion-one",
   weight: "400",
+  display: 'swap',
+  adjustFontFallback: false
 });
 
 const breeSerif = Bree_Serif({
   subsets: ['latin'],
   variable: '--font-bree-serif',
-  weight: '400'
+  weight: '400',
+  display: 'swap',
+  adjustFontFallback: false
 })
 
 const patuaOne = Patua_One({
   subsets: ['latin'],
   variable: '--font-patua-one',
-  weight: '400'
+  weight: '400',
+  display: 'swap',
+  adjustFontFallback: false
 })
 
 export const metadata = {

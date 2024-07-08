@@ -1,8 +1,15 @@
-import Register from "@/components/authenticates/Register";
+import FormAuthenticate from "@/components/authenticates/Form";
 
 const RegisterPage = () => {
     return(
-        <Register />
+        <main className="max-h-screen text-secondary text-lg font-passionOne  w-full pt-6 flex flex-col bg-slate-50">
+        <div className=" p-6">
+          <h1 className="text-3xl">Sign Up</h1>
+          <h2 className="text-xl">Welcome</h2>
+        </div>
+  
+        <FormAuthenticate typePage={'register'} />
+      </main>
     )
 }
 
