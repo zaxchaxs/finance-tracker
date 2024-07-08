@@ -1,7 +1,7 @@
 "use client";
 import Unauthenticate from "@/components/Unauthenticate";
 import LoaderPage from "@/components/loaders/loaderPage";
-import NavbarPage from "@/components/navpage/NavPage";
+import NavbarPage from "@/components/navbars/NavbarPage";
 import ReportStats from "@/components/reports/ReportStats";
 import tempTransaction from "@/components/tempTransactions";
 import { useAuth } from "@/contexts/AuthContext";
@@ -18,7 +18,7 @@ const ReportPage = () => {
   useEffect(() => {
     setIsGettingData(true);
     try {
-      if(!loading) {
+      if(!loading && currUser) {
         const docSnapshotTransactions = async () => {
           await getSnapshotUserTransaction(currUser?.uid, setTransactions);
           await getSnapshotUserWallet(currUser?.uid, setWallets);

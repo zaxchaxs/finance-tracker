@@ -2,7 +2,6 @@
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "firebase/auth";
 import {  auth, db } from "./firebase";
 import { doc, setDoc } from "firebase/firestore";
-import { useState } from "react";
 
 export const registerWithEmailAndPassword = async (email, password) => {
     try{

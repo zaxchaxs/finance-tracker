@@ -30,7 +30,7 @@ export default function Home() {
       </div>
       <div className="text-center text-lg font-semibold p-4 font-passionOne text-secondary">
         <h1>
-         Easily manage your finances, track your incomes and expenses. Take control of your money and make informed decisions for a better financial future.
+        Manage your finances, track your incomes and expenses. Take control of your money.
         </h1>
       </div>
       <div

@@ -4,7 +4,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useRouter } from "next/navigation";
 
 const LoginPage = () => {
-    const { currUser, isUserLogged } = useAuth();
+    const { currUser } = useAuth();
     const route = useRouter();
 
     return currUser ? (

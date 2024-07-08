@@ -28,6 +28,9 @@ module.exports = {
       fontFamily: {
         'passionOne': ['var(--font-patua-one)'],
         'lilitaOne': ['var(--font-lilita-one)']
+      },
+      borderRadius: {
+        '5xl': '3rem'
       }
     },
   },

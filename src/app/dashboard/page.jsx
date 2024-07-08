@@ -3,7 +3,7 @@ import Unauthenticate from "@/components/Unauthenticate";
 import CurrentTransaction from "@/components/dahsboard/currentTransaction";
 import NewTransactionSec from "@/components/dahsboard/newTransaction";
 import UserWalletAccount from "@/components/dahsboard/userWalletAccount";
-import NavbarPage from "@/components/navpage/NavPage";
+import NavbarPage from "@/components/navbars/NavbarPage";
 import { useAuth } from "@/contexts/AuthContext";
 import { getSnapshotUserWallet } from "@/libs/firestoreMethods";
 import { faCaretRight } from "@fortawesome/free-solid-svg-icons";
@@ -77,7 +77,7 @@ const DashboardPage = () => {
 
       {/* New Transaction Section */}
       <div
-        className={`w-full py-2 text-primary flex items-center gap-2 cursor-pointer border-b-2 border-green-950 z-10`}
+        className={`w-full py-2 text-primary flex items-center gap-2 cursor-pointer border-b-2 border-green-950`}
         onClick={() => setIsShowTransac(!isShowTransac)}
       >
         <FontAwesomeIcon
@@ -97,7 +97,7 @@ const DashboardPage = () => {
 
       {/* Current Transaction Section */}
       <div
-        className={`w-full py-2 text-primary flex items-center gap-2 cursor-pointer border-b-2 border-green-950 z-10`}
+        className={`w-full py-2 text-primary flex items-center gap-2 cursor-pointer border-b-2 border-green-950`}
         onClick={() => setIsShowCurrTransac(!isShowCurrTransac)}
       >
         <FontAwesomeIcon

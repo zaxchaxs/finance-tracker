@@ -112,6 +112,8 @@ const ReportStats = ({
         </div>
       ) : (
         <>
+
+          {/* filter element sections */}
           <div className="w-full font-passionOne text-base flex justify-between items-center">
             <div className="flex">
               <button
@@ -208,8 +210,11 @@ const ReportStats = ({
               </div>
             )}
           </div>
+
+          {/* chart graph */}
           <Chart data={data} />
 
+            {/* info */}
           <div className="text-secondary text-lg flex flex-col justify-center items-center gap-4">
             {totalAmount?.income === totalAmount?.expanse ? (
               ""
@@ -225,6 +230,11 @@ const ReportStats = ({
                 : "You should be more mindful of your spending. Stop wasting money on useless stuff."}
             </h1>
           </div>
+
+          {/* All filtered transactions */}
+          {/* <div className="w-full p-1 text-base rounded-md shadow-md items-center flex justify-center bg-secondary hover:bg-secondary-hover active:bg-secondary cursor-pointer">
+            <button>{`Show all transaction in ${convertedMonth}, ${year}`}</button>
+          </div> */}
         </>
       )}
     </div>
