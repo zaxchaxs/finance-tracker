@@ -19,11 +19,12 @@ const Navbar = () => {
     if(isNavOpen) {
       setTimeout(() => {
         setIndex('')
-      }, 500);
+      }, 300);
+      setIsNavOpen(!isNavOpen);
     } else {
       setIndex('z-10')
+      setIsNavOpen(!isNavOpen);
     }
-    setIsNavOpen(!isNavOpen);
   }
 
   return (
