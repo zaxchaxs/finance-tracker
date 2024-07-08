@@ -56,8 +56,9 @@ const DashboardPage = () => {
       {/* Nav */}
       <NavbarPage title={"Dashboard"} />
 
+      {/* Wallet sections */}
       <div
-        className="pt-4 py-2 w-full text-primary flex items-center gap-2 cursor-pointer border-b-2 border-green-950"
+        className="pt-4 py-2 w-full text-primary flex items-center gap-2 cursor-pointer border-b-2 border-green-950 z-0"
         onClick={() => setIsShowWallet(!isShowWallet)}
       >
         <FontAwesomeIcon
@@ -77,7 +78,7 @@ const DashboardPage = () => {
 
       {/* New Transaction Section */}
       <div
-        className={`w-full py-2 text-primary flex items-center gap-2 cursor-pointer border-b-2 border-green-950`}
+        className={`w-full py-2 text-primary flex items-center gap-2 cursor-pointer border-b-2 border-green-950 z-0`}
         onClick={() => setIsShowTransac(!isShowTransac)}
       >
         <FontAwesomeIcon
@@ -97,7 +98,7 @@ const DashboardPage = () => {
 
       {/* Current Transaction Section */}
       <div
-        className={`w-full py-2 text-primary flex items-center gap-2 cursor-pointer border-b-2 border-green-950`}
+        className={`w-full py-2 text-primary flex items-center gap-2 cursor-pointer border-b-2 border-green-950 z-0`}
         onClick={() => setIsShowCurrTransac(!isShowCurrTransac)}
       >
         <FontAwesomeIcon
