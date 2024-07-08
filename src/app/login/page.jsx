@@ -1,6 +1,5 @@
 'use client'
 import FormAuthenticate from "@/components/authenticates/Form";
-import Login from "@/components/authenticates/Login";
 import { useAuth } from "@/contexts/AuthContext";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";

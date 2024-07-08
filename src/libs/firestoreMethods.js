@@ -23,6 +23,7 @@ const addUser = async (idUser, newData) => {
     await setDoc(userRef, newData);
   } catch (error) {
     console.error(error.message);
+    throw Error(error.message);
   }
 };
 

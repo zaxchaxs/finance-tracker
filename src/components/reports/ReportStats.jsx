@@ -112,7 +112,6 @@ const ReportStats = ({
         </div>
       ) : (
         <>
-
           {/* filter element sections */}
           <div className="w-full font-passionOne text-base flex justify-between items-center">
             <div className="flex">
@@ -195,17 +194,21 @@ const ReportStats = ({
                   aria-orientation="vertical"
                   aria-labelledby="options-menu"
                 >
-                  {wallets?.map((wallet, idx) => (
-                    <button
-                      key={idx}
-                      value={wallet.accountId}
-                      name={wallet.name}
-                      onClick={handleSelectedWallet}
-                      className="block w-full transition-all ease-in-out duration-100 text-left px-4 py-2 text-sm hover:bg-green-300"
-                    >
-                      {wallet.name}
-                    </button>
-                  ))}
+                  {wallets ? (
+                    <h1 className="text-center block w-full px-4 py-2 text-sm">{`you don't have a wallet account yet`}</h1>
+                  ) : (
+                    wallets?.map((wallet, idx) => (
+                      <button
+                        key={idx}
+                        value={wallet.accountId}
+                        name={wallet.name}
+                        onClick={handleSelectedWallet}
+                        className="block w-full transition-all ease-in-out duration-100 text-left px-4 py-2 text-sm hover:bg-green-300"
+                      >
+                        {wallet.name}
+                      </button>
+                    ))
+                  )}
                 </div>
               </div>
             )}
@@ -214,7 +217,7 @@ const ReportStats = ({
           {/* chart graph */}
           <Chart data={data} />
 
-            {/* info */}
+          {/* info */}
           <div className="text-secondary text-lg flex flex-col justify-center items-center gap-4">
             {totalAmount?.income === totalAmount?.expanse ? (
               ""

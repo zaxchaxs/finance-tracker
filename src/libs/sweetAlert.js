@@ -169,3 +169,17 @@ export const failedSweetAlert = (message) => {
     confirmButtonColor: "#059669",
   })
 }
+
+export const successSweetAlert = () => {
+  Swal.fire({
+    title: "Success",
+    color: "#BBF7D0",
+    icon: "success",
+    background: "#059669",
+    confirmButtonColor: "#052E16",
+  }).then(result => {
+    if(result.isConfirmed) {
+      window.location.href = '/login';
+    }
+  })
+}
