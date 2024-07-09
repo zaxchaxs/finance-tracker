@@ -10,7 +10,7 @@ const LoginPage = () => {
 
     useEffect(() => {
       currUser && route.push('/dashboard');
-    }, [currUser]);
+    }, []);
     
     return (
       <main className="max-h-screen text-lg font-passionOne  w-full pt-6 flex flex-col bg-slate-50">

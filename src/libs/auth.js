@@ -1,8 +1,9 @@
 
 import { createUserWithEmailAndPassword, GithubAuthProvider, signInWithEmailAndPassword, signInWithPopup, signOut } from "firebase/auth";
-import {  auth } from "./firebase";
+import {  auth, db } from "./firebase";
 import { addUser, getDocUserById } from "./firestoreMethods";
 import { successSweetAlert } from "./sweetAlert";
+import { doc, getDoc } from "firebase/firestore";
 
 export const registerWithEmailAndPassword = async (email, password, name) => {
     try{
@@ -16,6 +17,8 @@ export const registerWithEmailAndPassword = async (email, password, name) => {
                 email: user.email,
                 name: name,
                 createdAt: new Date(),
+                photoURL: user.photoURL
+
             }
             await addUser(user.uid, newData);
         }
@@ -52,7 +55,23 @@ export const logout = async () => {
 export const loginWithGithub = async () => {
     const provider = new GithubAuthProvider();
     try {
-        await signInWithPopup(auth, provider);
+        const { user } = await signInWithPopup(auth, provider);
+        if(user){
+            // getting user in firestore. if didnt exists, create one. Uhuy.
+            const docSnap = await getDoc(doc(db, 'users', user.uid));
+
+            if(!docSnap.exists()) {
+                const newData = {
+                    name: user.displayName,
+                    email: user.email,
+                    userId: user.uid,
+                    createdAt: new Date(),
+                    photoURL: user.photoURL
+                };
+                await addUser(user.uid, newData);
+            };
+        };
+        window.location.href = '/dashboard';
     } catch (error) {
         console.error(error.message);
         throw Error(error.message)

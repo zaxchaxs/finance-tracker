@@ -35,7 +35,7 @@ const getDocUserById = async (idUser) => {
       console.log("test");
       return docSnap;
     } else {
-      throw new Error("Email or password wrong.");
+      throw new Error("User/email not found!");
     }
   } catch (e) {
     console.error(e.message);
