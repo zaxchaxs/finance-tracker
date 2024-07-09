@@ -23,7 +23,11 @@ export function AuthProvider({ children }) {
       setDocUser(docSnap.data())
     };
 
-    if(currUser) userDocSnap();
+    if(currUser) {
+      userDocSnap()
+    } else {
+      setCurrUser(null);
+    };
 
     return () => unsubscribe();
   }, [currUser]);

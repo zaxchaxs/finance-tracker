@@ -128,7 +128,7 @@ const FormAuthenticate = ({ typePage }) => {
         </button>
       </form>
 
-      <AlternatifLogin />
+      <AlternatifLogin setIsloading={setLoading} />
 
       {type && (
         <div className="text-primary text-base flex gap-2 py-6 items-center">

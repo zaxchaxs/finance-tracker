@@ -3,6 +3,7 @@ import Unauthenticate from "@/components/Unauthenticate";
 import CurrentTransaction from "@/components/dahsboard/currentTransaction";
 import NewTransactionSec from "@/components/dahsboard/newTransaction";
 import UserWalletAccount from "@/components/dahsboard/userWalletAccount";
+import LoaderPage from "@/components/loaders/loaderPage";
 import NavbarPage from "@/components/navbars/NavbarPage";
 import { useAuth } from "@/contexts/AuthContext";
 import { getSnapshotUserWallet } from "@/libs/firestoreMethods";
@@ -16,7 +17,7 @@ const DashboardPage = () => {
   const [isShowCurrTransac, setIsShowCurrTransac] = useState(false);
   const [userWalletData, setUserWalletData] = useState([]);
   const [loading, setLoading] = useState(false);
-  const { currUser } = useAuth();
+  const { currUser, loading: loadingCurrUser } = useAuth();
 
   const tempWalletData = [
     {
@@ -51,7 +52,9 @@ const DashboardPage = () => {
   }, [currUser]);
   
 
-  return currUser ? (
+  return loadingCurrUser ? (
+    <LoaderPage />
+  ) : currUser ? (
     <main className="min-h-screen text-xl  p-6 font-passionOne bg-primary w-full py-4 flex flex-col gap-5">
       {/* Nav */}
       <NavbarPage title={"Dashboard"} />

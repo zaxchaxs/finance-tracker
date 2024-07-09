@@ -1,11 +1,11 @@
-
-import { createUserWithEmailAndPassword, GithubAuthProvider, signInWithEmailAndPassword, signInWithPopup, signOut } from "firebase/auth";
+import { createUserWithEmailAndPassword, GithubAuthProvider, GoogleAuthProvider, signInWithEmailAndPassword, signInWithPopup, signOut } from "firebase/auth";
 import {  auth, db } from "./firebase";
 import { addUser, getDocUserById } from "./firestoreMethods";
 import { successSweetAlert } from "./sweetAlert";
 import { doc, getDoc } from "firebase/firestore";
 
 export const registerWithEmailAndPassword = async (email, password, name) => {
+    
     try{
         // firebase auth
         const { user } = await createUserWithEmailAndPassword(auth, email, password);
@@ -27,7 +27,7 @@ export const registerWithEmailAndPassword = async (email, password, name) => {
         // await setDoc(userRef, newData);
     } catch(e) {
         console.error(e.message);
-        throw Error(e.message)
+        throw Error(e.message);
     }
     successSweetAlert();
 };
@@ -59,7 +59,7 @@ export const loginWithGithub = async () => {
         if(user){
             // getting user in firestore. if didnt exists, create one. Uhuy.
             const docSnap = await getDoc(doc(db, 'users', user.uid));
-
+            
             if(!docSnap.exists()) {
                 const newData = {
                     name: user.displayName,
@@ -71,9 +71,32 @@ export const loginWithGithub = async () => {
                 await addUser(user.uid, newData);
             };
         };
-        window.location.href = '/dashboard';
     } catch (error) {
         console.error(error.message);
-        throw Error(error.message)
+        throw Error(error.message);
     }
+};
+
+export const loginWithGoogle = async () => {
+    const provider = new GoogleAuthProvider();
+    try {
+        const { user } = await signInWithPopup(auth, provider);
+        if(user) {
+            // getting user in firestore. if didnt exists, create one. Uhuy.
+            const docSnap = await getDoc(doc(db, 'users', user.uid));
+            if(!docSnap.exists()) {
+                const newData = {
+                    name: user.displayName,
+                    email: user.email,
+                    userId: user.email,
+                    createdAt: new Date(),
+                    photoURL: user.photoURL
+                };
+                await addUser(user.uid, newData);
+            };
+        };
+    } catch (error) {
+        console.error(error.message);
+        throw Error(error.message);
+    };
 }
