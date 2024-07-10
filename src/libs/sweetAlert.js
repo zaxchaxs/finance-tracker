@@ -170,7 +170,7 @@ export const failedSweetAlert = (message) => {
   })
 }
 
-export const successSweetAlert = () => {
+export const successSignupSweetAlert = () => {
   Swal.fire({
     title: "Success",
     color: "#BBF7D0",

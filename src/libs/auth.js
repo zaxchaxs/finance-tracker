@@ -1,7 +1,7 @@
 import { createUserWithEmailAndPassword, GithubAuthProvider, GoogleAuthProvider, signInWithEmailAndPassword, signInWithPopup, signOut } from "firebase/auth";
 import {  auth, db } from "./firebase";
 import { addUser, getDocUserById } from "./firestoreMethods";
-import { successSweetAlert } from "./sweetAlert";
+import { successSignupSweetAlert } from "./sweetAlert";
 import { doc, getDoc } from "firebase/firestore";
 
 export const registerWithEmailAndPassword = async (email, password, name) => {
@@ -22,14 +22,11 @@ export const registerWithEmailAndPassword = async (email, password, name) => {
             }
             await addUser(user.uid, newData);
         }
-
-        // const userRef = doc(db, "users", `${user.uid}`);
-        // await setDoc(userRef, newData);
     } catch(e) {
         console.error(e.message);
         throw Error(e.message);
     }
-    successSweetAlert();
+    successSignupSweetAlert();
 };
 
 export const loginWithEmailAndPassword = async (email, password) => {

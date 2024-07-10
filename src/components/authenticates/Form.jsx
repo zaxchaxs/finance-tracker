@@ -43,10 +43,10 @@ const FormAuthenticate = ({ typePage }) => {
 
   const handleSubmitLogin = async (e) => {
     e.preventDefault();
-    console.log("test");
     setLoading(true);
     try {
       await loginWithEmailAndPassword(email, password);
+      window.location.href = '/dashboard';
     } catch (error) {
       failedSweetAlert(error.message);
     } finally {

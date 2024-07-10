@@ -57,7 +57,8 @@ const CurrentTransaction = ({ isShowed, user }) => {
       const getCurrTransac = async () => {
         await getSnapshotUserTransaction(user?.uid, setCurrTransaction, limit);
       };
-      getCurrTransac();
+      if(user) getCurrTransac();
+      
     } catch (error) {
       console.error(error.message);
     } finally {

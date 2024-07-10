@@ -40,17 +40,26 @@ const UserWalletAccount = ({ isShowed, userWallets, user, isGettingData }) => {
         <LoaderSection width={"w-14"} />
       ) : (
         <>
-          <div>
+          {userWallets.length === 0 || !userWallets ? (
+            <div className="flex justify-center items-end w-full text-center">
+              <p>{`It seem you don't have a wallet account yet, try creating one.`}</p>
+            </div>
+          ) : (
+            <div>
+              {userWallets?.map((e, i) => (
+                <Wallet key={i} data={e} />
+              ))}
+            </div>
+          )}
+          {/* <div>
             {userWallets?.length === 0 || !userWallets ? (
               <div className="flex justify-center items-end w-full text-center">
                 <p>{`It seem you don't have a wallet account yet, try creating one.`}</p>
               </div>
             ) : (
-              userWallets?.map((e, i) => (
-                <Wallet key={i} data={e} />
-              ))
+              userWallets?.map((e, i) => <Wallet key={i} data={e} />)
             )}
-          </div>
+          </div> */}
 
           <div className="w-full flex flex-col">
             <button

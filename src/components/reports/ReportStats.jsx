@@ -194,7 +194,7 @@ const ReportStats = ({
                   aria-orientation="vertical"
                   aria-labelledby="options-menu"
                 >
-                  {wallets ? (
+                  {!wallets ? (
                     <h1 className="text-center block w-full px-4 py-2 text-sm">{`you don't have a wallet account yet`}</h1>
                   ) : (
                     wallets?.map((wallet, idx) => (
