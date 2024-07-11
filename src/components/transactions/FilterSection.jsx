@@ -240,14 +240,14 @@ const FilterSection = () => {
     }
   };
 
-  const handleSelectedFilterDate = (e) => {
+  const handleSelectedFilterDate = async (e) => {
+    setIsDateFilterOpen(!isDateFilterOpen);
     try {
-      const date = dateFiltering(currUser.uid, e.target.value, setTransactions);
+      const date = await dateFiltering(currUser.uid, e.target.value, setTransactions);
       setSelectedDateFilter(date);
     } catch (error) {
       console.log(error.message);
     } finally {
-      setIsDateFilterOpen(!isDateFilterOpen);
     }
   };
 

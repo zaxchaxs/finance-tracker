@@ -135,31 +135,47 @@ const getSnapshotUserWallet = async (idUser, setUserWalletData) => {
   }
 };
 
-const getSnapshotUserTransaction = async (idUser, setTransaction, conditional, limitNum) => {
-  
+const getSnapshotCurrUserTransaction = async (idUser, setTransaction, limitNum) => {
+  const date = new Date();
+  const startOfDay = new Date(date.setHours(0, 0, 0, 0));
+  const endOfDay = new Date(date.setHours(23, 59, 59, 999));
+
   try {
-    const q = limitNum
-      ? query(
+    const q = query(
           collection(db, `user-transactions/${idUser}/transactions`),
           orderBy("createdAt", "desc"),
-          limit(limitNum),
-          
+          limit(limitNum)
         )
-      : query(collection(db, `user-transactions/${idUser}/transactions`), 
-      
-    );
 
     const unsubscribe = onSnapshot(q, (snapshot) => {
       const data = snapshot.docs.map((e) => ({
         ...e.data(),
       }));
-      console.log(data);
       setTransaction(data);
     });
   } catch (error) {
     console.error(error.message);
   }
 };
+
+const getDocsFilterdTransactions = async (idUser, startAt, endAt, setTransaction) => {
+  try {
+    const q = query(
+      collection(db, `user-transactions/${idUser}/transactions`),
+      where("date", ">=", startAt),
+      where("date", "<=", endAt)
+    );
+
+    const docSnap = await getDocs(q);
+    const data = docSnap.docs.map(document => document.data());
+
+    setTransaction(data);
+    
+  } catch (error) {
+    console.error(error.message);
+    throw new Error(`Error getDocs: ${error.message}`)
+  }
+}
 
 const addDocTransaction = async (idUser, newData) => {
   // updating amount of wallet
@@ -204,7 +220,8 @@ const addDocTransaction = async (idUser, newData) => {
 export {
   getDocUserById,
   getSnapshotUserWallet,
-  getSnapshotUserTransaction,
+  getSnapshotCurrUserTransaction,
+  getDocsFilterdTransactions,
   addDocTransaction,
   addDocWallet,
   addUser,

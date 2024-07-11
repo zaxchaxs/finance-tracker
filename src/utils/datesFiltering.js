@@ -1,14 +1,14 @@
-import { getSnapshotUserTransaction } from "@/libs/firestoreMethods";
+import { getDocsFilterdTransactions, getSnapshotUserTransaction } from "@/libs/firestoreMethods";
 import { where } from "firebase/firestore";
 
 export const dateFiltering = (idUser, value, setTransaction) => {
     try {
         switch (value) {
           case "Today":
-            return getTransactionToday(idUser, setTransaction)
+            return getTransactionToday(idUser, setTransaction);
   
           case "Yesterday":
-            return getTransactionYesterday()
+            return getTransactionYesterday(idUser, setTransaction);
   
           case "Yesterday":
             break;
@@ -34,20 +34,33 @@ export const dateFiltering = (idUser, value, setTransaction) => {
 }
 
 const getTransactionToday = async (idUser, setTransaction) => {
+  try {
     const today = new Date();
-    const conditional = where("date", "==", today);
-    await getSnapshotUserTransaction(idUser, setTransaction, conditional)
+    const startOfDay = new Date(today.setHours(0, 0, 0, 0));
+    const endOfDay = new Date(today.setHours(23, 59, 59, 999));
+    
+    await getDocsFilterdTransactions(idUser, startOfDay, endOfDay, setTransaction);
+  
+    return today.toLocaleDateString('en-US', {day: 'numeric', month: 'long', year: '2-digit'});
 
-    const date = today.toLocaleDateString('en-US', {day: 'numeric', month: 'long', year: '2-digit'});
-
-    return date
+  } catch (error) {
+    console.error(error.message);
+  }
 }
 
-const getTransactionYesterday = () => {
+const getTransactionYesterday = async (idUser, setTransaction) => {
+  try {
     const today = new Date();
     const yesterday = new Date(today);
     yesterday.setDate(today.getDate() - 1);
+    const startOfDay = new Date(yesterday.setHours(0, 0, 0, 0));
+    const endOfDay = new Date(yesterday.setHours(23, 59, 59, 999));
 
+    await getDocsFilterdTransactions(idUser, startOfDay, endOfDay, setTransaction);
 
-    return yesterday.toLocaleDateString('en-US', {day: 'numeric', month: 'long', year: '2-digit'});
+    return yesterday.toLocaleDateString('en-US', {day: 'numeric', month: 'long', year: '2-digit'}); 
+
+  } catch (error) {
+    console.error(error.message);
+  }
 }

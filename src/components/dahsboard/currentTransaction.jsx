@@ -1,4 +1,4 @@
-import { getSnapshotUserTransaction } from "@/libs/firestoreMethods";
+import { getSnapshotCurrUserTransaction } from "@/libs/firestoreMethods";
 import { dateToString } from "@/utils/dates";
 import { formatRupiah } from "@/utils/formatRupiah";
 import { useEffect, useState } from "react";
@@ -54,9 +54,8 @@ const CurrentTransaction = ({ isShowed, user }) => {
     setIsGettingData(true);
     try { 
       const limit = 5;
-      const condition = null;
       const getCurrTransac = async () => {
-        await getSnapshotUserTransaction(user?.uid, setCurrTransaction, condition, limit);
+        await getSnapshotCurrUserTransaction(user?.uid, setCurrTransaction, limit);
       };
       if(user) getCurrTransac();
       
