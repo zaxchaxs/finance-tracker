@@ -1,11 +1,8 @@
 "use client";
 import { useAuth } from "@/contexts/AuthContext";
-import { db } from "@/libs/firebase";
-import { dateFilterValue } from "@/utils/dates";
 import { dateFiltering } from "@/utils/datesFiltering";
 import { faCaretDown } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { collection, getDocs, query, where } from "firebase/firestore";
 import { useEffect, useRef, useState } from "react";
 
 const FilterSection = () => {
@@ -200,7 +197,7 @@ const FilterSection = () => {
 
   useEffect(() => {
     // get default filter when page refreshed
-    const date = dateFiltering(currUser?.uid, selectedDateFilter, setTransactions);
+    const date = dateFiltering(currUser?.uid, selectedDateFilter, selectedWallet, setTransactions);
     setSelectedDateFilter(date);
 
     // handle for outside dropdown click
@@ -230,7 +227,7 @@ const FilterSection = () => {
 
   const handleSelectedWallet = (e) => {
     if (e.target.name === selectedWallet) {
-      setSelectedWallet("Specify Wallet");
+      setSelectedWallet(null);
       setIsWalletOpen(!isWalletOpen);
       //   setDataFilter("all");
     } else {
@@ -243,7 +240,7 @@ const FilterSection = () => {
   const handleSelectedFilterDate = async (e) => {
     setIsDateFilterOpen(!isDateFilterOpen);
     try {
-      const date = await dateFiltering(currUser.uid, e.target.value, setTransactions);
+      const date = await dateFiltering(currUser.uid, e.target.value, selectedWallet, setTransactions);
       setSelectedDateFilter(date);
     } catch (error) {
       console.log(error.message);

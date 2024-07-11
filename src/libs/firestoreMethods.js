@@ -158,13 +158,22 @@ const getSnapshotCurrUserTransaction = async (idUser, setTransaction, limitNum) 
   }
 };
 
-const getDocsFilterdTransactions = async (idUser, startAt, endAt, setTransaction) => {
+const getDocsFilterdTransactions = async (idUser, startAt, endAt, walletId, setTransaction) => {
+  console.log(walletId);
   try {
-    const q = query(
+    const q = walletId ? 
+    query(
       collection(db, `user-transactions/${idUser}/transactions`),
       where("date", ">=", startAt),
-      where("date", "<=", endAt)
-    );
+      where("date", "<=", endAt),
+      where('accountId', '==', walletId)
+    ) 
+    :
+    query(
+      collection(db, `user-transactions/${idUser}/transactions`),
+      where("date", ">=", startAt),
+      where("date", "<=", endAt),
+    )
 
     const docSnap = await getDocs(q);
     const data = docSnap.docs.map(document => document.data());
