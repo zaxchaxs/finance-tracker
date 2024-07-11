@@ -14,7 +14,11 @@ export const sweetAlertAddTransac = (
   setDescription,
   setAmount
 ) => {
+//   const option = {
+//     year: 'numeric', month: '2-digit', day: '2-digit'
+// }
   const convertedAmount = formatRupiah(newData.amount);
+  const convertedDate = newData.date.toDateString();
 
   Swal.fire({
     title: "Are you sure?",
@@ -34,7 +38,7 @@ export const sweetAlertAddTransac = (
       newData.name
     }</p>
         <p><strong>"${newData.description}"</strong></p>
-        <p><strong>${newData.date}</strong></p>
+        <p><strong>${convertedDate}</strong></p>
       `,
   }).then(async (result) => {
     if (result.isConfirmed) {

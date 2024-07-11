@@ -1,5 +1,5 @@
 import { getSnapshotUserTransaction } from "@/libs/firestoreMethods";
-import { testingDate } from "@/utils/converTimeStamp";
+import { dateToString } from "@/utils/dates";
 import { formatRupiah } from "@/utils/formatRupiah";
 import { useEffect, useState } from "react";
 import LoaderSection from "../loaders/loaderSection";
@@ -97,7 +97,7 @@ export default CurrentTransaction;
 
 const ColItem = ({ data }) => {
   // testing date
-  const date = testingDate(data.date);
+  const date = dateToString(data.date);
   const amount = formatRupiah(data.amount);
 
   return (

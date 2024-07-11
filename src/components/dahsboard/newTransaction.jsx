@@ -55,7 +55,7 @@ const NewTransactionSec = ({
     name: selectedWallet?.name,
     type: selectedType,
     amount: Number(amount),
-    date: selectedDate,
+    date: new Date (selectedDate),
     createdAt: new Date(),
     description,
   };
