@@ -12,6 +12,7 @@ import {
   orderBy,
   query,
   setDoc,
+  Timestamp,
   updateDoc,
   where,
 } from "firebase/firestore";
@@ -134,19 +135,25 @@ const getSnapshotUserWallet = async (idUser, setUserWalletData) => {
   }
 };
 
-const getSnapshotUserTransaction = async (idUser, setTransaction, limitNum) => {
+const getSnapshotUserTransaction = async (idUser, setTransaction, conditional, limitNum) => {
+  
   try {
-    const q = query(
-      collection(db, `user-transactions/${idUser}/transactions`),
-      limitNum ? (orderBy("createdAt", "desc"), limit(limitNum))
-      :
-      orderBy('date', 'desc')
+    const q = limitNum
+      ? query(
+          collection(db, `user-transactions/${idUser}/transactions`),
+          orderBy("createdAt", "desc"),
+          limit(limitNum),
+          
+        )
+      : query(collection(db, `user-transactions/${idUser}/transactions`), 
+      
     );
 
     const unsubscribe = onSnapshot(q, (snapshot) => {
       const data = snapshot.docs.map((e) => ({
         ...e.data(),
       }));
+      console.log(data);
       setTransaction(data);
     });
   } catch (error) {
@@ -166,8 +173,7 @@ const addDocTransaction = async (idUser, newData) => {
 
     const currWallet = docSnapshot.docs.find(
       (el) =>
-        el.data().userId === idUser &&
-        el.data().accountId === newData.accountId
+        el.data().userId === idUser && el.data().accountId === newData.accountId
     );
     const walletRef = currWallet.ref;
 

@@ -54,8 +54,9 @@ const CurrentTransaction = ({ isShowed, user }) => {
     setIsGettingData(true);
     try { 
       const limit = 5;
+      const condition = null;
       const getCurrTransac = async () => {
-        await getSnapshotUserTransaction(user?.uid, setCurrTransaction, limit);
+        await getSnapshotUserTransaction(user?.uid, setCurrTransaction, condition, limit);
       };
       if(user) getCurrTransac();
       
