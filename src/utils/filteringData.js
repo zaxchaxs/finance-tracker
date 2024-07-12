@@ -1,5 +1,3 @@
-import { Timestamp } from "firebase/firestore";
-
 export const yearDataFilter = (data, year) => {
     const yearFiltered = data?.filter(obj => {;
 
@@ -7,7 +5,6 @@ export const yearDataFilter = (data, year) => {
         const date = new Date(obj.date.toDate());
         return year === date.getFullYear();
     });
-    console.log(yearFiltered);
 
     const monthNames = [
         "Jan", "Feb", "Mar", "Apr", "May", "Jun",

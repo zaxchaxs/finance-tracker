@@ -39,6 +39,262 @@ const FilterSection = ({ wallets }) => {
         "type": "income"
     },
     {
+        "description": "",
+        "date": {
+            "seconds": 1720656000,
+            "nanoseconds": 0
+        },
+        "name": "uang darurat",
+        "amount": 100000,
+        "userId": "3U40vTwzEcN43dAhrOSTE3BeLYd2",
+        "createdAt": {
+            "seconds": 1720714754,
+            "nanoseconds": 923000000
+        },
+        "accountId": "e5107081-e068-41f4-85d5-a0a42e3f0668",
+        "type": "income"
+    },
+    {
+        "description": "",
+        "date": {
+            "seconds": 1720656000,
+            "nanoseconds": 0
+        },
+        "name": "uang darurat",
+        "amount": 100000,
+        "userId": "3U40vTwzEcN43dAhrOSTE3BeLYd2",
+        "createdAt": {
+            "seconds": 1720714754,
+            "nanoseconds": 923000000
+        },
+        "accountId": "e5107081-e068-41f4-85d5-a0a42e3f0668",
+        "type": "income"
+    },
+    {
+        "description": "",
+        "date": {
+            "seconds": 1720656000,
+            "nanoseconds": 0
+        },
+        "name": "uang darurat",
+        "amount": 100000,
+        "userId": "3U40vTwzEcN43dAhrOSTE3BeLYd2",
+        "createdAt": {
+            "seconds": 1720714754,
+            "nanoseconds": 923000000
+        },
+        "accountId": "e5107081-e068-41f4-85d5-a0a42e3f0668",
+        "type": "income"
+    },
+    {
+        "description": "",
+        "date": {
+            "seconds": 1720656000,
+            "nanoseconds": 0
+        },
+        "name": "uang darurat",
+        "amount": 100000,
+        "userId": "3U40vTwzEcN43dAhrOSTE3BeLYd2",
+        "createdAt": {
+            "seconds": 1720714754,
+            "nanoseconds": 923000000
+        },
+        "accountId": "e5107081-e068-41f4-85d5-a0a42e3f0668",
+        "type": "income"
+    },
+    {
+        "description": "",
+        "date": {
+            "seconds": 1720656000,
+            "nanoseconds": 0
+        },
+        "name": "uang darurat",
+        "amount": 100000,
+        "userId": "3U40vTwzEcN43dAhrOSTE3BeLYd2",
+        "createdAt": {
+            "seconds": 1720714754,
+            "nanoseconds": 923000000
+        },
+        "accountId": "e5107081-e068-41f4-85d5-a0a42e3f0668",
+        "type": "income"
+    },
+    {
+        "description": "",
+        "date": {
+            "seconds": 1720656000,
+            "nanoseconds": 0
+        },
+        "name": "uang darurat",
+        "amount": 100000,
+        "userId": "3U40vTwzEcN43dAhrOSTE3BeLYd2",
+        "createdAt": {
+            "seconds": 1720714754,
+            "nanoseconds": 923000000
+        },
+        "accountId": "e5107081-e068-41f4-85d5-a0a42e3f0668",
+        "type": "income"
+    },
+    {
+        "description": "",
+        "date": {
+            "seconds": 1720656000,
+            "nanoseconds": 0
+        },
+        "name": "uang darurat",
+        "amount": 100000,
+        "userId": "3U40vTwzEcN43dAhrOSTE3BeLYd2",
+        "createdAt": {
+            "seconds": 1720714754,
+            "nanoseconds": 923000000
+        },
+        "accountId": "e5107081-e068-41f4-85d5-a0a42e3f0668",
+        "type": "income"
+    },
+    {
+        "description": "",
+        "date": {
+            "seconds": 1720656000,
+            "nanoseconds": 0
+        },
+        "name": "uang darurat",
+        "amount": 100000,
+        "userId": "3U40vTwzEcN43dAhrOSTE3BeLYd2",
+        "createdAt": {
+            "seconds": 1720714754,
+            "nanoseconds": 923000000
+        },
+        "accountId": "e5107081-e068-41f4-85d5-a0a42e3f0668",
+        "type": "income"
+    },
+    {
+        "description": "",
+        "date": {
+            "seconds": 1720656000,
+            "nanoseconds": 0
+        },
+        "name": "uang darurat",
+        "amount": 100000,
+        "userId": "3U40vTwzEcN43dAhrOSTE3BeLYd2",
+        "createdAt": {
+            "seconds": 1720714754,
+            "nanoseconds": 923000000
+        },
+        "accountId": "e5107081-e068-41f4-85d5-a0a42e3f0668",
+        "type": "income"
+    },
+    {
+        "description": "",
+        "date": {
+            "seconds": 1720656000,
+            "nanoseconds": 0
+        },
+        "name": "uang darurat",
+        "amount": 100000,
+        "userId": "3U40vTwzEcN43dAhrOSTE3BeLYd2",
+        "createdAt": {
+            "seconds": 1720714754,
+            "nanoseconds": 923000000
+        },
+        "accountId": "e5107081-e068-41f4-85d5-a0a42e3f0668",
+        "type": "income"
+    },
+    {
+        "description": "",
+        "date": {
+            "seconds": 1720656000,
+            "nanoseconds": 0
+        },
+        "name": "uang darurat",
+        "amount": 100000,
+        "userId": "3U40vTwzEcN43dAhrOSTE3BeLYd2",
+        "createdAt": {
+            "seconds": 1720714754,
+            "nanoseconds": 923000000
+        },
+        "accountId": "e5107081-e068-41f4-85d5-a0a42e3f0668",
+        "type": "income"
+    },
+    {
+        "description": "",
+        "date": {
+            "seconds": 1720656000,
+            "nanoseconds": 0
+        },
+        "name": "uang darurat",
+        "amount": 100000,
+        "userId": "3U40vTwzEcN43dAhrOSTE3BeLYd2",
+        "createdAt": {
+            "seconds": 1720714754,
+            "nanoseconds": 923000000
+        },
+        "accountId": "e5107081-e068-41f4-85d5-a0a42e3f0668",
+        "type": "income"
+    },
+    {
+        "description": "",
+        "date": {
+            "seconds": 1720656000,
+            "nanoseconds": 0
+        },
+        "name": "uang darurat",
+        "amount": 100000,
+        "userId": "3U40vTwzEcN43dAhrOSTE3BeLYd2",
+        "createdAt": {
+            "seconds": 1720714754,
+            "nanoseconds": 923000000
+        },
+        "accountId": "e5107081-e068-41f4-85d5-a0a42e3f0668",
+        "type": "income"
+    },
+    {
+        "description": "",
+        "date": {
+            "seconds": 1720656000,
+            "nanoseconds": 0
+        },
+        "name": "uang darurat",
+        "amount": 100000,
+        "userId": "3U40vTwzEcN43dAhrOSTE3BeLYd2",
+        "createdAt": {
+            "seconds": 1720714754,
+            "nanoseconds": 923000000
+        },
+        "accountId": "e5107081-e068-41f4-85d5-a0a42e3f0668",
+        "type": "income"
+    },
+    {
+        "description": "",
+        "date": {
+            "seconds": 1720656000,
+            "nanoseconds": 0
+        },
+        "name": "uang darurat",
+        "amount": 100000,
+        "userId": "3U40vTwzEcN43dAhrOSTE3BeLYd2",
+        "createdAt": {
+            "seconds": 1720714754,
+            "nanoseconds": 923000000
+        },
+        "accountId": "e5107081-e068-41f4-85d5-a0a42e3f0668",
+        "type": "income"
+    },
+    {
+        "description": "",
+        "date": {
+            "seconds": 1720656000,
+            "nanoseconds": 0
+        },
+        "name": "uang darurat",
+        "amount": 100000,
+        "userId": "3U40vTwzEcN43dAhrOSTE3BeLYd2",
+        "createdAt": {
+            "seconds": 1720714754,
+            "nanoseconds": 923000000
+        },
+        "accountId": "e5107081-e068-41f4-85d5-a0a42e3f0668",
+        "type": "income"
+    },
+    {
         "amount": 100000000,
         "date": {
             "seconds": 1720310400,

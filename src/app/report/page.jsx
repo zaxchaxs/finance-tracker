@@ -46,8 +46,6 @@ const ReportPage = () => {
       {/* nav */}
       <NavbarPage title={"Reports"} />
 
-      <button onClick={() => console.log(transactions, filteredTransactions)}>Test</button>
-
       <ReportStats
         transactions={
           filteredTransactions.length === 0

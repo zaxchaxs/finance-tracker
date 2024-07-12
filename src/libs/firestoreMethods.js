@@ -153,7 +153,6 @@ const getSnapshotUserTransaction = async (idUser, setTransaction, limitNum) => {
       const data = snapshot.docs.map((e) => ({
         ...e.data(),
       }));
-      console.log(data);
       setTransaction(data);
     });
   } catch (error) {

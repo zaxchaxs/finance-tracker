@@ -5,4 +5,5 @@ export const sumTotalAmount = (data) => {
         expanse: acc.expanse + curr.expanse
     }));
     return result;
-}
+};
+

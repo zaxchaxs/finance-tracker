@@ -11,7 +11,7 @@ import {
 
 const Chart = ({ data }) => {
   return (
-    <div className="w-full rounded-lg shadow-md p-2 flex flex-col justify-center items-center">
+    <div className="w-full rounded-lg border-2 border-secondary border-opacity-15 shadow-md p-2 flex flex-col justify-center items-center">
       <div className="w-full overflow-x-scroll z-0">
         <BarChart
           className="text-xs z-0"

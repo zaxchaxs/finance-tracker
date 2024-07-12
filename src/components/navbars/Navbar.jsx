@@ -33,7 +33,7 @@ const Navbar = () => {
       <motion.div
         animate={{ x: isNavOpen ? 1 : -70, opacity: isNavOpen ? 1 : 0.1 }}
         transition={{ type: "spring", bounce: 0.6 }}
-        className={`bg-secondary rounded-r-2xl flex flex-col p-4 gap-8 py-5`}
+        className={`bg-secondary rounded-r-2xl flex flex-col p-4 gap-8 py-5 shadow-lg`}
       >
         <IconNavbar delay={0.1} route={"/"} icon={faHouse} />
         <IconNavbar delay={0.2} route={"/dashboard"} icon={faMoneyBillAlt} />
