@@ -42,9 +42,16 @@ export const selectedFilterConverting = (value) => {
         option
       )} - ${today.toLocaleDateString("en-US", option)}`;
     }
-
-    case "This month":
-      break;
+    
+    case "This month": {
+      const option = { day: "numeric", month: "short" };
+      const firstDayInMonth = new Date(today);
+      firstDayInMonth.setDate(1)
+      return `${firstDayInMonth.toLocaleDateString(
+        "en-US",
+        option
+      )} - ${today.toLocaleDateString("en-US", option)}`;
+    }
 
     case "Custom":
       break;

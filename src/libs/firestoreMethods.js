@@ -135,22 +135,25 @@ const getSnapshotUserWallet = async (idUser, setUserWalletData) => {
   }
 };
 
-const getSnapshotCurrUserTransaction = async (idUser, setTransaction, limitNum) => {
-  const date = new Date();
-  const startOfDay = new Date(date.setHours(0, 0, 0, 0));
-  const endOfDay = new Date(date.setHours(23, 59, 59, 999));
+const getSnapshotUserTransaction = async (idUser, setTransaction, limitNum) => {
 
   try {
-    const q = query(
-          collection(db, `user-transactions/${idUser}/transactions`),
-          orderBy("createdAt", "desc"),
-          limit(limitNum)
-        )
+    const q = limitNum ?
+    query(
+      collection(db, `user-transactions/${idUser}/transactions`),
+      orderBy("createdAt", "desc"),
+      limit(limitNum)
+    ) :
+    query(
+      collection(db, `user-transactions/${idUser}/transactions`),
+      orderBy("date", "desc"),
+    )
 
     const unsubscribe = onSnapshot(q, (snapshot) => {
       const data = snapshot.docs.map((e) => ({
         ...e.data(),
       }));
+      console.log(data);
       setTransaction(data);
     });
   } catch (error) {
@@ -229,7 +232,7 @@ const addDocTransaction = async (idUser, newData) => {
 export {
   getDocUserById,
   getSnapshotUserWallet,
-  getSnapshotCurrUserTransaction,
+  getSnapshotUserTransaction,
   getDocsFilterdTransactions,
   addDocTransaction,
   addDocWallet,

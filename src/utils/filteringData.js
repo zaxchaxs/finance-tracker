@@ -1,8 +1,13 @@
+import { Timestamp } from "firebase/firestore";
+
 export const yearDataFilter = (data, year) => {
-    const yearFiltered = data?.filter(obj => {
-        const date = new Date(obj.date);
+    const yearFiltered = data?.filter(obj => {;
+
+        // toDate() is firestore method for timmestamp. Inget ya
+        const date = new Date(obj.date.toDate());
         return year === date.getFullYear();
     });
+    console.log(yearFiltered);
 
     const monthNames = [
         "Jan", "Feb", "Mar", "Apr", "May", "Jun",
@@ -18,7 +23,8 @@ export const yearDataFilter = (data, year) => {
     }));
 
     yearFiltered?.forEach(transaction => {
-        const date = new Date(transaction.date);
+        // toDate() is firestore method for timmestamp. Inget ya
+        const date = new Date(transaction.date.toDate());
         const monthIdx = date.getMonth();
 
         if(transaction.type === 'income') {
@@ -33,7 +39,9 @@ export const yearDataFilter = (data, year) => {
 export const monthDataFilter  = (data, month, year) => {
 
     const monthFiltered = data?.filter(obj => {
-        const date = new Date(obj.date);
+
+        // toDate() is firestore method for timmestamp. Inget ya
+        const date = new Date(obj.date.toDate());
         return date.getMonth() === month && date.getFullYear() === year;
     });
 
@@ -50,7 +58,8 @@ export const monthDataFilter  = (data, month, year) => {
     }));
 
     monthFiltered?.forEach(transac => {
-        const date = new Date(transac.date);
+        // toDate() is firestore method for timmestamp. Inget ya
+        const date = new Date(transac.date.toDate());
         const dateIdx = date.getDate()-1;
 
         if(transac.type === 'income') {

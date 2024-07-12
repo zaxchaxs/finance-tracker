@@ -23,7 +23,7 @@ const ReportPage = () => {
     try {
       if (!loading && currUser) {
         const docSnapshotTransactions = async () => {
-          await getSnapshotUserTransaction(currUser?.uid, setTransactions);
+          await getSnapshotUserTransaction(currUser?.uid, setTransactions, null);
           await getSnapshotUserWallet(currUser?.uid, setWallets);
         };
         docSnapshotTransactions();
@@ -45,6 +45,8 @@ const ReportPage = () => {
     <main className="min-h-screen text-xl p-6 font-passionOne bg-primary w-full py-4 flex flex-col gap-5">
       {/* nav */}
       <NavbarPage title={"Reports"} />
+
+      <button onClick={() => console.log(transactions, filteredTransactions)}>Test</button>
 
       <ReportStats
         transactions={

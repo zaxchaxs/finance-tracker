@@ -145,7 +145,7 @@ const ReportStats = ({
               >
                 <FontAwesomeIcon icon={faCaretLeft} />
               </button>
-              <h1 className={`p-1 px-3 border-y-2 border-secondary`}>
+              <h1 className={`p-1 px-3 border-y-2 border-secondary`} onClick={() => console.log(data)}>
                 {selectedFilter === "year"
                   ? year
                   : `${convertedMonth}, ${year}`}
