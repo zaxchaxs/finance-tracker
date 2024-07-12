@@ -223,7 +223,7 @@ const FilterSection = () => {
         await getSnapshotUserWallet(currUser?.uid, setWallets);
       }
       
-      // if(currUser) getWallets();
+      // if(currUser) getWallets()
     } catch (error) {
       console.error(error.message);
     }
