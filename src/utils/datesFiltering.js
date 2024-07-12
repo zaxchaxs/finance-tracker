@@ -1,13 +1,13 @@
 import { getDocsFilterdTransactions, getSnapshotUserTransaction } from "@/libs/firestoreMethods";
 import { where } from "firebase/firestore";
 
-export const dateFiltering = (idUser, value, walletId, setTransaction) => {
+export const dateFiltering = (idUser, valueDate, walletId, setTransaction) => {
     try {
-        switch (value) {
+        switch (valueDate) {
           case "Today":
             return getTransactionToday(idUser, walletId, setTransaction);
   
-          case "Yesterday":
+            case "Yesterday":
             return getTransactionYesterday(idUser, walletId, setTransaction);
   
           case "Last 7 days":
@@ -38,8 +38,8 @@ const getTransactionToday = async (idUser, walletId, setTransaction) => {
     
     await getDocsFilterdTransactions(idUser, startOfDay, endOfDay, walletId, setTransaction);
     
-    const option = {day: 'numeric', month: 'long', year: '2-digit'}
-    return today.toLocaleDateString('en-US', option);
+    // const option = {day: 'numeric', month: 'long', year: '2-digit'}
+    // return today.toLocaleDateString('en-US', option);
 
   } catch (error) {
     console.error(error.message);
@@ -56,8 +56,8 @@ const getTransactionYesterday = async (idUser, walletId, setTransaction) => {
 
     await getDocsFilterdTransactions(idUser, startOfDay, endOfDay, walletId, setTransaction);
 
-    const option = {day: 'numeric', month: 'long', year: '2-digit'}
-    return yesterday.toLocaleDateString('en-US', option); 
+    // const option = {day: 'numeric', month: 'long', year: '2-digit'}
+    // return yesterday.toLocaleDateString('en-US', option); 
 
   } catch (error) {
     console.error(error.message);
@@ -74,8 +74,8 @@ const getTransactionLastWeek =  async (idUser, walletId, setTransaction) => {
 
     await getDocsFilterdTransactions(idUser, startOfWeek, endOfWeek, walletId, setTransaction);
 
-    const option = {day: 'numeric', month: 'long'};
-    return `${lastWeek.toLocaleDateString('en-US', option)} - ${today.toLocaleDateString('en-US', option)}`
+    // const option = {day: 'numeric', month: 'long'};
+    // return `${lastWeek.toLocaleDateString('en-US', option)} - ${today.toLocaleDateString('en-US', option)}`
 
 
   } catch (error) {

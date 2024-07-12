@@ -1,5 +1,7 @@
 "use client";
 import { useAuth } from "@/contexts/AuthContext";
+import { getSnapshotUserWallet } from "@/libs/firestoreMethods";
+import { selectedFilterConverting } from "@/utils/dates";
 import { dateFiltering } from "@/utils/datesFiltering";
 import { faCaretDown } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -7,16 +9,18 @@ import { useEffect, useRef, useState } from "react";
 
 const FilterSection = () => {
   const [transitions, setTransactions] = useState([]);
-  const [selectedWallet, setSelectedWallet] = useState("");
-  const [selectedDateFilter, setSelectedDateFilter] = useState("Today");
+  const [wallets, setWallets] = useState([]);
+  const [selectedWallet, setSelectedWallet] = useState({name: null, id: null});  
+  const [selectedDateFilter, setSelectedDateFilter] = useState({date: "Today", value: ''});
   const [isDateFilterOpen, setIsDateFilterOpen] = useState(false);
   const [isWalletOpen, setIsWalletOpen] = useState(false);
+
   const dropDownWalletRef = useRef(null);
   const dropDownDateRef = useRef(null);
 
   const { currUser, loading } = useAuth();
 
-  const wallets = [
+  const tempWalets = [
     {
       createdAt: {
         seconds: 1719721935,
@@ -196,10 +200,35 @@ const FilterSection = () => {
   ];
 
   useEffect(() => {
-    // get default filter when page refreshed
-    const date = dateFiltering(currUser?.uid, selectedDateFilter, selectedWallet, setTransactions);
-    setSelectedDateFilter(date);
 
+    try {
+      // get default transaction filtered
+      const getTransactionFiltered = async () => {
+        await dateFiltering(currUser?.uid, selectedDateFilter.value, selectedWallet.id, setTransactions);
+      };
+      
+      // if(currUser) getTransactionFiltered();
+
+    } catch (error) {
+      console.error(error.message);
+    }
+
+  }, [currUser, selectedDateFilter, selectedWallet]);
+
+  useEffect(() => {
+
+    // Get wallet doc
+    try {
+      const getWallets = async () => {
+        await getSnapshotUserWallet(currUser?.uid, setWallets);
+      }
+      
+      // if(currUser) getWallets();
+    } catch (error) {
+      console.error(error.message);
+    }
+
+    
     // handle for outside dropdown click
     document.addEventListener("mousedown", handleClickOutside);
     return () => {
@@ -221,31 +250,25 @@ const FilterSection = () => {
       setIsDateFilterOpen(isDateFilterOpen);
     }
   };
+
   const handleNewTransactionBtn = async () => {
     console.log(transitions);
   };
 
   const handleSelectedWallet = (e) => {
-    if (e.target.name === selectedWallet) {
-      setSelectedWallet(null);
+    if (e.target.name === selectedWallet.name) {
+      setSelectedWallet({name: null, id: null});
       setIsWalletOpen(!isWalletOpen);
-      //   setDataFilter("all");
     } else {
-      setSelectedWallet(e.target.name);
+      setSelectedWallet({name: e.target.name, id:e.target.value})
       setIsWalletOpen(!isWalletOpen);
-      //   setDataFilter(e.target.value);
     }
   };
 
   const handleSelectedFilterDate = async (e) => {
     setIsDateFilterOpen(!isDateFilterOpen);
-    try {
-      const date = await dateFiltering(currUser.uid, e.target.value, selectedWallet, setTransactions);
-      setSelectedDateFilter(date);
-    } catch (error) {
-      console.log(error.message);
-    } finally {
-    }
+    const date = selectedFilterConverting(e.target.value);
+    setSelectedDateFilter({date, value: e.target.value});
   };
 
   return (
@@ -256,7 +279,7 @@ const FilterSection = () => {
             className="py-2 px-4 rounded-md bg-secondary hover:bg-secondary-hover active:bg-secondary"
             onClick={() => setIsDateFilterOpen(!isDateFilterOpen)}
           >
-            {selectedDateFilter}
+            {selectedDateFilter.date}
           </button>
 
           {isDateFilterOpen && (
@@ -288,7 +311,7 @@ const FilterSection = () => {
             onClick={() => setIsWalletOpen(!isWalletOpen)}
             className="py-2 px-3 flex items-center gap-2 w-fit bg-secondary hover:bg-secondary-hover text-base rounded-md"
           >
-            {selectedWallet || "Wallet"}
+            {selectedWallet.name || "Wallet"}
             <FontAwesomeIcon icon={faCaretDown} className="w-3" />
           </button>
 
@@ -300,10 +323,10 @@ const FilterSection = () => {
                 aria-orientation="vertical"
                 aria-labelledby="options-menu"
               >
-                {!wallets ? (
+                {!tempWalets ? (
                   <h1 className="text-center block w-full px-4 py-2 text-sm">{`you don't have a wallet account yet`}</h1>
                 ) : (
-                  wallets?.map((wallet, idx) => (
+                  tempWalets?.map((wallet, idx) => (
                     <button
                       key={idx}
                       value={wallet.accountId}

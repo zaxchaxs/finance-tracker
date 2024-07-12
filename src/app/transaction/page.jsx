@@ -1,8 +1,11 @@
 'use client'
 import NavbarPage from "@/components/navbars/NavbarPage";
 import FilterSection from "@/components/transactions/FilterSection";
+import { useAuth } from "@/contexts/AuthContext";
+import { useEffect, useState } from "react";
 
 const TransactionPage = () => {
+    
     return(
         <main className="min-h-screen text-xl p-6 font-passionOne bg-primary w-full py-4 flex flex-col gap-5">
             {/* Nav */}
