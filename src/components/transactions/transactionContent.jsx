@@ -2,12 +2,13 @@ import { sumTotalAmount } from "@/utils/sumAmount";
 import TransactionDetail from "../dahsboard/transactionDefail";
 import { formatRupiah } from "@/utils/formatRupiah";
 import AdviceInfo from "../AdviceInfo";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCaretLeft, faCaretRight } from "@fortawesome/free-solid-svg-icons";
 
 const TransactionContent = ({ transactions }) => {
     const [page, setPage] = useState(1);
+    const [totalAmount, setTotalAmount] = useState({income: 0, expanse: 0});
 
   const newObjAmount = Array(transactions.length)
     .fill(null)
@@ -15,18 +16,25 @@ const TransactionContent = ({ transactions }) => {
       income: 0,
       expanse: 0,
     }));
-  transactions.forEach((transac, idx) => {
-    if (transac.type === "income") {
-      newObjAmount[idx].income += transac.amount;
-    } else if (transac.type === "expanse") {
-      newObjAmount[idx].expanse += transac.amount;
-    }
-  });
 
-  const totalAmount = sumTotalAmount(newObjAmount);
+  useEffect(() => {
+    const changeValObjAmount = () => {
+      transactions.map((transac, idx) => {
+        if (transac.type === "income") {
+          newObjAmount[idx].income += transac.amount;
+        } else if (transac.type === "expanse") {
+          newObjAmount[idx].expanse += transac.amount;
+        }
+      });
+      const result = sumTotalAmount(newObjAmount);
+      setTotalAmount(result);
+    };
+    if(transactions.length !== 0) changeValObjAmount();
+  }, [transactions]);
 
   const handleNextPage = () => {
     setPage(page+1)
+    console.log(totalAmount);
   }
 
   const handlePrevPage = () => {
@@ -39,13 +47,13 @@ const TransactionContent = ({ transactions }) => {
         <div className="flex justify-start items-center gap-1">
           <h1>{`Total Income: `}</h1>
           <h1 className="text-primary">{`${formatRupiah(
-            totalAmount?.income
+            totalAmount.income
           )}`}</h1>
         </div>
         <div className="flex justify-start gap-1 items-center">
           <h1>{`Total Expanse: `}</h1>
           <h1 className="text-danger-hover">{`${formatRupiah(
-            totalAmount?.expanse
+            totalAmount.expanse
           )}`}</h1>
         </div>
       </div>

@@ -4,7 +4,7 @@ import { selectedFilterConverting } from "@/utils/dates";
 import { dateFiltering } from "@/utils/datesFiltering";
 import { faCaretDown } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useEffect, useRef, useState } from "react";
+import { Suspense, useEffect, useRef, useState } from "react";
 import LoaderSection from "../loaders/loaderSection";
 import TransactionContent from "./transactionContent";
 
@@ -14,7 +14,7 @@ const FilterSection = ({ wallets }) => {
   const [selectedDateFilter, setSelectedDateFilter] = useState({ date: selectedFilterConverting("Today"), value: "Today"});
   const [isDateFilterOpen, setIsDateFilterOpen] = useState(false);
   const [isWalletOpen, setIsWalletOpen] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState();
 
   const dropDownWalletRef = useRef(null);
   const dropDownDateRef = useRef(null);
@@ -370,26 +370,25 @@ const FilterSection = ({ wallets }) => {
   ];
 
   useEffect(() => {
-    setLoading(true);
-    try {
-      // get default transaction filtered
-      const getTransactionFiltered = async () => {
+    
+    // get default transaction filtered
+    const getTransactionFiltered = async () => {
+      setLoading(true);
+      try {
         await dateFiltering(
           currUser?.uid,
           selectedDateFilter.value,
           selectedWallet.id,
           setTransactions
         );
-      };
-
-      // if(currUser) getTransactionFiltered();
-    } catch (error) {
-      console.error(error.message);
-    } finally {
-      setTimeout(() => {
+      } catch (error) {
+        console.error(error.message);
+      } finally {
         setLoading(false);
-      }, 2000);
-    }
+      }
+    };
+
+    getTransactionFiltered();
   }, [currUser, selectedDateFilter, selectedWallet]);
 
   // handle for outside dropdown click
@@ -531,7 +530,7 @@ const FilterSection = ({ wallets }) => {
       {loading ? (
         <LoaderSection width={"w-14"} />
       ) : (
-        <TransactionContent transactions={tempCurrTransac} />
+        <TransactionContent transactions={transaction} />
       )}
       {/* transaction component */}
     </>

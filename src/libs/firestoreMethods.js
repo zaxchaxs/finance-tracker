@@ -161,20 +161,21 @@ const getSnapshotUserTransaction = async (idUser, setTransaction, limitNum) => {
 };
 
 const getDocsFilterdTransactions = async (idUser, startAt, endAt, walletId, setTransaction) => {
-  console.log(walletId);
   try {
     const q = walletId ? 
     query(
       collection(db, `user-transactions/${idUser}/transactions`),
       where("date", ">=", startAt),
       where("date", "<=", endAt),
-      where('accountId', '==', walletId)
+      where('accountId', '==', walletId),
+      orderBy("date", "desc")
     ) 
     :
     query(
       collection(db, `user-transactions/${idUser}/transactions`),
       where("date", ">=", startAt),
       where("date", "<=", endAt),
+      orderBy("date", "desc")
     )
 
     const docSnap = await getDocs(q);

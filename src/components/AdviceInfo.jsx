@@ -14,7 +14,7 @@ const AdviceInfo = ({totalAmount}) => {
           {totalAmount?.income === totalAmount?.expanse
             ? ""
             : totalAmount?.income > totalAmount?.expanse
-            ? `Great, your expenses this ${selectedFilter} aren't bad. Keep it up!`
+            ? `Great, your expenses aren't bad. Keep it up!`
             : "You should be more mindful of your spending. Stop wasting money on useless stuff."}
         </h1>
       </div>
