@@ -1,6 +1,4 @@
 import { getSnapshotUserTransaction } from "@/libs/firestoreMethods";
-import { dateToString } from "@/utils/dates";
-import { formatRupiah } from "@/utils/formatRupiah";
 import { useEffect, useState } from "react";
 import LoaderSection from "../loaders/loaderSection";
 import TransactionDetail from "./transactionDefail";
@@ -8,20 +6,21 @@ import TransactionDetail from "./transactionDefail";
 const CurrentTransaction = ({ isShowed, user }) => {
   const [currTransaction, setCurrTransaction] = useState(null);
   const [isGettingData, setIsGettingData] = useState(false);
+
   useEffect(() => {
-    setIsGettingData(true);
-    try { 
-      const limit = 5;
-      const getCurrTransac = async () => {
+    const limit = 5;
+    const getCurrTransac = async () => {
+      setIsGettingData(true);
+      try {
         await getSnapshotUserTransaction(user?.uid, setCurrTransaction, limit);
-      };
-      if(user) getCurrTransac();
-      
-    } catch (error) {
-      console.error(error.message);
-    } finally {
-      setIsGettingData(false);
-    }
+      } catch (error) {
+        console.error(error.message);
+      } finally {
+        setIsGettingData(false);
+      }
+    };
+    
+    if (user) getCurrTransac();
   }, [user]);
 
   return (
