@@ -14,7 +14,7 @@ export const dateFiltering = (idUser, valueDate, walletId, setTransaction) => {
             return getTransactionLastWeek(idUser, walletId, setTransaction);
   
           case "Last 30 days":
-            break;
+            return getTransactionLastMonth(idUser, walletId, setTransaction);
   
           case "This month":
             break;
@@ -71,14 +71,29 @@ const getTransactionLastWeek =  async (idUser, walletId, setTransaction) => {
     lastWeek.setDate(today.getDate() - 7);
     const startOfWeek = new Date(lastWeek.setHours(0,0,0,0));
     const endOfWeek = new Date(today.setHours(23, 59, 59, 999));
-
+    
     await getDocsFilterdTransactions(idUser, startOfWeek, endOfWeek, walletId, setTransaction);
-
+    
     // const option = {day: 'numeric', month: 'long'};
     // return `${lastWeek.toLocaleDateString('en-US', option)} - ${today.toLocaleDateString('en-US', option)}`
-
+    
 
   } catch (error) {
-    
+    console.error('Error getting document',error.message);
+  }
+}
+
+const getTransactionLastMonth = async (idUser, walletId, setTransaction) => {
+  try {
+    const today = new Date() ;
+    const lastMonth = new Date(today);
+    lastMonth.setDate(today.getDate()-30)
+    const startOfMonth = new Date(lastMonth.setHours(0,0,0,0));
+    const endOfMonth = new Date(today.setHours(23, 59, 59, 999));
+
+    await getDocsFilterdTransactions(idUser, startOfMonth, endOfMonth, walletId, setTransaction);
+
+  } catch (error) {
+    console.error('Error getting document',error.message);
   }
 }

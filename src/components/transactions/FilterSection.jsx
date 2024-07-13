@@ -4,7 +4,7 @@ import { selectedFilterConverting } from "@/utils/dates";
 import { dateFiltering } from "@/utils/datesFiltering";
 import { faCaretDown } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Suspense, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import LoaderSection from "../loaders/loaderSection";
 import TransactionContent from "./transactionContent";
 
@@ -388,7 +388,7 @@ const FilterSection = ({ wallets }) => {
       }
     };
 
-    getTransactionFiltered();
+    // getTransactionFiltered();
   }, [currUser, selectedDateFilter, selectedWallet]);
 
   // handle for outside dropdown click
@@ -530,7 +530,7 @@ const FilterSection = ({ wallets }) => {
       {loading ? (
         <LoaderSection width={"w-14"} />
       ) : (
-        <TransactionContent transactions={transaction} />
+        <TransactionContent transactions={tempCurrTransac} />
       )}
       {/* transaction component */}
     </>

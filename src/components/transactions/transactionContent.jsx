@@ -7,7 +7,9 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCaretLeft, faCaretRight } from "@fortawesome/free-solid-svg-icons";
 
 const TransactionContent = ({ transactions }) => {
+  const [slicedTransac, setSlicedTransac] = useState();
     const [page, setPage] = useState(1);
+    const [indexPage, setIndexPage] = useState({first: 0, last: 10});
     const [totalAmount, setTotalAmount] = useState({income: 0, expanse: 0});
 
   const newObjAmount = Array(transactions.length)
@@ -32,13 +34,29 @@ const TransactionContent = ({ transactions }) => {
     if(transactions.length !== 0) changeValObjAmount();
   }, [transactions]);
 
+  // slicing transaction document
+  useEffect(() => {
+    setSlicedTransac(transactions?.slice(indexPage.first, indexPage.last));
+  }, [page])
+  
   const handleNextPage = () => {
-    setPage(page+1)
-    console.log(totalAmount);
-  }
+    if (page*10 >= transactions.length) return;
 
+    setPage(page+1)
+    setIndexPage({
+      first: indexPage.first+10,
+      last: indexPage.last+10
+    })
+  }
+  
   const handlePrevPage = () => {
+    if(page === 1) return;
+
     setPage(page-1)
+    setIndexPage({
+      first: indexPage.first-10,
+      last: indexPage.last-10
+    })
   }
 
   return (
@@ -64,7 +82,7 @@ const TransactionContent = ({ transactions }) => {
             <p>{`No transactions yet.`}</p>
           </div>
         ) : (
-          transactions.map((data, idx) => (
+          slicedTransac?.map((data, idx) => (
             <TransactionDetail key={idx} data={data} />
           ))
         )}
@@ -74,7 +92,7 @@ const TransactionContent = ({ transactions }) => {
         <button onClick={handlePrevPage} className="p-1 px-3 border-2 rounded-l-md border-secondary">
             <FontAwesomeIcon icon={faCaretLeft} />
         </button>
-        <button className="p-1 px-3 border-y-2 border-secondary bg-secondary text-slate-100">{page}</button>
+        <button className="p-1 px-3 border-y-2 border-secondary bg-secondary text-slate-100" onClick={() => console.log(slicedTransac.length)}>{page}</button>
         <button onClick={handleNextPage} className="p-1 px-3 border-2 rounded-r-md border-secondary" >
             <FontAwesomeIcon icon={faCaretRight} />
         </button>

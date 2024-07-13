@@ -5,13 +5,11 @@ import FilterSection from "@/components/transactions/FilterSection";
 import Unauthenticate from "@/components/Unauthenticate";
 import { useAuth } from "@/contexts/AuthContext";
 import { getSnapshotUserWallet } from "@/libs/firestoreMethods";
-import React, { Suspense, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 const TransactionPage = () => {
   const [wallets, setWallets] = useState([]);
   const { currUser, loading } = useAuth();
-
-  const LazyComponent = React.lazy(() => import('@/components/Lazy/LazyComponent'));
 
   const tempWalets = [
     {
