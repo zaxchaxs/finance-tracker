@@ -1,4 +1,5 @@
 import { getDocsFilterdTransactions, getSnapshotUserTransaction } from "@/libs/firestoreMethods";
+import { customDateSweetAlert } from "@/libs/sweetAlert";
 import { where } from "firebase/firestore";
 
 export const dateFiltering = (idUser, valueDate, walletId, setTransaction) => {
@@ -17,10 +18,10 @@ export const dateFiltering = (idUser, valueDate, walletId, setTransaction) => {
             return getTransactionLastMonth(idUser, walletId, setTransaction);
   
           case "This month":
-            break;
+            return getTransactionThisMonth(idUser, walletId, setTransaction);
   
           case "Custom":
-            break;
+            return customDateSweetAlert();
   
           default:
             break;
@@ -92,8 +93,23 @@ const getTransactionLastMonth = async (idUser, walletId, setTransaction) => {
     const endOfMonth = new Date(today.setHours(23, 59, 59, 999));
 
     await getDocsFilterdTransactions(idUser, startOfMonth, endOfMonth, walletId, setTransaction);
-
+    
   } catch (error) {
     console.error('Error getting document',error.message);
+  }
+}
+
+const getTransactionThisMonth = async (idUser, walletId, setTransaction) => {
+  try {
+    const today = new Date();
+    const firstDayInMonth = new Date(today);
+    firstDayInMonth.setDate(1);
+    const startOfFirstDay = new Date(firstDayInMonth.setHours(0,0,0,0));
+    const endOfDay = new Date(today.setHours(23, 59, 59, 999));
+    
+    await getDocsFilterdTransactions(idUser, startOfFirstDay, endOfDay, walletId, setTransaction);
+
+  } catch (error) {
+    console.error(error.message);
   }
 }

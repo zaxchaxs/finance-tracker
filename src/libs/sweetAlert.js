@@ -187,3 +187,20 @@ export const successSignupSweetAlert = () => {
     }
   })
 }
+
+export const customDateSweetAlert = () => {
+  Swal.fire({
+    title: "Select Date",
+    color: "#BBF7D0",
+    background: "#059669",
+    confirmButtonColor: "#052E16",
+    input: "date",
+    didOpen: () => {
+      
+    }
+  }).then(result => {
+    if(result.isConfirmed) {
+      const test = "";
+    }
+  })
+}
