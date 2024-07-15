@@ -4,7 +4,7 @@ import {
   faSquareXmark,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import UpdateModal from "./updateModal";
+import UpdateModal from "@/components/modals/updateModal";
 import { useState } from "react";
 
 const Wallet = ({ data }) => {

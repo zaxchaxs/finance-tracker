@@ -7,6 +7,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect, useRef, useState } from "react";
 import LoaderSection from "../loaders/loaderSection";
 import TransactionContent from "./transactionContent";
+import AddTransactionModal from "../modals/newTransacModal";
 
 const FilterSection = ({ wallets }) => {
   const [transaction, setTransactions] = useState([]);
@@ -14,6 +15,7 @@ const FilterSection = ({ wallets }) => {
   const [selectedDateFilter, setSelectedDateFilter] = useState({ date: selectedFilterConverting("Today"), value: "Today"});
   const [isDateFilterOpen, setIsDateFilterOpen] = useState(false);
   const [isWalletOpen, setIsWalletOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [loading, setLoading] = useState();
 
   const dropDownWalletRef = useRef(null);
@@ -415,7 +417,7 @@ const FilterSection = ({ wallets }) => {
   };
 
   const handleNewTransactionBtn = async () => {
-    console.log(transaction, wallets);
+    setIsModalOpen(!isModalOpen);
   };
 
   const handleSelectedWallet = (e) => {
@@ -524,6 +526,7 @@ const FilterSection = ({ wallets }) => {
           >
             New
           </button>
+          <AddTransactionModal isModalOpen={isModalOpen} handleCloseModal={setIsModalOpen} user={currUser} wallets={wallets} />
         </div>
       </div>
 

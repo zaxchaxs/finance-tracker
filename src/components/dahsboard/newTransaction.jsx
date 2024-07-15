@@ -46,7 +46,6 @@ const NewTransactionSec = ({
         setAmount
       );
     }
-    e.preventDefault();
   };
 
   const newData = {

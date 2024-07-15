@@ -2,7 +2,7 @@ import { sumTotalAmount } from "@/utils/sumAmount";
 import TransactionDetail from "../dahsboard/transactionDefail";
 import { formatRupiah } from "@/utils/formatRupiah";
 import AdviceInfo from "../AdviceInfo";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCaretLeft, faCaretRight } from "@fortawesome/free-solid-svg-icons";
 
@@ -11,6 +11,7 @@ const TransactionContent = ({ transactions }) => {
     const [page, setPage] = useState(1);
     const [indexPage, setIndexPage] = useState({first: 0, last: 10});
     const [totalAmount, setTotalAmount] = useState({income: 0, expanse: 0});
+    const scrollRef = useRef();
 
   const newObjAmount = Array(transactions.length)
     .fill(null)
@@ -37,6 +38,7 @@ const TransactionContent = ({ transactions }) => {
   // slicing transaction document
   useEffect(() => {
     setSlicedTransac(transactions?.slice(indexPage.first, indexPage.last));
+    // if(scrollRef.current) scrollRef.current.scrollIntoView();
   }, [page])
   
   const handleNextPage = () => {
@@ -88,7 +90,7 @@ const TransactionContent = ({ transactions }) => {
         )}
       </div>
 
-      <div className="w-full flex justify-center items-center mx-auto">
+      <div className="w-full flex justify-center items-center mx-auto" ref={scrollRef}>
         <button onClick={handlePrevPage} className="p-1 px-3 border-2 rounded-l-md border-secondary">
             <FontAwesomeIcon icon={faCaretLeft} />
         </button>
@@ -97,7 +99,7 @@ const TransactionContent = ({ transactions }) => {
             <FontAwesomeIcon icon={faCaretRight} />
         </button>
       </div>
-
+        
       <AdviceInfo totalAmount={totalAmount} />
     </div>
   );
