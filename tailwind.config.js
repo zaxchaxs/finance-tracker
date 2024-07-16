@@ -13,21 +13,27 @@ module.exports = {
           "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
       },
       colors: {
-        "primary": "#BBF7D0",
-        "secondary": "#059669",
-        "danger": "#EF4444",
-        "danger-hover": "#DC2626",
-        "secondary-hover": "#047857"
+        "primary": "#E1FAEE",
+        "secondary": "#047857",
+        "secondary-hover": "#049669",
+        'third': '#CCFBF1',
+        'third-hover': '#F0FDFA',
+        "danger": "#FF1D48",
+        "danger-hover": "#F43F5E",
       },
       textColor: {
         "primary": "#052E16",
         // "secondary": "#15803D",
         "secondary": "#2E2E2E",
-        "lightGreen": "#BBF7D0"
+        "lightGreen": "#BBF7D0",
+        "lightWhite": "#F1F5F9"
       },
       fontFamily: {
         'passionOne': ['var(--font-patua-one)'],
-        'lilitaOne': ['var(--font-lilita-one)']
+        'lilitaOne': ['var(--font-lilita-one)'],
+        'header': ['var(--font-blinker)'],
+        'tittle': ['var(--font-encodeSans)'],
+        'paragraf': ['var(--font-roboto)']
       },
       borderRadius: {
         '5xl': '3rem'

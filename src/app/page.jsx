@@ -5,6 +5,10 @@ import Image from "next/image";
 import homeIcon from "../../public/homeIcon.svg";
 import { useAuth } from "@/contexts/AuthContext";
 import LoaderPage from "@/components/loaders/loaderPage";
+import MainButton from "@/components/ui/buttons/PrimaryButton";
+import SecondButton from "@/components/ui/buttons/SecondButton";
+import DangerButton from "@/components/ui/buttons/DangerButton";
+import DropDownButton from "@/components/ui/buttons/DropDownButton";
 
 export default function Home() {
   const { currUser, loading } = useAuth();
@@ -14,7 +18,7 @@ export default function Home() {
     <LoaderPage />
   ) : (
     <main className="min-h-screen p-5 text-secondary bg-primary w-full flex flex-col items-center justify-between py-10 pb-14">
-      <h1 className="text-3xl p-4 text-primary text-center w-full font-lilitaOne">
+      <h1 className="text-3xl p-4 text-primary text-center w-full font-header">
         Zaxch Finance Tracker
       </h1>
       <div>
@@ -26,11 +30,15 @@ export default function Home() {
           className="w-[25vh] p-4"
         />
       </div>
-      <div className="text-center text-lg font-semibold p-4 font-passionOne text-secondary">
+      <div className="text-center text-lg font-semibold p-4 font-tittle text-secondary">
         <h1>
         Manage your finances, track your incomes and expenses. Take control of your money.
         </h1>
       </div>
+      <MainButton />
+      <SecondButton />
+      <DangerButton />
+      <DropDownButton />
       <div
         onClick={() => router.push("/login")}
         className={`gap-4 flex p-4 ${currUser ? "hidden" : ""}`}
