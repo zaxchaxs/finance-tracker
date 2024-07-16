@@ -11,22 +11,6 @@ const lilitaOne = Lilita_One({
   adjustFontFallback: false
 });
 
-const passionOne = Passion_One({
-  subsets: ["latin"],
-  variable: "--font-passion-one",
-  weight: "400",
-  display: 'swap',
-  adjustFontFallback: false
-});
-
-const breeSerif = Bree_Serif({
-  subsets: ['latin'],
-  variable: '--font-bree-serif',
-  weight: '400',
-  display: 'swap',
-  adjustFontFallback: false
-})
-
 const patuaOne = Patua_One({
   subsets: ['latin'],
   variable: '--font-patua-one',
@@ -69,7 +53,7 @@ export default function RootLayout({ children }) {
 
   return (
     <html lang="en">
-      <body className={`${lilitaOne.variable} ${passionOne.variable} ${breeSerif.variable} ${patuaOne.variable} ${blinker.variable} ${encodeSans.variable} ${roboto.variable}`}>
+      <body className={`${lilitaOne.variable} ${patuaOne.variable} ${blinker.variable} ${encodeSans.variable} ${roboto.variable}`}>
         <AuthProvider>
 
           <Navbar />
