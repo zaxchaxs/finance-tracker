@@ -25,16 +25,18 @@ const CurrentTransaction = ({ isShowed, user }) => {
 
   return (
     <div
-      className={`w-full text-lg text-secondary px-2 flex flex-col gap-1 ${
+      className={`w-full rounded-lg rounded-t-none p-4 flex shadow-md shadow-black text-secondary text-lg flex-col font-paragraf font-semibold relative ${
         isShowed ? "" : "hidden"
       }`}
     >
       {isGettingData ? (
-        <LoaderSection width={"w-14"} />
+        <div className="p-4">
+          <LoaderSection width={"w-14"} />
+        </div>
       ) : (
         <>
           {currTransaction?.length === 0 || !currTransaction ? (
-            <div className="flex justify-center items-end w-full text-center">
+            <div className="flex justify-center items-end w-full text-center py-2">
               <p>{`No transactions yet.`}</p>
             </div>
           ) : (

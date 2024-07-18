@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect, useState } from "react";
 import LoaderSection from "../loaders/loaderSection";
 import PrimaryButton from "../ui/buttons/PrimaryButton";
+import InputForm from "../ui/InputForm";
 
 const NewTransactionSec = ({
   user,
@@ -62,7 +63,7 @@ const NewTransactionSec = ({
 
   return (
     <div
-      className={`w-full rounded-lg rounded-t-none py-2 px-4 flex shadow-md shadow-black text-secondary text-lg flex-col font-paragraf font-semibold relative py-4 ${
+      className={`w-full rounded-lg rounded-t-none p-4 flex shadow-md shadow-black text-secondary text-lg flex-col font-paragraf font-semibold relative ${
         isShowed ? "" : "hidden"
       }`}
     >
@@ -106,68 +107,49 @@ const NewTransactionSec = ({
               </div>
 
               <div
-                className={`text-secondary font-passionOne w-full justify-between flex flex-col gap-2 ${
+                className={`text-secondary font-passionOne w-full justify-between flex flex-col gap-2.5 py-4 ${
                   selectedWallet ? "" : "hidden"
                 }`}
               >
                 <input
-                  className="bg-transparent py-2 focus:outline-none"
+                  className="bg-transparent py-2 focus:outline-none border-b-2 border-black p-2 rounded-lg"
                   type="date"
                   value={selectedDate}
                   onChange={handleDateChange}
                   name="Test"
                 />
-                <button
-                  className={`${
+                <div className={`${
                     selectedType === "income" ? "scale-105" : ""
-                  } p-1 px-2 bg-secondary hover:bg-secondary-hover rounded-lg text-green-200`}
-                  value={"income"}
-                  onClick={handleSelectedType}
-                >
-                  Income
-                </button>
-                <button
-                  className={`${
+                  }`}>
+                  <PrimaryButton handleClick={handleSelectedType} value={"income"} text={"Income"} type={"primary"} />
+                </div>
+
+                <div className={`${
                     selectedType === "expanse" ? "scale-105" : ""
-                  } p-1 px-2 rounded-lg text-green-200 bg-danger hover:bg-danger-hover`}
-                  value={"expanse"}
-                  onClick={handleSelectedType}
-                >
-                  Expanse
-                </button>
+                  }`}>
+                  <PrimaryButton handleClick={handleSelectedType} value={"expanse"} text={"Expanse"} type={"danger"} />
+
+                </div>
 
                 <form
-                  className="flex flex-col items-center py-2"
-                  onSubmit={(e) => handleSubmit(e)}
+                  className="flex flex-col items-center py-4 gap-3 "
+                  onSubmit={handleSubmit}
                 >
-                  <input
-                    type="text"
-                    placeholder="Amount"
-                    className="focus:outline-none rounded-md p-1 my-4 w-full"
-                    value={amount}
-                    onChange={handleAmountChange}
-                  />
-                  <div className="flex justify-between gap-3 w-full">
-                    <input
-                      placeholder="Descriptions"
-                      className="focus:outline-none w-full rounded-md p-1"
-                      type="text"
-                      value={description}
-                      onChange={handleDescChange}
-                    />
-                    <button
-                      onClick={(e) => handleSubmit(e)}
-                      className={`${
+                  <InputForm handleChange={handleAmountChange} isRequired={true} name={"Amount"} type={"text"} value={amount} />
+
+                  <div className="flex justify-between gap-3 w-full items-center">
+                    <InputForm handleChange={handleDescChange} isRequired={false} name={"Description"} type={"text"} value={description} />
+                    <div className={`${
                         selectedDate &&
                         selectedWallet &&
                         selectedType &&
                         amount > 0
                           ? ""
                           : "hidden"
-                      } p-1 px-2 bg-secondary rounded-lg text-green-200 hover:bg-secondary-hover`}
-                    >
-                      Submit
-                    </button>
+                      }`}>
+                      <PrimaryButton handleClick={handleSubmit} text={"Submit"} type={"primary"} value={"submit"} />
+
+                    </div>
                   </div>
                 </form>
               </div>
