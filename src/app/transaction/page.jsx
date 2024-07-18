@@ -49,7 +49,7 @@ const TransactionPage = () => {
   return loading ? (
     <LoaderPage />
   ) : currUser ? (
-    <main className="min-h-screen text-xl bg-primary w-full py-4 flex flex-col gap-5 relative">
+    <main className="min-h-screen text-lg relative font-passionOne bg-primary w-full flex flex-col gap-3">
       {/* Nav */}
       <NavbarPage title={"Transaction"} />
       

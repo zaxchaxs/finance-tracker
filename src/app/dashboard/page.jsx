@@ -61,7 +61,7 @@ const DashboardPage = () => {
       {/* Nav */}
       <NavbarPage title={"Dashboard"} />
 
-      <div className="w-full px-4 my-20 flex flex-col items-center gap-2 z-100">
+      <div className="w-full px-4 my-20 flex flex-col items-center gap-2 relative z-10">
 
         {/* Wallet sections */}
         <div className="pt-4 w-full text-primary flex flex-col items-center font-title"

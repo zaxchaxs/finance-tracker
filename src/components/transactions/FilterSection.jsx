@@ -8,6 +8,8 @@ import { useEffect, useRef, useState } from "react";
 import LoaderSection from "../loaders/loaderSection";
 import TransactionContent from "./transactionContent";
 import AddTransactionModal from "../modals/newTransacModal";
+import DropDownButton from "../ui/buttons/DropDownButton";
+import PrimaryButton from "../ui/buttons/PrimaryButton";
 
 const FilterSection = ({ wallets }) => {
   const [transaction, setTransactions] = useState([]);
@@ -20,6 +22,7 @@ const FilterSection = ({ wallets }) => {
 
   const dropDownWalletRef = useRef(null);
   const dropDownDateRef = useRef(null);
+  const isFirstRender = useRef(true);
 
   const { currUser } = useAuth();
 
@@ -363,12 +366,30 @@ const FilterSection = ({ wallets }) => {
   ];
 
   const dateFilter = [
-    "Today",
-    "Yesterday",
-    "Last 7 days",
-    "Last 30 days",
-    "This month",
-    "Custom",
+    {
+      name: "Today",
+      value: "Today"
+    },
+    {
+      name: "Yesterday",
+      value: "Yesterday"
+    },
+    {
+      name: "Last 7 days",
+      value: "Last 7 days"
+    },
+    {
+      name: "Last 30 days",
+      value: "Last 30 days"
+    },
+    {
+      name: "This month",
+      value: "This month"
+    },
+    {
+      name: "Custom",
+      value: "Custom"
+    },
   ];
 
   useEffect(() => {
@@ -377,12 +398,13 @@ const FilterSection = ({ wallets }) => {
     const getTransactionFiltered = async () => {
       setLoading(true);
       try {
-        await dateFiltering(
-          currUser?.uid,
-          selectedDateFilter.value,
-          selectedWallet.id,
-          setTransactions
-        );
+          console.log("test useeffetc");
+          await dateFiltering(
+            currUser?.uid,
+            selectedDateFilter.value,
+            selectedWallet.id,
+            setTransactions
+          );
       } catch (error) {
         console.error(error.message);
       } finally {
@@ -390,31 +412,14 @@ const FilterSection = ({ wallets }) => {
       }
     };
 
-    // getTransactionFiltered();
+    if(isFirstRender.current) {
+      isFirstRender.current = false;
+      return
+    };
+
+    if(currUser) getTransactionFiltered();
   }, [currUser, selectedDateFilter, selectedWallet]);
 
-  // handle for outside dropdown click
-  useEffect(() => {
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
-
-  const handleClickOutside = (event) => {
-    if (
-      dropDownWalletRef.current &&
-      !dropDownWalletRef.current.contains(event.target)
-    ) {
-      setIsWalletOpen(isWalletOpen);
-    }
-    if (
-      dropDownDateRef.current &&
-      !dropDownDateRef.current.contains(event.target)
-    ) {
-      setIsDateFilterOpen(isDateFilterOpen);
-    }
-  };
 
   const handleNewTransactionBtn = async () => {
     setIsModalOpen(!isModalOpen);
@@ -443,10 +448,12 @@ const FilterSection = ({ wallets }) => {
 
   return (
     <>
-      <div className="w-full text-base p-2 flex flex-col gap-4">
-        <div className="w-full flex items-center justify-between gap-4">
+      <div className="w-full text-base px-4 mt-20 flex flex-col gap-4 relative z-20">
+        <div className="w-full flex items-center justify-between gap-4 font-title relative z-10">
+
           {/* drop down date */}
-          <div className="relative min-w-fit " ref={dropDownDateRef}>
+          <DropDownButton datas={dateFilter} handleSelectedItem={handleSelectedFilterDate} selectedItem={selectedDateFilter.date} />
+          {/* <div className="relative min-w-fit " ref={dropDownDateRef}>
             <button
               className="py-2 px-4 rounded-md bg-secondary hover:bg-secondary-hover active:bg-secondary"
               onClick={() => setIsDateFilterOpen(!isDateFilterOpen)}
@@ -465,77 +472,37 @@ const FilterSection = ({ wallets }) => {
                   {dateFilter.map((date, idx) => (
                     <button
                       key={idx}
-                      value={date}
+                      value={date.value}
                       name={date}
                       onClick={handleSelectedFilterDate}
                       className="block w-full transition-all ease-in-out duration-100 text-left px-4 py-2 text-sm hover:bg-green-300"
                     >
-                      {date}
+                      {date.name}
                     </button>
                   ))}
                 </div>
               </div>
             )}
-          </div>
+          </div> */}
 
           {/* drop down wallet */}
-          <div className="relative w-fit" ref={dropDownWalletRef}>
-            <button
-              onClick={() => setIsWalletOpen(!isWalletOpen)}
-              className="py-2 px-3 flex items-center gap-2 w-fit bg-secondary hover:bg-secondary-hover text-base rounded-md"
-            >
-              {selectedWallet.name || "Wallet"}
-              <FontAwesomeIcon icon={faCaretDown} className="w-3" />
-            </button>
+          <DropDownButton datas={wallets} handleSelectedItem={handleSelectedWallet} selectedItem={selectedWallet.name || "Wallet"} />
 
-            {isWalletOpen && (
-              <div className="absolute w-full rounded-md shadow-lg bg-primary ring-secondary ring-opacity-10 ring-2 z-10">
-                <div
-                  className="py-1 text-secondary"
-                  role="menu"
-                  aria-orientation="vertical"
-                  aria-labelledby="options-menu"
-                >
-                  {loading ? (
-                    <LoaderSection width={"w-10"} />
-                  ) : !wallets ? (
-                    <h1 className="text-center block w-full px-4 py-2 text-sm">{`you don't have a wallet account yet`}</h1>
-                  ) : (
-                    wallets?.map((wallet, idx) => (
-                      <button
-                        key={idx}
-                        value={wallet.accountId}
-                        name={wallet.name}
-                        onClick={handleSelectedWallet}
-                        className="block w-full transition-all ease-in-out duration-100 text-left px-4 py-2 text-sm hover:bg-green-300"
-                      >
-                        {wallet.name}
-                      </button>
-                    ))
-                  )}
-                </div>
-              </div>
-            )}
-          </div>
         </div>
 
-        <div className="relative w-fit">
-          <button
-            onClick={handleNewTransactionBtn}
-            className="py-2 px-4 rounded-md bg-secondary hover:bg-secondary-hover active:bg-secondary"
-          >
-            New
-          </button>
-          <AddTransactionModal isModalOpen={isModalOpen} handleCloseModal={setIsModalOpen} user={currUser} wallets={wallets} />
+        <div className="w-fit">
+          <PrimaryButton handleClick={handleNewTransactionBtn} text={"New"} type={"primary"} value={"new"} />
+
+          <AddTransactionModal isModalOpen={isModalOpen} user={currUser.uid} wallets={selectedWallet.name} handleCloseModal={handleNewTransactionBtn} />
+
         </div>
       </div>
 
       {loading ? (
         <LoaderSection width={"w-14"} />
       ) : (
-        <TransactionContent transactions={tempCurrTransac} />
+        <TransactionContent transactions={transaction} />
       )}
-      {/* transaction component */}
     </>
   );
 };

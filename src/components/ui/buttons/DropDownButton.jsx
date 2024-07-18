@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect, useRef, useState } from "react";
 import SolidShadow from "../solidShadow/SolidShadow";
 
-const DropDownButton = ({}) => {
+const DropDownButton = ({datas, handleSelectedItem, selectedItem}) => {
   const [isOpen, setIsOpen] = useState(false);
   const dropDownRef = useRef();
 
@@ -37,8 +37,9 @@ const DropDownButton = ({}) => {
     };
   }, []);
 
-  const handleSelectedButton = () => {
+  const handleSelectedButton = (e) => {
     setIsOpen(!isOpen);
+    handleSelectedItem(e);
   };
 
   const handleClickOutside = (event) => {
@@ -62,23 +63,25 @@ const DropDownButton = ({}) => {
           onClick={() => setIsOpen(!isOpen)}
           className="relative w-full ring-1 ring-black z-10 h-full bg-third  hover:bg-third-hover active:bg-third p-2 px-4 rounded-lg flex gap-2 justify-between items-center"
         >
-          Testing
+          {selectedItem}
           <FontAwesomeIcon icon={faCaretDown} />
         </button>
 
         {isOpen && (
-          <div className="absolute z-10 w-full rounded-lg bg-third ring-1 ring-black shadow-lg">
-            {!data ? (
+          <div className="absolute z-20 w-full rounded-lg bg-third ring-1 ring-black shadow-lg text-secondary">
+            {!datas ? (
               <h1 className="text-center block w-full px-4 py-2 text-sm">{`you don't have a wallet account yet`}</h1>
             ) : (
-              data.map((el, idx) => {
+              datas?.map((obj, idx) => {
                 return (
                   <button
                     key={idx}
+                    value={obj.value || obj.accountId}
+                    name={obj.name}
                     onClick={handleSelectedButton}
                     className="block w-full transition-all ease-in-out duration-200 p-2 px-4 hover:bg-third-hover"
                   >
-                    {el.name}
+                    {obj.name}
                   </button>
                 );
               })

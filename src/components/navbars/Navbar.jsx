@@ -30,7 +30,7 @@ const Navbar = () => {
   return (
     <>
       <div
-        className={`fixed top-1/2 -translate-y-1/2 ${isNavOpen ? "z-50" : index}`}
+        className={`fixed top-1/2 -translate-y-1/2 ${isNavOpen ? "z-50" : index} bg-primary`}
       >
         <div className="relative">
           <motion.div
@@ -56,7 +56,7 @@ const Navbar = () => {
       
       </div>
         <motion.button
-          className="p-3 z-[100] fixed top-[72vh]"
+          className="p-3 z-50 fixed top-[72vh]"
           onClick={handleClickNav}
           transition={{ repeat: Infinity, ease: "easeInOut", duration: 1.2 }}
         >

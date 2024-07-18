@@ -31,7 +31,7 @@ const PrimaryButton = ({handleClick, text, type, value}) => {
     return(
         <div className="relative z-0 group shadow-lg font-title">
             <SolidShadow background={background.bgSolid} />
-            <button value={value} onClick={handleClick} className={`relative w-full ring-1 ring-black z-10 h-full p-1 px-3 rounded-lg ${background.bg}`}>
+            <button value={value} onClick={handleClick} className={`relative w-full ring-1 ring-black z-10 h-full p-1.5 px-3 rounded-lg ${background.bg}`}>
                 {text}
             </button>
         </div>

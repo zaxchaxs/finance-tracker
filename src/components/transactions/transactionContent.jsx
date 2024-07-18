@@ -12,6 +12,7 @@ const TransactionContent = ({ transactions }) => {
     const [indexPage, setIndexPage] = useState({first: 0, last: 10});
     const [totalAmount, setTotalAmount] = useState({income: 0, expanse: 0});
     const scrollRef = useRef();
+    const isFirstRender = useRef(true);
 
   const newObjAmount = Array(transactions.length)
     .fill(null)
@@ -22,6 +23,7 @@ const TransactionContent = ({ transactions }) => {
 
   useEffect(() => {
     const changeValObjAmount = () => {
+      console.log("test");
       transactions.map((transac, idx) => {
         if (transac.type === "income") {
           newObjAmount[idx].income += transac.amount;
@@ -32,6 +34,12 @@ const TransactionContent = ({ transactions }) => {
       const result = sumTotalAmount(newObjAmount);
       setTotalAmount(result);
     };
+
+    if(isFirstRender.current) {
+      isFirstRender.current = false;
+      return;
+    }
+
     if(transactions.length !== 0) changeValObjAmount();
   }, [transactions]);
 
@@ -62,8 +70,8 @@ const TransactionContent = ({ transactions }) => {
   }
 
   return (
-    <div className="w-full text-base flex flex-col gap-4 text-secondary">
-      <div className="text-secondary text-base">
+    <div className="w-full text-base flex flex-col gap-4 text-secondary relative z-10">
+      <div className="text-secondary text-base p-4 font-title">
         <div className="flex justify-start items-center gap-1">
           <h1>{`Total Income: `}</h1>
           <h1 className="text-primary">{`${formatRupiah(
@@ -78,7 +86,7 @@ const TransactionContent = ({ transactions }) => {
         </div>
       </div>
 
-      <div className="rounded-lg border-2 border-secondary border-opacity-15 shadow-md p-2">
+      <div className="rounded-lg border-2 border-secondary border-opacity-15 shadow-md p-2 font-paragraf font-semibold">
         {transactions.length === 0 ? (
           <div className="flex justify-center items-end w-full text-center">
             <p>{`No transactions yet.`}</p>
