@@ -3,21 +3,6 @@ import "./globals.css";
 import { AuthProvider } from "@/contexts/AuthContext";
 import Navbar from "@/components/navbars/Navbar";
 
-const lilitaOne = Lilita_One({
-  subsets: ["latin"],
-  variable: "--font-lilita-one",
-  weight: "400",
-  display: 'swap',
-  adjustFontFallback: false
-});
-
-const patuaOne = Patua_One({
-  subsets: ['latin'],
-  variable: '--font-patua-one',
-  weight: '400',
-  display: 'swap',
-  adjustFontFallback: false
-})
 
 const blinker = Blinker({
   weight: "800",
@@ -53,7 +38,7 @@ export default function RootLayout({ children }) {
 
   return (
     <html lang="en">
-      <body className={`${lilitaOne.variable} ${patuaOne.variable} ${blinker.variable} ${encodeSans.variable} ${roboto.variable}`}>
+      <body className={` ${blinker.variable} ${encodeSans.variable} ${roboto.variable}`}>
         <AuthProvider>
 
           <Navbar />

@@ -1,4 +1,4 @@
-'use client'
+"use client";
 import {
   faChartColumn,
   faCircleArrowRight,
@@ -10,55 +10,67 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { useState } from "react";
+import SolidShadow from "../ui/solidShadow/SolidShadow";
 
 const Navbar = () => {
   const [isNavOpen, setIsNavOpen] = useState(true);
-  const [index, setIndex] = useState('z-10');
+  const [index, setIndex] = useState("z-10");
 
   const handleClickNav = () => {
-    if(isNavOpen) {
+    if (isNavOpen) {
       setTimeout(() => {
-        setIndex('')
+        setIndex("z-10");
       }, 300);
       setIsNavOpen(!isNavOpen);
     } else {
-      setIndex('z-10')
       setIsNavOpen(!isNavOpen);
     }
-  }
+  };
 
   return (
-
-    <div className={`fixed top-1/2 -translate-y-1/2 ${isNavOpen ? 'z-50' : index}`}>
-      <motion.div
-        animate={{ x: isNavOpen ? 1 : -70, opacity: isNavOpen ? 1 : 0.1 }}
-        transition={{ type: "spring", bounce: 0.6 }}
-        className={`bg-secondary rounded-r-2xl flex flex-col p-4 gap-8 py-5 shadow-lg`}
+    <>
+      <div
+        className={`fixed top-1/2 -translate-y-1/2 ${isNavOpen ? "z-50" : index}`}
       >
-        <IconNavbar delay={0.1} route={"/"} icon={faHouse} />
-        <IconNavbar delay={0.2} route={"/dashboard"} icon={faMoneyBillAlt} />
-        <IconNavbar
-          delay={0.3}
-          route={"/transaction"}
-          icon={faMoneyBillTransfer}
-        />
-        <IconNavbar delay={0.4} route={"/report"} icon={faChartColumn} />
-      </motion.div>
-
-      <motion.button
-              className="p-3 z-50" onClick={handleClickNav}
-              transition={{ repeat: Infinity, ease: 'easeInOut', duration: 1.2 }}
-            >
-              <FontAwesomeIcon
-              flip={isNavOpen && "horizontal" }
-                icon={faCircleArrowRight}
-                color="#059669"
-                size="2x"
-                className="w-8"
-              />
-
+        <div className="relative">
+          <motion.div
+            className="w-full left-1 top-0.5 h-full absolute rounded-r-2xl bg-emerald-900 z-0"
+            animate={{ x: isNavOpen ? 1 : -70, opacity: isNavOpen ? 1 : 0.1 }}
+            transition={{ type: "spring", bounce: 0.6 }}
+          ></motion.div>
+          <motion.div
+            animate={{ x: isNavOpen ? 1 : -70, opacity: isNavOpen ? 1 : 0.1 }}
+            transition={{ type: "spring", bounce: 0.6 }}
+            className={`bg-secondary ring-1 ring-black rounded-r-2xl flex flex-col p-4 gap-8 py-5 shadow-lg z-10`}
+          >
+            <IconNavbar delay={0.1} route={"/"} icon={faHouse} />
+            <IconNavbar delay={0.2} route={"/dashboard"} icon={faMoneyBillAlt} />
+            <IconNavbar
+              delay={0.3}
+              route={"/transaction"}
+              icon={faMoneyBillTransfer}
+            />
+            <IconNavbar delay={0.4} route={"/report"} icon={faChartColumn} />
+          </motion.div>
+        </div>
+      
+      </div>
+        <motion.button
+          className="p-3 z-[100] fixed top-[72vh]"
+          onClick={handleClickNav}
+          transition={{ repeat: Infinity, ease: "easeInOut", duration: 1.2 }}
+        >
+          <FontAwesomeIcon
+            flip={isNavOpen && "horizontal"}
+            icon={faCircleArrowRight}
+            color="#059669"
+            size="2x"
+            className="w-8"
+          />
+          
         </motion.button>
-    </div>
+    
+    </>
   );
 };
 

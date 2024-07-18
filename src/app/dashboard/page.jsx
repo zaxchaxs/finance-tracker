@@ -5,6 +5,7 @@ import NewTransactionSec from "@/components/dahsboard/newTransaction";
 import UserWalletAccount from "@/components/dahsboard/userWalletAccount";
 import LoaderPage from "@/components/loaders/loaderPage";
 import NavbarPage from "@/components/navbars/NavbarPage";
+import SolidShadow from "@/components/ui/solidShadow/SolidShadow";
 import { useAuth } from "@/contexts/AuthContext";
 import { getSnapshotUserWallet } from "@/libs/firestoreMethods";
 import { faCaretRight } from "@fortawesome/free-solid-svg-icons";
@@ -56,55 +57,65 @@ const DashboardPage = () => {
   return loadingCurrUser ? (
     <LoaderPage />
   ) : currUser ? (
-    <main className="min-h-screen text-lg p-6 font-passionOne bg-primary w-full py-4 flex flex-col gap-3">
+    <main className="min-h-screen text-lg relative font-passionOne bg-primary w-full flex flex-col gap-3">
       {/* Nav */}
       <NavbarPage title={"Dashboard"} />
 
-      <div className="w-full px-2 flex flex-col items-center gap-2">
+      <div className="w-full px-4 my-20 flex flex-col items-center gap-2 z-100">
 
         {/* Wallet sections */}
-        <div
-          className="pt-4 py-2 w-full text-primary flex items-center gap-2 cursor-pointer border-b-2 border-green-950 z-0"
-          onClick={() => setIsShowWallet(!isShowWallet)}
+        <div className="pt-4 w-full text-primary flex flex-col items-center font-title"
         >
-          <FontAwesomeIcon
-            className="w-2"
-            size="1x"
-            icon={faCaretRight}
-            rotation={isShowWallet && 90}
-          />
-          <h1>My wallet account</h1>
-        </div>
+          <div className="relative w-full">
+            <SolidShadow background={"bg-emerald-900"} />
+            <div className="w-full flex gap-3 items-center ring-2 ring-black cursor-pointer p-2 rounded-lg relative z-10 bg-primary" onClick={() => setIsShowWallet(!isShowWallet)}>
+              <FontAwesomeIcon
+                className="w-2"
+                size="1x"
+                icon={faCaretRight}
+                rotation={isShowWallet && 90}
+              />
+              <h1>My wallet account</h1>
+            </div>
+          </div>
+
         <UserWalletAccount
           isShowed={isShowWallet}
           userWallets={userWalletData}
           user={currUser}
           isGettingData={loading}
         />
+        </div>
 
         {/* New Transaction Section */}
         <div
-          className={`w-full py-2 text-primary flex items-center gap-2 cursor-pointer border-b-2 border-green-950 z-0`}
-          onClick={() => setIsShowTransac(!isShowTransac)}
+          className="pt-4 w-full text-primary flex flex-col items-center font-title"
         >
-          <FontAwesomeIcon
-            className="w-2"
-            size="1x"
-            icon={faCaretRight}
-            rotation={isShowTransac && 90}
-          />
-          <h1>New Transaction</h1>
-        </div>
+          <div className="relative w-full">
+            <SolidShadow background={"bg-emerald-900"} />
+            <div className="w-full flex gap-3 items-center ring-2 ring-black cursor-pointer p-2 rounded-lg relative z-10 bg-primary" onClick={() => setIsShowTransac(!isShowTransac)}>
+            <FontAwesomeIcon
+              className="w-2"
+              size="1x"
+              icon={faCaretRight}
+              rotation={isShowTransac && 90}
+            />
+            <h1>New Transaction</h1>
+
+            </div>
+
+          </div>
         <NewTransactionSec
           isShowed={isShowTransac}
           walletAcountData={userWalletData}
           user={currUser}
           isGettingData={loading}
         />
+        </div>
 
         {/* Current Transaction Section */}
         <div
-          className={`w-full py-2 text-primary flex items-center gap-2 cursor-pointer border-b-2 border-green-950 z-0`}
+          className={`w-full py-2 text-primary flex items-center gap-2 cursor-pointer border-b-2 border-green-950 z-0 font-title`}
           onClick={() => setIsShowCurrTransac(!isShowCurrTransac)}
         >
           <FontAwesomeIcon

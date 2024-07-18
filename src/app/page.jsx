@@ -5,14 +5,16 @@ import Image from "next/image";
 import homeIcon from "../../public/homeIcon.svg";
 import { useAuth } from "@/contexts/AuthContext";
 import LoaderPage from "@/components/loaders/loaderPage";
-import MainButton from "@/components/ui/buttons/PrimaryButton";
-import SecondButton from "@/components/ui/buttons/SecondButton";
 import DangerButton from "@/components/ui/buttons/DangerButton";
-import DropDownButton from "@/components/ui/buttons/DropDownButton";
+import PrimaryButton from "@/components/ui/buttons/PrimaryButton";
 
 export default function Home() {
   const { currUser, loading } = useAuth();
   const router = useRouter();
+
+  const handleClickLogin = () => {};
+
+  const handleClickLogout = () => {};
 
   return loading ? (
     <LoaderPage />
@@ -30,31 +32,19 @@ export default function Home() {
           className="w-[25vh] p-4"
         />
       </div>
-      <div className="text-center text-lg font-semibold p-4 font-tittle text-secondary">
+      <div className="text-center text-lg font-semibold p-4 font-title text-secondary">
         <h1>
-        Manage your finances, track your incomes and expenses. Take control of your money.
+          Manage your finances, track your incomes and expenses. Take control of
+          your money.
         </h1>
       </div>
-      <MainButton />
-      <SecondButton />
-      <DangerButton />
-      <DropDownButton />
-      <div
-        onClick={() => router.push("/login")}
-        className={`gap-4 flex p-4 ${currUser ? "hidden" : ""}`}
-      >
-        <button className="p-2 px-4 rounded-xl font-lilitaOne bg-secondary hover:bg-secondary-hover text-lightGreen">
-          Login
-        </button>
-      </div>
-      <div
-        onClick={logout}
-        className={`gap-4 flex p-4 ${currUser ? "" : "hidden"}`}
-      >
-        <button className="p-2 px-4 rounded-xl font-lilitaOne bg-danger hover:bg-danger-hover text-lightGreen">
-          Logout
-        </button>
-      </div>
+
+      <PrimaryButton
+        handleClick={currUser ? logout : () => router.push("/login")}
+        text={currUser ? "Logout" : "Login"}
+        value={currUser ? "Logout" : "Login"}
+        type={currUser ? "danger" : "primary"}
+      />
     </main>
   );
 }

@@ -3,6 +3,7 @@
 import { faCaretDown } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect, useRef, useState } from "react";
+import SolidShadow from "../solidShadow/SolidShadow";
 
 const DropDownButton = ({}) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -55,7 +56,7 @@ const DropDownButton = ({}) => {
         className="relative z-0 group shadow-lg font-tittle text-secondary"
         ref={dropDownRef}
       >
-        <div className="group-hover:top-1.5 group-hover:left-1.5 transition-all ease-in-out duration-200 absolute w-full 0 h-full rounded-lg top-1 left-1 bg-teal-900"></div>
+          <SolidShadow background={"bg-teal-900"} />
 
         <button
           onClick={() => setIsOpen(!isOpen)}

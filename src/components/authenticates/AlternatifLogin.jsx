@@ -1,6 +1,7 @@
 import { loginWithGithub, loginWithGoogle } from "@/libs/auth";
 import { failedSweetAlert } from "@/libs/sweetAlert";
 import { useRouter } from "next/navigation";
+import PrimaryButton from "../ui/buttons/PrimaryButton";
 
 const AlternatifLogin = ({setIsloading}) => {
   const router = useRouter();
@@ -24,12 +25,8 @@ const AlternatifLogin = ({setIsloading}) => {
         <>
         <p className="text-primary text-base py-3">Or login with</p>
         <div className="flex text-slate-100 gap-10 text-base">
-          <button value={'google'} onClick={handleClickLogin} className="p-2 px-7 rounded-full bg-danger hover:bg-danger-hover shadow-md">
-            Google
-          </button>
-          <button value={'github'} onClick={handleClickLogin} className="p-2 px-7 rounded-full bg-gray-700 hover:bg-gray-800 shadow-md">
-            Github
-          </button>
+          <PrimaryButton handleClick={handleClickLogin} text={"Google"} value={"google"} type={"danger"} />
+          <PrimaryButton handleClick={handleClickLogin} text={"Github"} value={"github"} type={"dark"} />
         </div>
         </>
     )

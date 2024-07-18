@@ -3,6 +3,7 @@ import { faCaretDown } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect, useState } from "react";
 import LoaderSection from "../loaders/loaderSection";
+import PrimaryButton from "../ui/buttons/PrimaryButton";
 
 const NewTransactionSec = ({
   user,
@@ -61,34 +62,28 @@ const NewTransactionSec = ({
 
   return (
     <div
-      className={`w-full px-4 flex text-lg text-secondary flex-col gap-2 ${
+      className={`w-full rounded-lg rounded-t-none py-2 px-4 flex shadow-md shadow-black text-secondary text-lg flex-col font-paragraf font-semibold relative py-4 ${
         isShowed ? "" : "hidden"
       }`}
     >
       {isGettingData ? (
-        <LoaderSection width={"w-14"} />
+        <div className="p-4">
+          <LoaderSection width={"w-14"} />
+        </div>
       ) : (
         <>
           {walletAcountData?.length === 0 || !walletAcountData ? (
-            <div className="flex justify-center items-end w-full text-center">
+            <div className="flex justify-center items-end w-full text-center py-2">
               <p>{`It seem you don't have a wallet account yet, try creating one.`}</p>
             </div>
           ) : (
             <>
-              <div
-                className="w-full p-1 px-2 flex items-center cursor-pointer gap-2"
-                onClick={() => setIsShowWallet(!isShowWallet)}
-              >
-                <FontAwesomeIcon
-                  icon={faCaretDown}
-                  rotation={!isShowWallet && 270}
-                />
-                <h1>To:</h1>
-              </div>
+              <PrimaryButton handleClick={() => setIsShowWallet(!isShowWallet)} text={isShowWallet ? "Close " : "To:" } type={"secondary"} value={"isShowwallet"} />
+
               <div
                 className={`${
                   isShowWallet ? "" : "hidden"
-                } flex flex-col gap-2`}
+                } flex flex-col gap-2 py-4`}
               >
                 {walletAcountData.map((e, i) => {
                   const detailsWallet = {

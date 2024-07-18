@@ -29,10 +29,8 @@ module.exports = {
         "lightWhite": "#F1F5F9"
       },
       fontFamily: {
-        'passionOne': ['var(--font-patua-one)'],
-        'lilitaOne': ['var(--font-lilita-one)'],
         'header': ['var(--font-blinker)'],
-        'tittle': ['var(--font-encodeSans)'],
+        'title': ['var(--font-encodeSans)'],
         'paragraf': ['var(--font-roboto)']
       },
       borderRadius: {

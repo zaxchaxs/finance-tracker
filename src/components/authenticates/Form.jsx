@@ -7,6 +7,8 @@ import LoaderSection from "../loaders/loaderSection";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import AlternatifLogin from "./AlternatifLogin";
+import SolidShadow from "../ui/solidShadow/SolidShadow";
+import PrimaryButton from "../ui/buttons/PrimaryButton";
 
 
 const FormAuthenticate = ({ typePage }) => {
@@ -57,7 +59,7 @@ const FormAuthenticate = ({ typePage }) => {
   };
 
   return (
-    <div className="bg-primary h-screen w-full rounded-t-5xl p-4 shadow-lg flex flex-col justify-center items-center">
+    <div className="bg-primary h-screen w-full rounded-t-5xl p-4 shadow-lg flex flex-col justify-center items-center ring-1 ring-secondary">
       {loading && <LoaderSection width={"w-14"} />}
 
       <form
@@ -65,7 +67,7 @@ const FormAuthenticate = ({ typePage }) => {
         onSubmit={type ? handleSubmitLogin : handleSubmitSignup}
       >
         <input
-          className={`w-full rounded-lg p-2 px-4 outline-none ${
+          className={`w-full rounded-full p-2 px-4 outline-none z-0 ring-1 ring-black shadow-lg ${
             type && "hidden"
           } z-0`}
           type="text"
@@ -74,39 +76,37 @@ const FormAuthenticate = ({ typePage }) => {
           placeholder="Name"
           required={type ? false : true}
         />
-        <input
-          className={`w-full rounded-lg p-2 px-4 outline-none z-0`}
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          placeholder="Email"
-          required={true}
-        />
+          <input
+            className={`w-full rounded-full p-2 px-4 outline-none z-0 ring-1 ring-black shadow-lg`}
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="Email"
+            required={true}
+          />
         <div className="w-full relative items-center">
           <input
-            className={`w-full rounded-lg p-2 px-4 outline-none z-0`}
+            className={`w-full rounded-full p-2 px-4 outline-none z-0 ring-1 ring-black shadow-lg`}
             type={typeInput}
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             placeholder="Password"
             required={true}
           />
-          {/* <button
-            className="absolute right-2 top-2"
-            type="button"
-            onClick={handleShowPassword}
-          > */}
-            <FontAwesomeIcon
+          <FontAwesomeIcon
             className="absolute right-2 top-3 cursor-pointer w-4"
             onClick={handleShowPassword}
-              color="#9F9F9F"
-              icon={typeInput === "password" ? faEye : faEyeSlash}
-            />
-          {/* </button> */}
+            color="#9F9F9F"
+            icon={typeInput === "password" ? faEye : faEyeSlash}
+          />
         </div>
-        <div className={`${type && "hidden"} w-full z-0 flex flex-col items-center justify-center`}>
+        <div
+          className={`${
+            type && "hidden"
+          } w-full z-0 flex flex-col items-center justify-center`}
+        >
           <input
-            className={`w-full rounded-lg p-2 px-4 outline-none ${
+            className={`w-full rounded-full p-2 px-4 outline-none z-0 ring-1 ring-black shadow-lg ${
               type && "hidden"
             } `}
             type="password"
@@ -116,22 +116,19 @@ const FormAuthenticate = ({ typePage }) => {
             required={type ? false : true}
           />
           <p className="text-danger">
-            {isPassDidntMatch ? "Password didn't match" : ''}
+            {isPassDidntMatch ? "Password didn't match" : ""}
           </p>
         </div>
-        <button
-          className="p-2 text-slate-100 px-7 rounded-full bg-secondary hover:bg-secondary-hover active:bg-secondary shadow-md"
-          type="submit"
-          disabled={isPassDidntMatch}
-        >
-          {type ? "Login" : "Sign Up"}
-        </button>
+        <div className="py-2">
+          <PrimaryButton type={"primary"} text={type ? "Login" : "Sign Up"} value={type ? "Login" : "Sign Up"} />
+
+        </div>
       </form>
 
       <AlternatifLogin setIsloading={setLoading} />
 
       {type && (
-        <div className="text-primary text-base flex gap-2 py-6 items-center">
+        <div className="text-primary text-base flex gap-2 py-4 items-center">
           <p className="">Need an account?</p>
           <button
             className="text-blue-500"
