@@ -14,7 +14,7 @@ const NewTransactionSec = ({
 }) => {
   const [isShowWallet, setIsShowWallet] = useState(false);
   const [selectedDate, setSelectedDate] = useState("");
-  const [selectedWallet, setSelectedWallet] = useState("");
+  const [selectedWallet, setSelectedWallet] = useState({accountId: "", name: ''});
   const [selectedType, setSelectedType] = useState("");
   const [description, setDescription] = useState("");
   const [amount, setAmount] = useState("");
@@ -79,7 +79,7 @@ const NewTransactionSec = ({
             </div>
           ) : (
             <>
-              <PrimaryButton handleClick={() => setIsShowWallet(!isShowWallet)} text={isShowWallet ? "Close " : "To:" } type={"secondary"} value={"isShowwallet"} />
+              <PrimaryButton handleClick={() => setIsShowWallet(!isShowWallet)} text={selectedWallet.name ? selectedWallet.name : isShowWallet ? "Close " : "To:" } type={"secondary"} value={"isShowwallet"} />
 
               <div
                 className={`${
@@ -96,7 +96,7 @@ const NewTransactionSec = ({
                     <div
                       onClick={() => handleSelectedWallet(detailsWallet)}
                       key={i}
-                      className="cursor-pointer border-y-2 w-full border-secondary rounded-md p-1 px-3 group"
+                      className="cursor-pointer ring-2 ring-secondary w-full rounded-md p-1 px-3 group"
                     >
                       <button className="group-hover:translate-x-3 transition-all ease-in-out duration-200">
                         {e.name}

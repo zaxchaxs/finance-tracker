@@ -23,6 +23,7 @@ const Navbar = () => {
       }, 300);
       setIsNavOpen(!isNavOpen);
     } else {
+      setIndex("z-50");
       setIsNavOpen(!isNavOpen);
     }
   };
@@ -30,7 +31,7 @@ const Navbar = () => {
   return (
     <>
       <div
-        className={`fixed top-1/2 -translate-y-1/2 ${isNavOpen ? "z-50" : index} bg-primary`}
+        className={`fixed top-1/2 -translate-y-1/2 ${index} bg-primary`}
       >
         <div className="relative">
           <motion.div

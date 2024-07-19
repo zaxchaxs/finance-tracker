@@ -23,7 +23,7 @@ const PrimaryButton = ({handleClick, text, type, value}) => {
                 break;
                 
             default:
-                // setBackground({bg: "bg-secondary hover:bg-secondary active:bg-secondary", bgSolid: "bg-emerald-900"})
+                setBackground({bg: "bg-secondary hover:bg-secondary active:bg-secondary", bgSolid: "bg-emerald-900"})
                 break;
         }
     }, []);
