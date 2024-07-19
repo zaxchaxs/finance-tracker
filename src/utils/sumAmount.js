@@ -4,7 +4,6 @@ export const sumTotalAmount = (data) => {
             income: data[0].income,
             expanse: data[0].expanse
         }
-        console.log(data);
         return result
     };
 

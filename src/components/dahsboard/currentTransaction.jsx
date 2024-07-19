@@ -30,9 +30,7 @@ const CurrentTransaction = ({ isShowed, user }) => {
       }`}
     >
       {isGettingData ? (
-        <div className="p-4">
           <LoaderSection width={"w-14"} />
-        </div>
       ) : (
         <>
           {currTransaction?.length === 0 || !currTransaction ? (

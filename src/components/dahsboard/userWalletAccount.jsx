@@ -41,9 +41,7 @@ const UserWalletAccount = ({ isShowed, userWallets, user, isGettingData }) => {
     >
       
       {isGettingData ? (
-        <div className="p-4">
           <LoaderSection width={"w-14"} />
-        </div>
       ) : (
         <>
           {userWallets.length === 0 || !userWallets ? (

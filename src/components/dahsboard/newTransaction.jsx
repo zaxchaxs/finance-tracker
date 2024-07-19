@@ -68,9 +68,7 @@ const NewTransactionSec = ({
       }`}
     >
       {isGettingData ? (
-        <div className="p-4">
           <LoaderSection width={"w-14"} />
-        </div>
       ) : (
         <>
           {walletAcountData?.length === 0 || !walletAcountData ? (

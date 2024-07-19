@@ -5,6 +5,7 @@ import AdviceInfo from "../AdviceInfo";
 import { useEffect, useRef, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCaretLeft, faCaretRight } from "@fortawesome/free-solid-svg-icons";
+import SolidShadow from "../ui/solidShadow/SolidShadow";
 
 const TransactionContent = ({ transactions }) => {
   const [slicedTransac, setSlicedTransac] = useState();
@@ -23,7 +24,6 @@ const TransactionContent = ({ transactions }) => {
 
   useEffect(() => {
     const changeValObjAmount = () => {
-      console.log("test");
       transactions.map((transac, idx) => {
         if (transac.type === "income") {
           newObjAmount[idx].income += transac.amount;
@@ -70,42 +70,58 @@ const TransactionContent = ({ transactions }) => {
   }
 
   return (
-    <div className="w-full text-base flex flex-col gap-4 text-secondary relative z-10">
-      <div className="text-secondary text-base p-4 font-title">
-        <div className="flex justify-start items-center gap-1">
-          <h1>{`Total Income: `}</h1>
-          <h1 className="text-primary">{`${formatRupiah(
-            totalAmount.income
-          )}`}</h1>
-        </div>
-        <div className="flex justify-start gap-1 items-center">
-          <h1>{`Total Expanse: `}</h1>
-          <h1 className="text-danger-hover">{`${formatRupiah(
-            totalAmount.expanse
-          )}`}</h1>
-        </div>
-      </div>
+    <div className="w-full text-base flex flex-col gap-4 text-secondary relative z-10 p-4">
 
-      <div className="rounded-lg border-2 border-secondary border-opacity-15 shadow-md p-2 font-paragraf font-semibold">
-        {transactions.length === 0 ? (
-          <div className="flex justify-center items-end w-full text-center">
-            <p>{`No transactions yet.`}</p>
+      <div className="p-2  shadow-md shadow-gray-600  rounded-lg">
+        <div className="text-secondary text-base font-title px-2">
+          <div className="flex justify-start items-center gap-1">
+            <h1>{`Total Income: `}</h1>
+            <h1 className="text-primary">{`${formatRupiah(
+              totalAmount.income
+            )}`}</h1>
           </div>
-        ) : (
-          slicedTransac?.map((data, idx) => (
-            <TransactionDetail key={idx} data={data} />
-          ))
-        )}
+          <div className="flex justify-start gap-1 items-center">
+            <h1>{`Total Expanse: `}</h1>
+            <h1 className="text-danger-hover">{`${formatRupiah(
+              totalAmount.expanse
+            )}`}</h1>
+          </div>
+        </div>
+
+        <div className="rounded-lg  font-paragraf font-semibold ">
+          {transactions.length === 0 ? (
+            <div className="flex justify-center items-end w-full text-center">
+              <p>{`No transactions yet.`}</p>
+            </div>
+          ) : (
+            slicedTransac?.map((data, idx) => (
+              <TransactionDetail key={idx} data={data} />
+            ))
+          )}
+        </div>
       </div>
 
-      <div className="w-full flex justify-center items-center mx-auto" ref={scrollRef}>
-        <button onClick={handlePrevPage} className="p-1 px-3 border-2 rounded-l-md border-secondary">
-            <FontAwesomeIcon icon={faCaretLeft} />
-        </button>
-        <button className="p-1 px-3 border-y-2 border-secondary bg-secondary text-slate-100" onClick={() => console.log(slicedTransac.length)}>{page}</button>
-        <button onClick={handleNextPage} className="p-1 px-3 border-2 rounded-r-md border-secondary" >
-            <FontAwesomeIcon icon={faCaretRight} />
-        </button>
+      {/* Pagination */}
+      <div className="w-full flex items-center justify-center relative" ref={scrollRef}>
+        <div className="w-fit relative group">
+            <SolidShadow background={"bg-teal-900"} />
+              <div className="relative flex justify-center items-center mx-auto w-fit z-10 font-title">
+                    <button value={"left"} onClick={handlePrevPage} className={`relative w-full ring-1 ring-black z-10 h-full p-1.5 px-3 rounded-l-lg bg-third hover:bg-third-hover text-secondary active:bg-third`}>
+                      <FontAwesomeIcon icon={faCaretLeft} />
+                    </button>
+
+                    <button value={"left"} onClick={handlePrevPage} className={`relative w-full ring-1 ring-black z-10 h-full p-1.5 px-3  bg-secondary text-lightWhite hover:bg-secondary active:bg-secondary`}>
+                      {page}
+                    </button>
+
+                    <button value={"left"} onClick={handleNextPage} className={`relative w-full ring-1 ring-black z-10 h-full p-1.5 px-3 rounded-r-lg bg-third hover:bg-third-hover text-secondary active:bg-third`}>
+                      <FontAwesomeIcon icon={faCaretRight} />
+                    </button>
+
+              </div>
+
+
+            </div>
       </div>
         
       <AdviceInfo totalAmount={totalAmount} />

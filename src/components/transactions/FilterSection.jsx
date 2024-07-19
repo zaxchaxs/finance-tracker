@@ -20,8 +20,6 @@ const FilterSection = ({ wallets }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [loading, setLoading] = useState();
 
-  const dropDownWalletRef = useRef(null);
-  const dropDownDateRef = useRef(null);
   const isFirstRender = useRef(true);
 
   const { currUser } = useAuth();
@@ -398,7 +396,6 @@ const FilterSection = ({ wallets }) => {
     const getTransactionFiltered = async () => {
       setLoading(true);
       try {
-          console.log("test useeffetc");
           await dateFiltering(
             currUser?.uid,
             selectedDateFilter.value,
@@ -453,37 +450,6 @@ const FilterSection = ({ wallets }) => {
 
           {/* drop down date */}
           <DropDownButton datas={dateFilter} handleSelectedItem={handleSelectedFilterDate} selectedItem={selectedDateFilter.date} />
-          {/* <div className="relative min-w-fit " ref={dropDownDateRef}>
-            <button
-              className="py-2 px-4 rounded-md bg-secondary hover:bg-secondary-hover active:bg-secondary"
-              onClick={() => setIsDateFilterOpen(!isDateFilterOpen)}
-            >
-              {selectedDateFilter.date}
-            </button>
-
-            {isDateFilterOpen && (
-              <div className="absolute w-full rounded-md shadow-lg bg-primary ring-secondary ring-opacity-10 ring-2 z-10">
-                <div
-                  className="py-1 text-secondary"
-                  role="menu"
-                  aria-orientation="vertical"
-                  aria-labelledby="options-menu"
-                >
-                  {dateFilter.map((date, idx) => (
-                    <button
-                      key={idx}
-                      value={date.value}
-                      name={date}
-                      onClick={handleSelectedFilterDate}
-                      className="block w-full transition-all ease-in-out duration-100 text-left px-4 py-2 text-sm hover:bg-green-300"
-                    >
-                      {date.name}
-                    </button>
-                  ))}
-                </div>
-              </div>
-            )}
-          </div> */}
 
           {/* drop down wallet */}
           <DropDownButton datas={wallets} handleSelectedItem={handleSelectedWallet} selectedItem={selectedWallet.name || "Wallet"} />
@@ -493,7 +459,7 @@ const FilterSection = ({ wallets }) => {
         <div className="w-fit">
           <PrimaryButton handleClick={handleNewTransactionBtn} text={"New"} type={"primary"} value={"new"} />
 
-          <AddTransactionModal isModalOpen={isModalOpen} user={currUser.uid} wallets={selectedWallet.name} handleCloseModal={handleNewTransactionBtn} />
+          <AddTransactionModal isModalOpen={isModalOpen} user={currUser} wallets={wallets} handleCloseModal={handleNewTransactionBtn} />
 
         </div>
       </div>

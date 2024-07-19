@@ -57,7 +57,7 @@ const Navbar = () => {
       
       </div>
         <motion.button
-          className="p-3 z-50 fixed top-[72vh]"
+          className="z-50 fixed top-[72vh] left-3.5"
           onClick={handleClickNav}
           transition={{ repeat: Infinity, ease: "easeInOut", duration: 1.2 }}
         >

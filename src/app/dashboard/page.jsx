@@ -43,9 +43,7 @@ const DashboardPage = () => {
       } catch (error) {
         console.error(error.message);
       } finally {
-        setTimeout(() => {
-          setLoading(false);
-        }, 0);
+        setLoading(false);
       }
     };
 

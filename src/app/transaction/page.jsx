@@ -5,11 +5,12 @@ import FilterSection from "@/components/transactions/FilterSection";
 import Unauthenticate from "@/components/Unauthenticate";
 import { useAuth } from "@/contexts/AuthContext";
 import { getSnapshotUserWallet } from "@/libs/firestoreMethods";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 const TransactionPage = () => {
   const [wallets, setWallets] = useState([]);
   const { currUser, loading } = useAuth();
+  const isFirstRender = useRef(true);
 
   const tempWalets = [
     {
@@ -35,15 +36,21 @@ const TransactionPage = () => {
   ];
 
   useEffect(() => {
-    try {
-      // get wallet and transaction doc
-      const getDefaultDataDoc = async () => {
+    const getDefaultDataDoc = async () => {
+      try {
         await getSnapshotUserWallet(currUser?.uid, setWallets);
-      };
-      if (currUser) getDefaultDataDoc();
-    } catch (error) {
-      console.error(error.message);
+        
+      } catch (error) {
+        console.error(error.message);
+      }
     }
+
+    if(isFirstRender.current) {
+      isFirstRender.current = false;
+      return
+    };
+
+    if (currUser) getDefaultDataDoc();
   }, [currUser]);
 
   return loading ? (
@@ -53,7 +60,7 @@ const TransactionPage = () => {
       {/* Nav */}
       <NavbarPage title={"Transaction"} />
       
-      <FilterSection wallets={tempWalets} />
+      <FilterSection wallets={wallets} />
     </main>
   ) : (
     <Unauthenticate />

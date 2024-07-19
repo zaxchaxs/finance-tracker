@@ -57,9 +57,6 @@ const getTransactionYesterday = async (idUser, walletId, setTransaction) => {
 
     await getDocsFilterdTransactions(idUser, startOfDay, endOfDay, walletId, setTransaction);
 
-    // const option = {day: 'numeric', month: 'long', year: '2-digit'}
-    // return yesterday.toLocaleDateString('en-US', option); 
-
   } catch (error) {
     console.error(error.message);
   }
@@ -74,10 +71,6 @@ const getTransactionLastWeek =  async (idUser, walletId, setTransaction) => {
     const endOfWeek = new Date(today.setHours(23, 59, 59, 999));
     
     await getDocsFilterdTransactions(idUser, startOfWeek, endOfWeek, walletId, setTransaction);
-    
-    // const option = {day: 'numeric', month: 'long'};
-    // return `${lastWeek.toLocaleDateString('en-US', option)} - ${today.toLocaleDateString('en-US', option)}`
-    
 
   } catch (error) {
     console.error('Error getting document',error.message);

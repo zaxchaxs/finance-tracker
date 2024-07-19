@@ -19,20 +19,20 @@ const ReportPage = () => {
   const { currUser, loading } = useAuth();
 
   useEffect(() => {
-    setIsGettingData(true);
-    try {
-      if (!loading && currUser) {
-        const docSnapshotTransactions = async () => {
+      const docSnapshotTransactions = async () => {
+        console.log("test");
+        setIsGettingData(true);
+        try {
           await getSnapshotUserTransaction(currUser?.uid, setTransactions, null);
           await getSnapshotUserWallet(currUser?.uid, setWallets);
-        };
-        docSnapshotTransactions();
-      }
-    } catch (error) {
-      console.error(error.message);
-    } finally {
-      setIsGettingData(false);
-    }
+        } catch (error) {
+          console.error(error.message);
+        } finally {
+          setIsGettingData(false);
+        }
+      };
+
+      if (!loading && currUser) docSnapshotTransactions();
   }, [currUser]);
 
   const handleFilterData = (id) => {
