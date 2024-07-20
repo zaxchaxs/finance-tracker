@@ -61,7 +61,12 @@ const DashboardPage = () => {
       <NavbarPage title={"Dashboard"} />
 
       <div className="w-full px-4 my-20 flex flex-col items-center gap-2 relative z-10">        
-
+      <ToastContainer
+        position="top-right"
+        limit={3}
+        className={"flex flex-col items-end rounded-lg border-2 border-black mt-20"}
+        style={{ marginTop:  '4rem'}}
+      />
         {/* Wallet sections */}
         <div className="pt-4 w-full text-primary flex flex-col items-center font-title"
         >

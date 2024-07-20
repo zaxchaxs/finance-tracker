@@ -7,6 +7,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import LoaderPage from "@/components/loaders/loaderPage";
 import DangerButton from "@/components/ui/buttons/DangerButton";
 import PrimaryButton from "@/components/ui/buttons/PrimaryButton";
+import { ToastContainer } from "react-toastify";
 
 export default function Home() {
   const { currUser, loading } = useAuth();

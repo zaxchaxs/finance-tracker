@@ -15,7 +15,8 @@ export const sweetAlertAddTransac = (
   setSelectedWallet,
   setSelectedType,
   setDescription,
-  setAmount
+  setAmount,
+  setLoadingAddDoc
 ) => {
 //   const option = {
 //     year: 'numeric', month: '2-digit', day: '2-digit'
@@ -46,29 +47,18 @@ export const sweetAlertAddTransac = (
   }).then(async (result) => {
     if (result.isConfirmed) {
       try {
+        setLoadingAddDoc(true);
         await addDocTransaction(newData.userId, newData);
-        Swal.fire({
-          title: "Success",
-          color: "#BBF7D0",
-          icon: "success",
-          background: "#059669",
-          confirmButtonColor: "#052E16",
-        });
+        sideSweetAlertSuccess("Transaction added!");
       } catch (error) {
-        Swal.fire({
-          title: "Failed",
-          color: "#052E16",
-          icon: "error",
-          background: "#BBF7D0",
-          text: error.message,
-          confirmButtonColor: "#059669",
-        });
+        sideSweetAlertError("Failed adding transaction!")
       } finally {
         setSelectedDate("");
         setSelectedWallet("");
         setSelectedType("");
         setDescription("");
         setAmount("");
+        setLoadingAddDoc(false)
       }
     }
   });
@@ -78,7 +68,8 @@ export const sweetAlertAddWallet = (
   newData,
   setIsAddWalletBtnClicked,
   setWalletName,
-  setwalletAmount
+  setwalletAmount,
+  setLoadingAddDoc
 ) => {
   const convertedAmount = formatRupiah(newData.amount);
 
@@ -92,7 +83,6 @@ export const sweetAlertAddWallet = (
     confirmButtonColor: "#052E16",
     cancelButtonText: "Cancel",
     cancelButtonColor: "#EF4444",
-    toast: true,
     html: `
         <p><strong>Name: </strong> ${newData.name}</p>
         <p><strong>Amount: </strong>${convertedAmount}</p>
@@ -100,27 +90,17 @@ export const sweetAlertAddWallet = (
   }).then(async (result) => {
     if (result.isConfirmed) {
       try {
+        setLoadingAddDoc(true);
         await addDocWallet(newData);
-        Swal.fire({
-          title: "Success",
-          color: "#BBF7D0",
-          icon: "success",
-          background: "#059669",
-          confirmButtonColor: "#052E16",
-        });
+        sideSweetAlertSuccess("Success!")
       } catch (error) {
-        Swal.fire({
-          title: "Failed",
-          color: "#052E16",
-          icon: "error",
-          background: "#BBF7D0",
-          text: error.message,
-          confirmButtonColor: "#059669",
-        });
+        throw new Error(error.message);
+      } finally {
+        setIsAddWalletBtnClicked(false);
+        setWalletName("");
+        setwalletAmount("");
+        setLoadingAddDoc(false);
       }
-      setIsAddWalletBtnClicked(false);
-      setWalletName("");
-      setwalletAmount("");
     }
   });
 };
@@ -146,13 +126,7 @@ export const sweetAlertDeleteWallet = (data) => {
     if (result.isConfirmed) {
       try {
         await deleteWalletDoc(data.accountId, data.userId);
-        Swal.fire({
-          title: "Success",
-          color: "#BBF7D0",
-          icon: "success",
-          background: "#059669",
-          confirmButtonColor: "#052E16",
-        });
+        sideSweetAlertSuccess("Deleted!")
       } catch (error) {
         Swal.fire({
           title: "Failed",
@@ -209,16 +183,44 @@ export const customDateSweetAlert = () => {
   })
 }
 
-export const SideSweetAlertSuccess = () => {
-  return toast("testing");
-
-  Swal.fire({
-    title: 'Hello World!',
-    text: 'This is a SweetAlert2 message.',
-    icon: 'success',
-    position: 'top-end',
-    toast: true,
-    showConfirmButton: false,
-    timer: 3000
+export const sideSweetAlertSuccess = (message) => {
+  return toast.success(message || "Success!", {
+    position: "top-right",
+    autoClose: 3000,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+    hideProgressBar: true,
+    theme: "colored",
+    className: "w-fit m-4 p-0 bg-emerald-600",
+    style: {borderRadius: '0.5rem', backgroundColor: '#047857'}
   });
-}
+};
+
+export const sideSweetAlertWarning = (message) => {
+  return toast.warning(message || "Something wrong!", {
+    position: "top-right",
+    autoClose: 3000,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+    hideProgressBar: true,
+    theme: "colored",
+    className: "w-fit m-4 p-0",
+    style: {borderRadius: '0.5rem', backgroundColor: '#FF8000'}
+  });
+};
+
+export const sideSweetAlertError = (message) => {
+  return toast.error(message || "Error!", {
+    position: "top-right",
+    autoClose: 3000,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+    hideProgressBar: true,
+    theme: "colored",
+    className: "w-fit m-4 p-0",
+    style: {borderRadius: '0.5rem', backgroundColor: '#FF1D48'}
+  });
+};

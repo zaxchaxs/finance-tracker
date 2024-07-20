@@ -1,48 +1,57 @@
 import { useState } from "react";
 import Wallet from "./wallet";
-import { SideSweetAlertSuccess, sweetAlertAddWallet } from "@/libs/sweetAlert";
+import { sideSweetAlertError, sideSweetAlertSuccess, sideSweetAlertWarning, sweetAlertAddWallet } from "@/libs/sweetAlert";
 import { v4 as uuidv4 } from "uuid";
 import LoaderSection from "../loaders/loaderSection";
 import PrimaryButton from "../ui/buttons/PrimaryButton";
-import SolidShadow from "../ui/solidShadow/SolidShadow";
 import InputForm from "../ui/InputForm";
 import { ToastContainer } from "react-toastify";
+import LoaderLightSection from "../loaders/loaderLightSection";
 
 const UserWalletAccount = ({ isShowed, userWallets, user, isGettingData }) => {
   const [isAddWalletBtnClicked, setIsAddWalletBtnClicked] = useState(false);
   const [walletName, setWalletName] = useState("");
   const [walletAmount, setwalletAmount] = useState();
+  const [loadingAddDoc, setLoadingAddDoc] = useState(false);
 
   //   handler functions
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // console.log(userWallets);
     const isWalletAlreadyExist = userWallets.find(obj => obj.name === walletName);
-    // console.log(isWalletAlreadyExist);
-
     if(isWalletAlreadyExist) {
-      console.log("1");
-      SideSweetAlertSuccess();
+      sideSweetAlertWarning(`${walletName} is already exists!`);
       return;
-    }
+    };
 
-    const accountId = uuidv4();
+    const addDocWallet = () => {
+      try {
+        const accountId = uuidv4();
+        const newData = {
+          userId: user.uid,
+          accountId,
+          name: walletName,
+          amount: Number(walletAmount),
+          createdAt: new Date(),
+        };
+        sweetAlertAddWallet(
+          newData,
+          setIsAddWalletBtnClicked,
+          setWalletName,
+          setwalletAmount,
+          setLoadingAddDoc
+        );
+      } catch (error) {
+        sideSweetAlertError("Failed to add wallet!")
+      }
+    };
+
     if (walletName && walletAmount > 0) {
-      const newData = {
-        userId: user.uid,
-        accountId,
-        name: walletName,
-        amount: Number(walletAmount),
-        createdAt: new Date(),
-      };
-      sweetAlertAddWallet(
-        newData,
-        setIsAddWalletBtnClicked,
-        setWalletName,
-        setwalletAmount
-      );
-    }
+      addDocWallet()
+    } else {
+      sideSweetAlertWarning("Please fill the form")
+    };
+
   };
 
   return (
@@ -67,41 +76,28 @@ const UserWalletAccount = ({ isShowed, userWallets, user, isGettingData }) => {
             </div>
           )}
           <div className="w-full flex flex-col font-title">
-            <ToastContainer />
-
             <div className="py-4">
-              <div className={isAddWalletBtnClicked ? "" : "hidden"}>
                 <PrimaryButton
                   handleClick={() =>
                     setIsAddWalletBtnClicked(!isAddWalletBtnClicked)
                   }
-                  text={"Close"}
-                  type={"danger"}
-                  value={"close"}
+                  text={isAddWalletBtnClicked ? "close" : 'Add Wallet Account'}
+                  type={isAddWalletBtnClicked ? "danger" : 'primary'}
+                  value={isAddWalletBtnClicked ? "close" : 'Add Wallet Account'}
                 />
-              </div>
-              <div className={isAddWalletBtnClicked ? "hidden" : ""}>
-                <PrimaryButton
-                  handleClick={() =>
-                    setIsAddWalletBtnClicked(!isAddWalletBtnClicked)
-                  }
-                  text={"Add Wallet Account"}
-                  type={"primary"}
-                  value={"add"}
-                />
-              </div>
             </div>
 
             <form
               className={`${
                 isAddWalletBtnClicked ? "" : "hidden"
               } w-full px-4 text-secondary flex flex-col gap-4 py-4 font-paragraf`}
+              onSubmit={handleSubmit}
             >
               <InputForm handleChange={(e) => setWalletName(e.target.value)} name={"Name"} value={walletName} type={"text"}isRequired={true} />
 
               <div className="flex gap-2 justify-between">
                 <InputForm handleChange={(e) => setwalletAmount(e.target.value)} name={"Amount"} value={walletAmount} type={"text"}  isRequired={true} />
-                <PrimaryButton handleClick={(e) => handleSubmit(e)} text={"Submit"} type={"primary"} value={"submit"} />
+                <PrimaryButton handleClick={(e) => handleSubmit(e)} text={loadingAddDoc ? <LoaderLightSection width={"w-7"} /> : "Submit" } type={"primary"} value={"submit"} />
                 
               </div>
             </form>

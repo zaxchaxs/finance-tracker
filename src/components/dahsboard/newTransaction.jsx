@@ -1,10 +1,11 @@
-import { sweetAlertAddTransac } from "@/libs/sweetAlert";
+import { sideSweetAlertWarning, sweetAlertAddTransac } from "@/libs/sweetAlert";
 import { faCaretDown } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect, useState } from "react";
 import LoaderSection from "../loaders/loaderSection";
 import PrimaryButton from "../ui/buttons/PrimaryButton";
 import InputForm from "../ui/InputForm";
+import LoaderLightSection from "../loaders/loaderLightSection";
 
 const NewTransactionSec = ({
   user,
@@ -13,6 +14,7 @@ const NewTransactionSec = ({
   isGettingData,
 }) => {
   const [isShowWallet, setIsShowWallet] = useState(false);
+  const [loadingAddDoc, setLoadingAddDoc] = useState(false);
   const [selectedDate, setSelectedDate] = useState("");
   const [selectedWallet, setSelectedWallet] = useState({accountId: "", name: ''});
   const [selectedType, setSelectedType] = useState("");
@@ -38,22 +40,25 @@ const NewTransactionSec = ({
   };
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (selectedDate && selectedWallet && selectedType && amount > 0) {
+    if (selectedDate && selectedWallet.accountId && selectedType && amount > 0) {
       sweetAlertAddTransac(
         newData,
         setSelectedDate,
         setSelectedWallet,
         setSelectedType,
         setDescription,
-        setAmount
+        setAmount,
+        setLoadingAddDoc
       );
+    } else {
+      sideSweetAlertWarning("Please fill the form!");
     }
   };
 
   const newData = {
     userId: user?.uid,
-    accountId: selectedWallet?.accountId,
-    name: selectedWallet?.name,
+    accountId: selectedWallet.accountId,
+    name: selectedWallet.name,
     type: selectedType,
     amount: Number(amount),
     date: new Date (selectedDate),
@@ -106,7 +111,7 @@ const NewTransactionSec = ({
 
               <div
                 className={`text-secondary font-passionOne w-full justify-between flex flex-col gap-2.5 py-4 ${
-                  selectedWallet ? "" : "hidden"
+                  selectedWallet.accountId ? "" : "hidden"
                 }`}
               >
                 <input
@@ -139,13 +144,13 @@ const NewTransactionSec = ({
                     <InputForm handleChange={handleDescChange} isRequired={false} name={"Description"} type={"text"} value={description} />
                     <div className={`${
                         selectedDate &&
-                        selectedWallet &&
+                        selectedWallet.accountId &&
                         selectedType &&
                         amount > 0
                           ? ""
                           : "hidden"
                       }`}>
-                      <PrimaryButton handleClick={handleSubmit} text={"Submit"} type={"primary"} value={"submit"} />
+                      <PrimaryButton handleClick={handleSubmit} text={loadingAddDoc ? <LoaderLightSection width={"w-7"} /> : "Submit"} type={"primary"} value={"submit"} />
 
                     </div>
                   </div>

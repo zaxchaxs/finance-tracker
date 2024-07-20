@@ -4,10 +4,11 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { motion } from "framer-motion";
 import { useRef, useState } from "react";
 import LoaderSection from "../loaders/loaderSection";
-import { failedSweetAlert, sweetAlertDeleteWallet } from "@/libs/sweetAlert";
+import { failedSweetAlert, sideSweetAlertError, sideSweetAlertSuccess, sweetAlertDeleteWallet } from "@/libs/sweetAlert";
 import PrimaryButton from "../ui/buttons/PrimaryButton";
 import InputForm from "../ui/InputForm";
 import SolidShadow from "../ui/solidShadow/SolidShadow";
+import LoaderLightSection from "../loaders/loaderLightSection";
 
 const UpdateModal = ({data, isInfoClicked, setIsInfoClicked}) => {
     const [name, setName] = useState("");
@@ -40,8 +41,9 @@ const UpdateModal = ({data, isInfoClicked, setIsInfoClicked}) => {
             setLoadingUpdate(true);
             try {
                 await updateWalletDoc(data.accountId, newData)
+                sideSweetAlertSuccess("Updated!")
             } catch (error) {
-              failedSweetAlert(error.message);
+              sideSweetAlertError("Failed to update!");
             } finally {
                 setName("");
                 setAmount("");
@@ -60,6 +62,7 @@ const UpdateModal = ({data, isInfoClicked, setIsInfoClicked}) => {
         sweetAlertDeleteWallet(data);
       } catch (error) {
         console.error(error.message);
+        sideSweetAlertError("Failed to delete!")
       } finally {
         setLoadingUpdate(false);
         setIsInfoClicked(false);
@@ -95,14 +98,6 @@ const UpdateModal = ({data, isInfoClicked, setIsInfoClicked}) => {
                       {closeIcon}
                     </button>
                   </div>
-                  {/* <button className="absolute right-5" onClick={() => setIsInfoClicked(false)}>
-                    <FontAwesomeIcon
-                      icon={faSquareXmark}
-                      color="#EF4444"
-                      size="2x"
-                      className="w-6"
-                    />
-                  </button> */}
                 </div>
                 <div className="py-4 w-full flex flex-col gap-4">
                   <InputForm handleChange={(e) => setName(e.target.value)} isRequired={false} name={"Name"} type={"text"} value={name} />
@@ -117,14 +112,12 @@ const UpdateModal = ({data, isInfoClicked, setIsInfoClicked}) => {
                   {
                       loadingUpdate ? 
                       <div className="py-2 w-full">
-                          <LoaderSection width={'w-14'} />
+                          <LoaderLightSection width={'w-14'} />
                       </div>
                       :
                       <div className="flex w-full justify-between items-center">
                         <PrimaryButton handleClick={handleDelete} type={"danger"} text={"Delete"} value={"delete"} />
                         <PrimaryButton handleClick={handleUpdate} type={"secondary"} text={"Update"} value={"update"} />
-                          {/* <button className="p-1 px-2 rounded-md bg-danger hover:bg-danger-hover" onClick={handleDelete}>Delete</button>
-                          <button className={`p-1 px-2 rounded-md bg-blue-500 hover:bg-blue-600`} onClick={handleUpdate}>Update</button> */}
                       </div>
                   }
                 </div>

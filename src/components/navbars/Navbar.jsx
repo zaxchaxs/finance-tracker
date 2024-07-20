@@ -14,7 +14,7 @@ import SolidShadow from "../ui/solidShadow/SolidShadow";
 
 const Navbar = () => {
   const [isNavOpen, setIsNavOpen] = useState(true);
-  const [index, setIndex] = useState("z-10");
+  const [index, setIndex] = useState("z-50");
 
   const handleClickNav = () => {
     if (isNavOpen) {
