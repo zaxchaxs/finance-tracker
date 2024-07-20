@@ -12,6 +12,10 @@ import {
 import { sumTotalAmount } from "@/utils/sumAmount";
 import { formatRupiah } from "@/utils/formatRupiah";
 import AdviceInfo from "../AdviceInfo";
+import LoaderSection from "../loaders/loaderSection";
+import PrimaryButton from "../ui/buttons/PrimaryButton";
+import SolidShadow from "../ui/solidShadow/SolidShadow";
+import DropDownButton from "../ui/buttons/DropDownButton";
 
 const ReportStats = ({
   transactions,
@@ -105,59 +109,63 @@ const ReportStats = ({
   };
 
   return (
-    <div className="w-full p-2 flex flex-col gap-5 text-slate-100">
+    <div className="w-full px-5 mt-20 flex flex-col gap-5 text-lightWhite font-title relative z-10">
       {isGettingData ? (
-        // <LoaderPage />
-        <div className="text-secondary w-full text-center flex items-center justify-center">
-          <h1>Wait a moment..</h1>
-        </div>
+        <LoaderSection width={"w-14"} />
       ) : (
         <>
           {/* filter element sections */}
-          <div className="w-full font-passionOne text-base flex justify-between items-center">
-            <div className="flex">
-              <button
+          <div className="w-full font-title text-base flex justify-between items-center">
+            {/* btn filter */}
+            <div className="flex w-full">
+              <PrimaryButton
+                handleClick={handleSelectedFilter}
+                text={"Year"}
+                type={selectedFilter === "year" ? "Primary" : "secondary"}
                 value={"year"}
-                className={`${
-                  selectedFilter === "year"
-                    ? "bg-secondary hover:bg-secondary-hover"
-                    : "hover:bg-green-300 text-secondary"
-                } p-1 px-3 border-2 border-secondary rounded-md duration-200 ease-in-out transition-all`}
-                onClick={handleSelectedFilter}
-              >
-                Year
-              </button>
-              <button
+              />
+
+              <PrimaryButton
+                handleClick={handleSelectedFilter}
+                text={"Month"}
+                type={selectedFilter === "month" ? "Primary" : "secondary"}
                 value={"month"}
-                className={`${
-                  selectedFilter === "month"
-                    ? "bg-secondary hover:bg-secondary-hover"
-                    : "hover:bg-green-300 text-secondary"
-                } p-1 px-3 border-2 border-secondary rounded-md duration-200 ease-in-out transition-all`}
-                onClick={handleSelectedFilter}
-              >
-                Month
-              </button>
+              />
             </div>
-            <div className="flex text-secondary">
-              <button
-                className={`p-1 px-3 border-2 border-secondary rounded-l-md hover:bg-green-300 transition-all ease-in-out duration-200`}
-                onClick={handleLeftBtnClick}
-              >
-                <FontAwesomeIcon icon={faCaretLeft} />
-              </button>
-              <h1 className={`p-1 px-3 border-y-2 border-secondary`} onClick={() => console.log(data)}>
-                {selectedFilter === "year"
-                  ? year
-                  : `${convertedMonth}, ${year}`}
-              </h1>
-              <button
-                className={`p-1 px-3 border-2 border-secondary rounded-r-md hover:bg-green-300 transition-all ease-in-out duration-200`}
-                onClick={handleRightBtnClick}
-              >
-                <FontAwesomeIcon icon={faCaretRight} />
-              </button>
+
+            {/* Page Filter */}
+            <div
+              className="w-full flex items-center justify-center relative"
+            >
+              <div className="w-fit relative group flex">
+                <SolidShadow background={"bg-teal-900"} />
+                <div className="relative flex justify-center items-center mx-auto w-fit z-10 font-title">
+                  <button
+                    value={"left"}
+                    onClick={handleLeftBtnClick}
+                    className={`relative ring-1 ring-black z-10 h-full p-1.5 px-3 rounded-l-lg bg-third hover:bg-third-hover text-secondary active:bg-third`}
+                  >
+                    <FontAwesomeIcon icon={faCaretLeft} />
+                  </button>
+                  <button
+                    value={"middle"}
+                    className={`relative w-full ring-1 ring-black z-10 h-full p-1.5 px-3  bg-secondary text-lightWhite hover:bg-secondary active:bg-secondary`}
+                  >
+                    {selectedFilter === "year"
+                      ? year
+                      : `${convertedMonth}, ${year}`}
+                  </button>
+                  <button
+                    value={"left"}
+                    onClick={handleRightBtnClick}
+                    className={`relative ring-1 ring-black z-10 h-full p-1.5 px-3 rounded-r-lg bg-third hover:bg-third-hover text-secondary active:bg-third`}
+                  >
+                    <FontAwesomeIcon icon={faCaretRight} />
+                  </button>
+                </div>
+              </div>
             </div>
+
           </div>
 
           <div className="text-secondary text-base">
@@ -175,45 +183,10 @@ const ReportStats = ({
             </div>
           </div>
 
-          <div
-            className="relative font-passionOne text-base w-fit "
-            ref={dropdownRef}
-          >
-            <button
-              onClick={toggleWalletDropDown}
-              className="py-2 px-3 flex items-center gap-2 w-fit bg-secondary hover:bg-secondary-hover text-base rounded-md"
-            >
-              {selectedWallet || "Specify Wallet"}
-              <FontAwesomeIcon icon={faCaretDown} />
-            </button>
+              <div className="w-fit z-20">
+                <DropDownButton datas={wallets} handleSelectedItem={handleSelectedWallet} selectedItem={selectedWallet || "Specify Wallet"} />
 
-            {isWalletOpen && (
-              <div className="absolute w-full rounded-md shadow-lg bg-primary ring-secondary ring-opacity-10 ring-2 z-10">
-                <div
-                  className="py-1 text-secondary"
-                  role="menu"
-                  aria-orientation="vertical"
-                  aria-labelledby="options-menu"
-                >
-                  {!wallets ? (
-                    <h1 className="text-center block w-full px-4 py-2 text-sm">{`you don't have a wallet account yet`}</h1>
-                  ) : (
-                    wallets?.map((wallet, idx) => (
-                      <button
-                        key={idx}
-                        value={wallet.accountId}
-                        name={wallet.name}
-                        onClick={handleSelectedWallet}
-                        className="block w-full transition-all ease-in-out duration-100 text-left px-4 py-2 text-sm hover:bg-green-300"
-                      >
-                        {wallet.name}
-                      </button>
-                    ))
-                  )}
-                </div>
               </div>
-            )}
-          </div>
 
           {/* chart graph */}
           <Chart data={data} />

@@ -9,7 +9,7 @@ import {
   getSnapshotUserTransaction,
   getSnapshotUserWallet,
 } from "@/libs/firestoreMethods";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 const ReportPage = () => {
   const [wallets, setWallets] = useState(null);
@@ -17,10 +17,12 @@ const ReportPage = () => {
   const [filteredTransactions, setFilteredTransactions] = useState([]);
   const [isGettingData, setIsGettingData] = useState(false);
   const { currUser, loading } = useAuth();
+  const isFirstRender = useRef(true);
+
 
   useEffect(() => {
       const docSnapshotTransactions = async () => {
-        console.log("test");
+        console.log("test effec");
         setIsGettingData(true);
         try {
           await getSnapshotUserTransaction(currUser?.uid, setTransactions, null);
@@ -30,6 +32,11 @@ const ReportPage = () => {
         } finally {
           setIsGettingData(false);
         }
+      };
+
+      if(isFirstRender.current) {
+        isFirstRender.current = false;
+        return
       };
 
       if (!loading && currUser) docSnapshotTransactions();
@@ -42,7 +49,7 @@ const ReportPage = () => {
   return loading ? (
     <LoaderPage />
   ) : currUser ? (
-    <main className="min-h-screen text-xl p-6 font-passionOne bg-primary w-full py-4 flex flex-col gap-5">
+    <main className="min-h-screen text-lg bg-primary w-full py-4 flex flex-col gap-5">
       {/* nav */}
       <NavbarPage title={"Reports"} />
 

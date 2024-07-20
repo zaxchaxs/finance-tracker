@@ -26,7 +26,7 @@ const PrimaryButton = ({handleClick, text, type, value}) => {
                 setBackground({bg: "bg-secondary hover:bg-secondary active:bg-secondary", bgSolid: "bg-emerald-900"})
                 break;
         }
-    }, []);
+    }, [type]);
     
     return(
         <div className="relative z-0 group shadow-lg font-title">

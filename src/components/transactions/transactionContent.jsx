@@ -12,7 +12,6 @@ const TransactionContent = ({ transactions }) => {
     const [page, setPage] = useState(1);
     const [indexPage, setIndexPage] = useState({first: 0, last: 10});
     const [totalAmount, setTotalAmount] = useState({income: 0, expanse: 0});
-    const scrollRef = useRef();
     const isFirstRender = useRef(true);
 
   const newObjAmount = Array(transactions.length)
@@ -88,7 +87,7 @@ const TransactionContent = ({ transactions }) => {
           </div>
         </div>
 
-        <div className="rounded-lg  font-paragraf font-semibold ">
+        <div className="rounded-lg font-paragraf font-semibold ">
           {transactions.length === 0 ? (
             <div className="flex justify-center items-end w-full text-center">
               <p>{`No transactions yet.`}</p>
@@ -102,25 +101,20 @@ const TransactionContent = ({ transactions }) => {
       </div>
 
       {/* Pagination */}
-      <div className="w-full flex items-center justify-center relative" ref={scrollRef}>
+      <div className="w-full flex items-center justify-center relative">
         <div className="w-fit relative group">
             <SolidShadow background={"bg-teal-900"} />
               <div className="relative flex justify-center items-center mx-auto w-fit z-10 font-title">
                     <button value={"left"} onClick={handlePrevPage} className={`relative w-full ring-1 ring-black z-10 h-full p-1.5 px-3 rounded-l-lg bg-third hover:bg-third-hover text-secondary active:bg-third`}>
                       <FontAwesomeIcon icon={faCaretLeft} />
                     </button>
-
-                    <button value={"left"} onClick={handlePrevPage} className={`relative w-full ring-1 ring-black z-10 h-full p-1.5 px-3  bg-secondary text-lightWhite hover:bg-secondary active:bg-secondary`}>
+                    <button value={"left"} className={`relative w-full ring-1 ring-black z-10 h-full p-1.5 px-3  bg-secondary text-lightWhite hover:bg-secondary active:bg-secondary`}>
                       {page}
                     </button>
-
                     <button value={"left"} onClick={handleNextPage} className={`relative w-full ring-1 ring-black z-10 h-full p-1.5 px-3 rounded-r-lg bg-third hover:bg-third-hover text-secondary active:bg-third`}>
                       <FontAwesomeIcon icon={faCaretRight} />
                     </button>
-
               </div>
-
-
             </div>
       </div>
         
