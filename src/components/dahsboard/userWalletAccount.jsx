@@ -1,11 +1,12 @@
 import { useState } from "react";
 import Wallet from "./wallet";
-import { sweetAlertAddWallet } from "@/libs/sweetAlert";
+import { SideSweetAlertSuccess, sweetAlertAddWallet } from "@/libs/sweetAlert";
 import { v4 as uuidv4 } from "uuid";
 import LoaderSection from "../loaders/loaderSection";
 import PrimaryButton from "../ui/buttons/PrimaryButton";
 import SolidShadow from "../ui/solidShadow/SolidShadow";
 import InputForm from "../ui/InputForm";
+import { ToastContainer } from "react-toastify";
 
 const UserWalletAccount = ({ isShowed, userWallets, user, isGettingData }) => {
   const [isAddWalletBtnClicked, setIsAddWalletBtnClicked] = useState(false);
@@ -15,6 +16,17 @@ const UserWalletAccount = ({ isShowed, userWallets, user, isGettingData }) => {
   //   handler functions
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    // console.log(userWallets);
+    const isWalletAlreadyExist = userWallets.find(obj => obj.name === walletName);
+    // console.log(isWalletAlreadyExist);
+
+    if(isWalletAlreadyExist) {
+      console.log("1");
+      SideSweetAlertSuccess();
+      return;
+    }
+
     const accountId = uuidv4();
     if (walletName && walletAmount > 0) {
       const newData = {
@@ -39,7 +51,6 @@ const UserWalletAccount = ({ isShowed, userWallets, user, isGettingData }) => {
         isShowed ? "" : "hidden"
       }`}
     >
-      
       {isGettingData ? (
           <LoaderSection width={"w-14"} />
       ) : (
@@ -56,6 +67,8 @@ const UserWalletAccount = ({ isShowed, userWallets, user, isGettingData }) => {
             </div>
           )}
           <div className="w-full flex flex-col font-title">
+            <ToastContainer />
+
             <div className="py-4">
               <div className={isAddWalletBtnClicked ? "" : "hidden"}>
                 <PrimaryButton
@@ -88,7 +101,7 @@ const UserWalletAccount = ({ isShowed, userWallets, user, isGettingData }) => {
 
               <div className="flex gap-2 justify-between">
                 <InputForm handleChange={(e) => setwalletAmount(e.target.value)} name={"Amount"} value={walletAmount} type={"text"}  isRequired={true} />
-                <PrimaryButton handleClick={() => handleSubmit(e)} text={"Submit"} type={"primary"} value={"submit"} />
+                <PrimaryButton handleClick={(e) => handleSubmit(e)} text={"Submit"} type={"primary"} value={"submit"} />
                 
               </div>
             </form>

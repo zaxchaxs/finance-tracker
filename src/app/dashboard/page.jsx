@@ -11,6 +11,7 @@ import { getSnapshotUserWallet } from "@/libs/firestoreMethods";
 import { faCaretRight } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect, useState } from "react";
+import { ToastContainer } from "react-toastify";
 
 const DashboardPage = () => {
   const [isShowWallet, setIsShowWallet] = useState(true);
@@ -59,7 +60,7 @@ const DashboardPage = () => {
       {/* Nav */}
       <NavbarPage title={"Dashboard"} />
 
-      <div className="w-full px-4 my-20 flex flex-col items-center gap-2 relative z-10">
+      <div className="w-full px-4 my-20 flex flex-col items-center gap-2 relative z-10">        
 
         {/* Wallet sections */}
         <div className="pt-4 w-full text-primary flex flex-col items-center font-title"

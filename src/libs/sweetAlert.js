@@ -5,6 +5,9 @@ import {
   addDocWallet,
   deleteWalletDoc,
 } from "./firestoreMethods";
+import { toast } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
+
 
 export const sweetAlertAddTransac = (
   newData,
@@ -89,6 +92,7 @@ export const sweetAlertAddWallet = (
     confirmButtonColor: "#052E16",
     cancelButtonText: "Cancel",
     cancelButtonColor: "#EF4444",
+    toast: true,
     html: `
         <p><strong>Name: </strong> ${newData.name}</p>
         <p><strong>Amount: </strong>${convertedAmount}</p>
@@ -203,4 +207,18 @@ export const customDateSweetAlert = () => {
       const test = "";
     }
   })
+}
+
+export const SideSweetAlertSuccess = () => {
+  return toast("testing");
+
+  Swal.fire({
+    title: 'Hello World!',
+    text: 'This is a SweetAlert2 message.',
+    icon: 'success',
+    position: 'top-end',
+    toast: true,
+    showConfirmButton: false,
+    timer: 3000
+  });
 }

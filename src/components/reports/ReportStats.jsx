@@ -7,7 +7,6 @@ import {
   faCaretDown,
   faCaretLeft,
   faCaretRight,
-  faExclamationCircle,
 } from "@fortawesome/free-solid-svg-icons";
 import { sumTotalAmount } from "@/utils/sumAmount";
 import { formatRupiah } from "@/utils/formatRupiah";
