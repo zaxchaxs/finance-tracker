@@ -6,6 +6,7 @@ import Unauthenticate from "@/components/Unauthenticate";
 import { useAuth } from "@/contexts/AuthContext";
 import { getSnapshotUserWallet } from "@/libs/firestoreMethods";
 import { useEffect, useRef, useState } from "react";
+import { ToastContainer } from "react-toastify";
 
 const TransactionPage = () => {
   const [wallets, setWallets] = useState([]);
@@ -59,6 +60,12 @@ const TransactionPage = () => {
     <main className="min-h-screen text-lg relative bg-primary w-full flex flex-col gap-3">
       {/* Nav */}
       <NavbarPage title={"Transaction"} />
+      <ToastContainer
+        position="top-right"
+        limit={3}
+        className={"flex flex-col items-end rounded-lg border-2 border-black mt-20 font-title"}
+        style={{ marginTop:  '5rem'}}
+      />
       
       <FilterSection wallets={wallets} />
     </main>

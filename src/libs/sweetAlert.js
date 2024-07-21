@@ -16,11 +16,10 @@ export const sweetAlertAddTransac = (
   setSelectedType,
   setDescription,
   setAmount,
-  setLoadingAddDoc
+  setLoadingAddDoc,
+  callback
 ) => {
-//   const option = {
-//     year: 'numeric', month: '2-digit', day: '2-digit'
-// }
+
   const convertedAmount = formatRupiah(newData.amount);
   const convertedDate = newData.date.toDateString();
 
@@ -58,7 +57,8 @@ export const sweetAlertAddTransac = (
         setSelectedType("");
         setDescription("");
         setAmount("");
-        setLoadingAddDoc(false)
+        setLoadingAddDoc(false);
+        if(callback) callback();
       }
     }
   });
@@ -69,7 +69,7 @@ export const sweetAlertAddWallet = (
   setIsAddWalletBtnClicked,
   setWalletName,
   setwalletAmount,
-  setLoadingAddDoc
+  setLoadingAddDoc,
 ) => {
   const convertedAmount = formatRupiah(newData.amount);
 
@@ -193,7 +193,7 @@ export const sideSweetAlertSuccess = (message) => {
     hideProgressBar: true,
     theme: "colored",
     className: "w-fit m-4 p-0 bg-emerald-600",
-    style: {borderRadius: '0.5rem', backgroundColor: '#047857'}
+    style: {borderRadius: '0.5rem', backgroundColor: '#047857', margin: '6px'}
   });
 };
 
@@ -207,7 +207,7 @@ export const sideSweetAlertWarning = (message) => {
     hideProgressBar: true,
     theme: "colored",
     className: "w-fit m-4 p-0",
-    style: {borderRadius: '0.5rem', backgroundColor: '#FF8000'}
+    style: {borderRadius: '0.5rem', backgroundColor: '#FF8000', margin: '6px'}
   });
 };
 
@@ -221,6 +221,6 @@ export const sideSweetAlertError = (message) => {
     hideProgressBar: true,
     theme: "colored",
     className: "w-fit m-4 p-0",
-    style: {borderRadius: '0.5rem', backgroundColor: '#FF1D48'}
+    style: {borderRadius: '0.5rem', backgroundColor: '#FF1D48',  margin: '6px'}
   });
 };

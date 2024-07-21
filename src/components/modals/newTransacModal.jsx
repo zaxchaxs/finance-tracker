@@ -1,4 +1,4 @@
-import { sweetAlertAddTransac } from "@/libs/sweetAlert";
+import { sideSweetAlertWarning, sweetAlertAddTransac } from "@/libs/sweetAlert";
 import { faCaretDown } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { motion } from "framer-motion";
@@ -6,11 +6,12 @@ import { useEffect, useRef, useState } from "react";
 import PrimaryButton from "../ui/buttons/PrimaryButton";
 import DropDownButton from "../ui/buttons/DropDownButton";
 import InputForm from "../ui/InputForm";
+import LoaderLightSection from "../loaders/loaderLightSection";
 
 const AddTransactionModal = ({ isModalOpen, handleCloseModal, user, wallets }) => {
     const [amount, setAmount] = useState("");
     const [description, setDescription] = useState("");
-    const [loading, setLoading] = useState(false);
+    const [loadingAddDoc, setLoadingAddDoc] = useState(false);
     const [selectedType, setSelectedType] = useState("");
     const [selectedDate, setSelectedDate] = useState();
     const [selectedWallet, setSelectedWallet] = useState({name: '', id: ''})
@@ -30,22 +31,6 @@ const AddTransactionModal = ({ isModalOpen, handleCloseModal, user, wallets }) =
     description,
   };
 
-//   dropdown outside handle click
-  useEffect(() => {
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-        document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [])
-
-  const handleClickOutside = (event) => {
-    if (
-      dropDownWalletRef.current &&
-      !dropDownWalletRef.current.contains(event.target)
-    ) {
-      setIsShowWallet(isShowWallet);
-    }
-  };
 
   const handleSelectedTypeBtn = (e) => {
     setSelectedType(e.target.value)
@@ -61,17 +46,23 @@ const AddTransactionModal = ({ isModalOpen, handleCloseModal, user, wallets }) =
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if(isOkToSubmit) {
-        sweetAlertAddTransac(
-            newData,
-            setSelectedDate,
-            setSelectedWallet,
-            setSelectedType,
-            setDescription,
-            setAmount
-        )
-    };
-    handleCloseModal(!isModalOpen)
+
+    if (!isOkToSubmit) {
+      sideSweetAlertWarning("Please fill the form correctly");
+      return;
+    }
+
+    sweetAlertAddTransac(
+      newData,
+      setSelectedDate,
+      setSelectedWallet,
+      setSelectedType,
+      setDescription,
+      setAmount,
+      setLoadingAddDoc,
+      handleCloseModal
+    );
+
   };
 
   return (
@@ -107,7 +98,7 @@ const AddTransactionModal = ({ isModalOpen, handleCloseModal, user, wallets }) =
           </div>
         </div>
 
-        <div className="text-base text-secondary flex flex-col gap-2 justify-center items-center ">
+        <form onSubmit={handleSubmit} className="text-base text-secondary flex flex-col gap-2 justify-center items-center ">
           <InputForm
             handleChange={(e) => setAmount(e.target.value)}
             name={"Amount"}
@@ -123,7 +114,7 @@ const AddTransactionModal = ({ isModalOpen, handleCloseModal, user, wallets }) =
             type={"text"}
             value={description}
           />
-        </div>
+        </form>
 
         <div className="flex py-6 justify-between items-center gap-2 w-full">
           <div
@@ -157,14 +148,18 @@ const AddTransactionModal = ({ isModalOpen, handleCloseModal, user, wallets }) =
             type={"danger"}
             value={"close"}
           />
-          <div className={`${!isOkToSubmit && "hidden"}`}>
+
+          <div className={`${loadingAddDoc ? "" : "hidden"}`}>
+            <LoaderLightSection width={"w-14"} />
+
+          </div>
+
             <PrimaryButton
               handleClick={handleSubmit}
               text={"Submit"}
               type={"primary"}
               value={"submit"}
             />
-          </div>
         </div>
       </motion.div>
     </div>

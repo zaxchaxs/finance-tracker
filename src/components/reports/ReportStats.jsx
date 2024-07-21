@@ -110,7 +110,10 @@ const ReportStats = ({
   return (
     <div className="w-full px-5 mt-20 flex flex-col gap-5 text-lightWhite font-title relative z-10">
       {isGettingData ? (
-        <LoaderSection width={"w-14"} />
+        <div className="font-title text-secondary text-center">
+          <LoaderSection width={"w-14"} />
+          <p>This may take a moment..</p>
+        </div>
       ) : (
         <>
           {/* filter element sections */}

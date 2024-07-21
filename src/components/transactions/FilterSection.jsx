@@ -2,7 +2,7 @@
 import { useAuth } from "@/contexts/AuthContext";
 import { selectedFilterConverting } from "@/utils/dates";
 import { dateFiltering } from "@/utils/datesFiltering";
-import { faCaretDown } from "@fortawesome/free-solid-svg-icons";
+import { faArrowsRotate, faCaretDown } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect, useRef, useState } from "react";
 import LoaderSection from "../loaders/loaderSection";
@@ -10,6 +10,7 @@ import TransactionContent from "./transactionContent";
 import AddTransactionModal from "../modals/newTransacModal";
 import DropDownButton from "../ui/buttons/DropDownButton";
 import PrimaryButton from "../ui/buttons/PrimaryButton";
+import SolidShadow from "../ui/solidShadow/SolidShadow";
 
 const FilterSection = ({ wallets }) => {
   const [transaction, setTransactions] = useState([]);
@@ -19,6 +20,7 @@ const FilterSection = ({ wallets }) => {
   const [isWalletOpen, setIsWalletOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [loading, setLoading] = useState();
+  const [isRefreshed, setIsRefreshed] = useState(false);
 
   const isFirstRender = useRef(true);
 
@@ -415,7 +417,7 @@ const FilterSection = ({ wallets }) => {
     };
 
     if(currUser) getTransactionFiltered();
-  }, [currUser, selectedDateFilter, selectedWallet]);
+  }, [currUser, selectedDateFilter, selectedWallet, isRefreshed]);
 
 
   const handleNewTransactionBtn = async () => {
@@ -456,10 +458,14 @@ const FilterSection = ({ wallets }) => {
 
         </div>
 
-        <div className="w-fit">
+        <div className="w-full justify-between items-center flex">
           <PrimaryButton handleClick={handleNewTransactionBtn} text={"New"} type={"primary"} value={"new"} />
+        
+            {/* refresh btn */}
+          <PrimaryButton handleClick={() => setIsRefreshed(!isRefreshed)} text={<FontAwesomeIcon icon={faArrowsRotate} />} type={"secondary"} value={"refresh"} />
 
           <AddTransactionModal isModalOpen={isModalOpen} user={currUser} wallets={wallets} handleCloseModal={handleNewTransactionBtn} />
+
 
         </div>
       </div>
