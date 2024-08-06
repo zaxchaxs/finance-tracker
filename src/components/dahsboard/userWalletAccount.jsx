@@ -1,11 +1,10 @@
 import { useState } from "react";
 import Wallet from "./wallet";
-import { sideSweetAlertError, sideSweetAlertSuccess, sideSweetAlertWarning, sweetAlertAddWallet } from "@/libs/sweetAlert";
+import { sideSweetAlertError, sideSweetAlertWarning, sweetAlertAddWallet } from "@/libs/sweetAlert";
 import { v4 as uuidv4 } from "uuid";
 import LoaderSection from "../loaders/loaderSection";
 import PrimaryButton from "../ui/buttons/PrimaryButton";
 import InputForm from "../ui/InputForm";
-import { ToastContainer } from "react-toastify";
 import LoaderLightSection from "../loaders/loaderLightSection";
 
 const UserWalletAccount = ({ isShowed, userWallets, user, isGettingData }) => {
@@ -96,7 +95,7 @@ const UserWalletAccount = ({ isShowed, userWallets, user, isGettingData }) => {
               <InputForm handleChange={(e) => setWalletName(e.target.value)} name={"Name"} value={walletName} type={"text"}isRequired={true} />
 
               <div className="flex gap-2 justify-between">
-                <InputForm handleChange={(e) => setwalletAmount(e.target.value)} name={"Amount"} value={walletAmount} type={"text"}  isRequired={true} />
+                <InputForm handleChange={(e) => setwalletAmount(e.target.value)} name={"Amount"} value={walletAmount} type={"text"}  isRequired={true} inputMode={"numeric"} />
                 <PrimaryButton handleClick={(e) => handleSubmit(e)} text={loadingAddDoc ? <LoaderLightSection width={"w-7"} /> : "Submit" } type={"primary"} value={"submit"} />
                 
               </div>

@@ -5,22 +5,41 @@ import Image from "next/image";
 import homeIcon from "../../public/homeIcon.svg";
 import { useAuth } from "@/contexts/AuthContext";
 import LoaderPage from "@/components/loaders/loaderPage";
-import DangerButton from "@/components/ui/buttons/DangerButton";
 import PrimaryButton from "@/components/ui/buttons/PrimaryButton";
 import { ToastContainer } from "react-toastify";
+import { useState } from "react";
+import { sideSweetAlertError, sideSweetAlertSuccess } from "@/libs/sweetAlert";
+import LoaderLightSection from "@/components/loaders/loaderLightSection";
 
 export default function Home() {
   const { currUser, loading } = useAuth();
   const router = useRouter();
+  const [loadingAuth, setLoadingAuth] = useState(false);
 
-  const handleClickLogin = () => {};
-
-  const handleClickLogout = () => {};
+  const handleLogout = async () => {
+    setLoadingAuth(true);
+    try {
+      await logout();
+      sideSweetAlertSuccess("Success to logout")
+    } catch (error) {
+      sideSweetAlertError("Failed to logout");
+    } finally {
+       setLoadingAuth(false);
+    };
+  };
 
   return loading ? (
     <LoaderPage />
   ) : (
-    <main className="min-h-screen p-5 text-secondary bg-primary w-full flex flex-col items-center justify-between py-10 pb-14">
+    <main className="min-h-screen p-5 relative z-10 text-secondary bg-primary w-full flex flex-col items-center justify-between py-10 pb-14">
+      
+      <ToastContainer
+        position="top-right"
+        limit={3}
+        className={"flex flex-col items-end rounded-lg mt-20"}
+        style={{ marginTop:  '4rem'}}
+      />
+
       <h1 className="text-3xl p-4 text-primary text-center w-full font-header">
         Zaxch Finance Tracker
       </h1>
@@ -41,8 +60,8 @@ export default function Home() {
       </div>
 
       <PrimaryButton
-        handleClick={currUser ? logout : () => router.push("/login")}
-        text={currUser ? "Logout" : "Login"}
+        handleClick={currUser ? handleLogout : () => router.push("/login")}
+        text={currUser ? loadingAuth ? <LoaderLightSection width={"w-10"} /> : "Logout" : "Login"}
         value={currUser ? "Logout" : "Login"}
         type={currUser ? "danger" : "primary"}
       />

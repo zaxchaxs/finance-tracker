@@ -64,7 +64,7 @@ const DashboardPage = () => {
       <ToastContainer
         position="top-right"
         limit={3}
-        className={"flex flex-col items-end rounded-lg border-2 border-black mt-20"}
+        className={"flex flex-col items-end rounded-lg mt-20"}
         style={{ marginTop:  '4rem'}}
       />
         {/* Wallet sections */}

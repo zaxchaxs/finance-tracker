@@ -10,7 +10,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { useState } from "react";
-import SolidShadow from "../ui/solidShadow/SolidShadow";
 
 const Navbar = () => {
   const [isNavOpen, setIsNavOpen] = useState(true);
@@ -31,7 +30,7 @@ const Navbar = () => {
   return (
     <>
       <div
-        className={`fixed top-1/2 -translate-y-1/2 ${index} bg-primary`}
+        className={`fixed top-1/2 -translate-y-1/2 ${index}`}
       >
         <div className="relative">
           <motion.div

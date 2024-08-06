@@ -138,7 +138,7 @@ const NewTransactionSec = ({
                   className="flex flex-col items-center py-4 gap-3 "
                   onSubmit={handleSubmit}
                 >
-                  <InputForm handleChange={handleAmountChange} isRequired={true} name={"Amount"} type={"text"} value={amount} />
+                  <InputForm handleChange={handleAmountChange} isRequired={true} name={"Amount"} type={"text"} value={amount} inputMode={"numeric"} />
 
                   <div className="flex justify-between gap-3 w-full items-center">
                     <InputForm handleChange={handleDescChange} isRequired={false} name={"Description"} type={"text"} value={description} />

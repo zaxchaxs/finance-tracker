@@ -13,29 +13,6 @@ const TransactionPage = () => {
   const { currUser, loading } = useAuth();
   const isFirstRender = useRef(true);
 
-  const tempWalets = [
-    {
-      createdAt: {
-        seconds: 1719721935,
-        nanoseconds: 661000000,
-      },
-      name: "dompet 1",
-      accountId: "64b25906-38a6-4006-b21d-4631764b3d49",
-      userId: "3U40vTwzEcN43dAhrOSTE3BeLYd2",
-      amount: 1233361123,
-    },
-    {
-      userId: "3U40vTwzEcN43dAhrOSTE3BeLYd2",
-      amount: 1500000,
-      accountId: "e5107081-e068-41f4-85d5-a0a42e3f0668",
-      name: "uang darurat",
-      createdAt: {
-        seconds: 1719885822,
-        nanoseconds: 783000000,
-      },
-    },
-  ];
-
   useEffect(() => {
     const getDefaultDataDoc = async () => {
       try {
@@ -63,7 +40,7 @@ const TransactionPage = () => {
       <ToastContainer
         position="top-right"
         limit={3}
-        className={"flex flex-col items-end rounded-lg border-2 border-black mt-20 font-title"}
+        className={"flex flex-col items-end rounded-lg mt-20 font-title"}
         style={{ marginTop:  '5rem'}}
       />
       

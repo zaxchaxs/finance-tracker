@@ -1,4 +1,4 @@
-import { Archivo_Black, Black_Han_Sans, Blinker, Bree_Serif, Chivo, Encode_Sans, Lilita_One, Passion_One, Patua_One, Roboto } from "next/font/google";
+import {  Blinker, Encode_Sans, Roboto } from "next/font/google";
 import "./globals.css";
 import { AuthProvider } from "@/contexts/AuthContext";
 import Navbar from "@/components/navbars/Navbar";
@@ -8,15 +8,15 @@ const blinker = Blinker({
   weight: "800",
   subsets: ['latin'],
   display: 'swap',
-  adjustFontFallback: false,
+  // adjustFontFallback: false,
   variable: '--font-blinker'
-});
+})
 
 const encodeSans = Encode_Sans({
   weight: "800",
   subsets: ['latin'],
   display: 'swap',
-  adjustFontFallback: false,
+  // adjustFontFallback: false,
   variable: '--font-encodeSans'
 });
 
@@ -24,7 +24,7 @@ const roboto = Roboto({
   weight: '400',
   subsets: ['latin'],
   display: 'swap',
-  adjustFontFallback: false,
+  // adjustFontFallback: false,
   variable: '--font-roboto'
   
 })

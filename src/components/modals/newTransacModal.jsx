@@ -1,8 +1,6 @@
 import { sideSweetAlertWarning, sweetAlertAddTransac } from "@/libs/sweetAlert";
-import { faCaretDown } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { motion } from "framer-motion";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import PrimaryButton from "../ui/buttons/PrimaryButton";
 import DropDownButton from "../ui/buttons/DropDownButton";
 import InputForm from "../ui/InputForm";
@@ -105,6 +103,7 @@ const AddTransactionModal = ({ isModalOpen, handleCloseModal, user, wallets }) =
             isRequired={true}
             type={"text"}
             value={amount}
+            inputMode={"numeric"}
           />
 
           <InputForm

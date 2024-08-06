@@ -10,7 +10,6 @@ import TransactionContent from "./transactionContent";
 import AddTransactionModal from "../modals/newTransacModal";
 import DropDownButton from "../ui/buttons/DropDownButton";
 import PrimaryButton from "../ui/buttons/PrimaryButton";
-import SolidShadow from "../ui/solidShadow/SolidShadow";
 
 const FilterSection = ({ wallets }) => {
   const [transaction, setTransactions] = useState([]);
