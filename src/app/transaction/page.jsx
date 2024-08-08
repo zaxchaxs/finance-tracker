@@ -11,7 +11,6 @@ import { ToastContainer } from "react-toastify";
 const TransactionPage = () => {
   const [wallets, setWallets] = useState([]);
   const { currUser, loading } = useAuth();
-  const isFirstRender = useRef(true);
 
   useEffect(() => {
     const getDefaultDataDoc = async () => {
@@ -23,18 +22,13 @@ const TransactionPage = () => {
       }
     }
 
-    if(isFirstRender.current) {
-      isFirstRender.current = false;
-      return
-    };
-
     if (currUser) getDefaultDataDoc();
   }, [currUser]);
 
   return loading ? (
     <LoaderPage />
   ) : currUser ? (
-    <main className="min-h-screen text-lg relative bg-primary w-full flex flex-col gap-3">
+    <main className="min-h-screen text-base relative bg-primary w-full flex flex-col gap-3">
       {/* Nav */}
       <NavbarPage title={"Transaction"} />
       <ToastContainer

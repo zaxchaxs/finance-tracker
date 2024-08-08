@@ -55,7 +55,7 @@ const UserWalletAccount = ({ isShowed, userWallets, user, isGettingData }) => {
 
   return (
     <div
-      className={`w-full rounded-lg rounded-t-none py-2 px-4 flex shadow-md shadow-black text-secondary text-lg flex-col font-paragraf font-semibold relative ${
+      className={`w-full rounded-lg rounded-t-none py-2 px-4 flex shadow-md shadow-black text-secondary text-base flex-col font-paragraf font-semibold relative ${
         isShowed ? "" : "hidden"
       }`}
     >

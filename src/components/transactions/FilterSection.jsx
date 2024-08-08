@@ -21,8 +21,6 @@ const FilterSection = ({ wallets }) => {
   const [loading, setLoading] = useState();
   const [isRefreshed, setIsRefreshed] = useState(false);
 
-  const isFirstRender = useRef(true);
-
   const { currUser } = useAuth();
 
   const tempCurrTransac = [
@@ -408,11 +406,6 @@ const FilterSection = ({ wallets }) => {
       } finally {
         setLoading(false);
       }
-    };
-
-    if(isFirstRender.current) {
-      isFirstRender.current = false;
-      return
     };
 
     if(currUser) getTransactionFiltered();

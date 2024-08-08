@@ -3,7 +3,7 @@ const { FontAwesomeIcon } = require("@fortawesome/react-fontawesome")
 
 const AdviceInfo = ({totalAmount}) => {
     return(
-        <div className="text-secondary text-lg flex flex-col justify-center font-title items-center gap-4">
+        <div className="text-secondary text-base flex flex-col justify-center font-title items-center gap-4">
         {totalAmount?.income === totalAmount?.expanse ? (
           ""
         ) : (

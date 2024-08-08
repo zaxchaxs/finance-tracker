@@ -17,8 +17,6 @@ const ReportPage = () => {
   const [filteredTransactions, setFilteredTransactions] = useState([]);
   const [isGettingData, setIsGettingData] = useState(false);
   const { currUser, loading } = useAuth();
-  const isFirstRender = useRef(true);
-
 
   useEffect(() => {
       const docSnapshotTransactions = async () => {
@@ -32,11 +30,6 @@ const ReportPage = () => {
         } finally {
           setIsGettingData(false);
         }
-      };
-
-      if(isFirstRender.current) {
-        isFirstRender.current = false;
-        return
       };
 
       if (!loading && currUser) docSnapshotTransactions();

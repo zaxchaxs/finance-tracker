@@ -108,7 +108,7 @@ const ReportStats = ({
   };
 
   return (
-    <div className="w-full px-5 mt-20 flex flex-col gap-5 text-lightWhite font-title relative z-10">
+    <div className="w-full px-5 mt-20 flex text-base flex-col gap-5 text-lightWhite font-title relative z-10">
       {isGettingData ? (
         <div className="font-title text-secondary text-center">
           <LoaderSection width={"w-14"} />
@@ -185,7 +185,7 @@ const ReportStats = ({
             </div>
           </div>
 
-              <div className="w-fit z-20">
+              <div className="w-fit z-20 text-base">
                 <DropDownButton datas={wallets} handleSelectedItem={handleSelectedWallet} selectedItem={selectedWallet || "Specify Wallet"} />
 
               </div>

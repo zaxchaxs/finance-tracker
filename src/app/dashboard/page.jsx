@@ -56,7 +56,7 @@ const DashboardPage = () => {
   return loadingCurrUser ? (
     <LoaderPage />
   ) : currUser ? (
-    <main className="min-h-screen text-lg relative font-passionOne bg-primary w-full flex flex-col gap-3">
+    <main className="min-h-screen text-base relative font-passionOne bg-primary w-full flex flex-col gap-3">
       {/* Nav */}
       <NavbarPage title={"Dashboard"} />
 

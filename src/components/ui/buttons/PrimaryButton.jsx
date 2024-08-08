@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import SolidShadow from "../solidShadow/SolidShadow";
 
-const PrimaryButton = ({handleClick, text, type, value}) => {
+const PrimaryButton = ({handleClick, text, type, value, className}) => {
     const [background, setBackground] = useState({bg: "", bgSolid: ""});
 
     useEffect(() => {
@@ -29,7 +29,7 @@ const PrimaryButton = ({handleClick, text, type, value}) => {
     }, [type, value]);
     
     return(
-        <div className="relative z-0 group shadow-lg font-title">
+        <div className={`relative z-0 group shadow-lg font-title ${className}`}>
             <SolidShadow background={background.bgSolid} />
             <button value={value} onClick={handleClick} className={`relative w-full ring-1 ring-black z-10 h-full p-1.5 px-3 rounded-lg ${background.bg}`}>
                 {text}

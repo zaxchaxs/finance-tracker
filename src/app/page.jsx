@@ -59,12 +59,17 @@ export default function Home() {
         </h1>
       </div>
 
-      <PrimaryButton
-        handleClick={currUser ? handleLogout : () => router.push("/login")}
-        text={currUser ? loadingAuth ? <LoaderLightSection width={"w-10"} /> : "Logout" : "Login"}
-        value={currUser ? "Logout" : "Login"}
-        type={currUser ? "danger" : "primary"}
-      />
+      <div className="flex gap-4 items-center justify-center">
+        <PrimaryButton
+          handleClick={currUser ? handleLogout : () => router.push("/login")}
+          text={currUser ? loadingAuth ? <LoaderLightSection width={"w-10"} /> : "Logout" : "Login"}
+          value={currUser ? "Logout" : "Login"}
+          type={currUser ? "danger" : "primary"}
+        />
+
+        <PrimaryButton className={currUser ? "" : "hidden"} handleClick={() => router.push("/dashboard")} text={"Start"} type={"primary"} value={"Start"} />
+
+      </div>
     </main>
   );
 }

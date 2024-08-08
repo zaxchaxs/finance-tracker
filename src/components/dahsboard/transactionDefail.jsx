@@ -14,7 +14,7 @@ const TransactionDetail = ({ data }) => {
   const amount = formatRupiah(data.amount);
 
   return (
-    <div className="w-full border-secondary rounded-lg text-base mb-2 p-2 border-b-2">
+    <div className="w-full border-secondary rounded-lg text-sm mb-2 p-2 border-b-2">
       <div className="flex justify-between items-center">
         <p>{date}</p>
         <p

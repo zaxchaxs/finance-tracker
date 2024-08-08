@@ -68,7 +68,7 @@ const NewTransactionSec = ({
 
   return (
     <div
-      className={`w-full rounded-lg rounded-t-none p-4 flex shadow-md shadow-black text-secondary text-lg flex-col font-paragraf font-semibold relative ${
+      className={`w-full rounded-lg rounded-t-none p-4 flex shadow-md shadow-black text-secondary text-base flex-col font-paragraf font-semibold relative ${
         isShowed ? "" : "hidden"
       }`}
     >
@@ -115,7 +115,7 @@ const NewTransactionSec = ({
                 }`}
               >
                 <input
-                  className="bg-transparent py-2 focus:outline-none border-b-2 border-black p-2 rounded-lg"
+                  className="bg-transparent w-full py-2 focus:outline-none border-b-2 border-black p-2 rounded-lg"
                   type="date"
                   value={selectedDate}
                   onChange={handleDateChange}

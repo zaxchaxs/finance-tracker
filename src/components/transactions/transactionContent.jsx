@@ -12,7 +12,6 @@ const TransactionContent = ({ transactions }) => {
     const [page, setPage] = useState(1);
     const [indexPage, setIndexPage] = useState({first: 0, last: 10});
     const [totalAmount, setTotalAmount] = useState({income: 0, expanse: 0});
-    const isFirstRender = useRef(true);
 
   const newObjAmount = Array(transactions.length)
     .fill(null)
@@ -33,11 +32,6 @@ const TransactionContent = ({ transactions }) => {
       const result = sumTotalAmount(newObjAmount);
       setTotalAmount(result);
     };
-
-    if(isFirstRender.current) {
-      isFirstRender.current = false;
-      return;
-    }
 
     if(transactions.length !== 0) changeValObjAmount();
   }, [transactions]);
@@ -69,10 +63,10 @@ const TransactionContent = ({ transactions }) => {
   }
 
   return (
-    <div className="w-full text-base flex flex-col gap-4 text-secondary relative z-10 p-4">
+    <div className="w-full text-sm flex flex-col gap-4 text-secondary relative z-10 p-4">
 
       <div className="p-2  shadow-md shadow-gray-600  rounded-lg">
-        <div className="text-secondary text-base font-title px-2">
+        <div className="text-secondary font-title px-2">
           <div className="flex justify-start items-center gap-1">
             <h1>{`Total Income: `}</h1>
             <h1 className="text-primary">{`${formatRupiah(
