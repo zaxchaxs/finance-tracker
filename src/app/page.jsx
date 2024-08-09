@@ -7,14 +7,26 @@ import { useAuth } from "@/contexts/AuthContext";
 import LoaderPage from "@/components/loaders/loaderPage";
 import PrimaryButton from "@/components/ui/buttons/PrimaryButton";
 import { ToastContainer } from "react-toastify";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { sideSweetAlertError, sideSweetAlertSuccess } from "@/libs/sweetAlert";
 import LoaderLightSection from "@/components/loaders/loaderLightSection";
+import Swal from "sweetalert2";
 
 export default function Home() {
   const { currUser, loading } = useAuth();
   const router = useRouter();
   const [loadingAuth, setLoadingAuth] = useState(false);
+
+  useEffect(() => {
+    Swal.fire({
+      title: "Hello There",
+      text: "Right now, this web only works well on mobile view. And the only available currency is IDR for now. Why? Because I’m just too lazy 😁.",
+      color: "#BBF7D0",
+      background: "#059669",
+      confirmButtonText: "Okay",
+      confirmButtonColor: "#052E16",
+    })
+  }, [])
 
   const handleLogout = async () => {
     setLoadingAuth(true);
