@@ -5,6 +5,7 @@ import { logout } from "@/libs/auth";
 import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import Link from "next/link";
 
 const NavUserInfo = () => {
   const [isNavOpen, setIsNavOpen] = useState(false);
@@ -43,13 +44,18 @@ const NavUserInfo = () => {
             </button>
           </div>
           <div className=" text-slate-100 w-full flex items-center justify-between h-full text-base flex-col">
-            <h1>In Progress😉</h1>
-            <button
-              className="text-lg bg-danger hover:bg-danger-hover rounded-lg text-slate-100 p-1 px-2"
-              onClick={handleLogout}
-            >
-              Logout
-            </button>
+            <div className="flex flex-col justify-center items-center gap-4">
+              <h1>In Progress😉</h1>
+              <Link className="text-base bg-third hover:bg-third-hover rounded-lg text-secondary p-1 px-2" href={"user/setting"} >Setting</Link>
+            </div>
+            <div className="flex flex-col gap-2 justify-center items-center">
+              <button
+                className="text-lg bg-danger hover:bg-danger-hover rounded-lg text-slate-100 p-1 px-2"
+                onClick={handleLogout}
+              >
+                Logout
+              </button>
+            </div>
           </div>
         </motion.div>
       </div>
