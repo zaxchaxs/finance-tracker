@@ -20,7 +20,7 @@ export default function Home() {
   useEffect(() => {
     Swal.fire({
       title: "Hello There",
-      text: "Right now, this web only works well on mobile view. And the only available currency is IDR for now. Why? Because I’m just too lazy 😁.",
+      text: "This web only works well on mobile view, and the only available currency is IDR for now. Cuz I’m just too lazy 😁.",
       color: "#BBF7D0",
       background: "#059669",
       confirmButtonText: "Okay",
