@@ -27,13 +27,13 @@ This is an web application that helps users record their income and expenses, as
 ## Screenshots
 ![Personal Finance Tracker](public/screenshots/personalFinance.png)
 
-<div style="display: flex; justify-content: center;">
+<div style="display: flex; justify-content: space-between; align-items: center;" align="center">
   <img src="public/screenshots/currentTransact.png" alt="Current Transact Screenshot" width="200"/>
   <img src="public/screenshots/reportScreenshot.png" alt="Report Screenshot" width="200"/>
   <img src="public/screenshots/filter Sec.png" alt="Filter Section Screenshot" width="200"/>
 </div>
 
-<div style="display: flex; justify-content: center;">
+<div style="display: flex; justify-content: space-between; align-items: center;" align="center">
   <img src="public/screenshots/signUp.png" alt="Current Transact Screenshot" width="200"/>
   <img src="public/screenshots/wallet Account.png" alt="Current Transact Screenshot" width="200"/>
 </div>
