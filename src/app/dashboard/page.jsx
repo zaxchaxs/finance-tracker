@@ -4,7 +4,7 @@ import CurrentTransaction from "@/components/dahsboard/currentTransaction";
 import NewTransactionSec from "@/components/dahsboard/newTransaction";
 import UserWalletAccount from "@/components/dahsboard/userWalletAccount";
 import LoaderPage from "@/components/loaders/loaderPage";
-import NavbarPage from "@/components/navbars/NavbarPage";
+import NavbarPage from "@/components/Navbars/NavbarPage";
 import SolidShadow from "@/components/ui/solidShadow/SolidShadow";
 import { useAuth } from "@/contexts/AuthContext";
 import { getSnapshotUserWallet } from "@/libs/firestoreMethods";
@@ -56,7 +56,7 @@ const DashboardPage = () => {
   return loadingCurrUser ? (
     <LoaderPage />
   ) : currUser ? (
-    <main className="min-h-screen text-base relative font-passionOne bg-primary w-full flex flex-col gap-3">
+    <main className="min-h-screen text-base relative font-passionOne bg-primary  w-full flex flex-col gap-3">
       {/* Nav */}
       <NavbarPage title={"Dashboard"} />
 

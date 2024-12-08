@@ -1,6 +1,6 @@
 "use client";
 
-import NavbarPage from "@/components/navbars/NavbarPage";
+import NavbarPage from "@/components/Navbars/NavbarPage";
 
 const TestingPage = () => {
 

@@ -12,16 +12,25 @@ module.exports = {
   			'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
   			'gradient-conic': 'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))'
   		},
-  		colors: {
-  			'primary': '#E1FAEE',
-  			'secondary': '#047857',
-  			'secondary-hover': '#049669',
+		backgroundColor: {
+			primary: '#4B5945',
+			"primary-hover": "#66785F",
+			secondary: '#91AC8F',
+			"secondary-hover": "#B2C9AD",
+			background: '#E9EED9',
+			foreground: '#CBD2A4',
+		},
+		colors: {
+			'primary': '#4B5945',
+			"primary-hover": "#66785F",
+			secondary: '#91AC8F',
+			"secondary-hover": "#B2C9AD",
   			third: '#CCFBF1',
   			'third-hover': '#F0FDFA',
   			'danger': '#FF1D48',
   			'danger-hover': '#F43F5E',
-  			background: 'hsl(var(--background))',
-  			foreground: 'hsl(var(--foreground))',
+  			background: '#E2DBD0',
+  			foreground: 'FFFDF5',
   			card: {
   				DEFAULT: 'hsl(var(--card))',
   				foreground: 'hsl(var(--card-foreground))'
@@ -68,8 +77,8 @@ module.exports = {
   			'lightWhite': '#F1F5F9'
   		},
   		fontFamily: {
-  			header: ['var(--font-blinker)'],
-  			title: ['var(--font-encodeSans)'],
+  			header: ['var(--font-catamaran)'],
+  			title: ['var(--font-nunito-sans)'],
   			paragraf: ['var(--font-roboto)']
   		},
   		borderRadius: {
@@ -77,7 +86,17 @@ module.exports = {
   			lg: 'var(--radius)',
   			md: 'calc(var(--radius) - 2px)',
   			sm: 'calc(var(--radius) - 4px)'
-  		}
+  		},
+		borderColor: {
+			'primary': '#052E16',
+  			'secondary': '#2E2E2E',
+  			'lightGreen': '#BBF7D0',
+  			'lightWhite': '#F1F5F9',
+  			third: '#CCFBF1',
+  			'third-hover': '#F0FDFA',
+  			'danger': '#FF1D48',
+  			'danger-hover': '#F43F5E',
+		}
   	}
   },
   plugins: [require("tailwindcss-animate")],

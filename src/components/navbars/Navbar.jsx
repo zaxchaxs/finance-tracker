@@ -8,8 +8,8 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { motion } from "framer-motion";
-import Link from "next/link";
 import { useState } from "react";
+import IconNavbar from "./IconNavbar";
 
 const Navbar = () => {
   const [isNavOpen, setIsNavOpen] = useState(true);
@@ -71,25 +71,6 @@ const Navbar = () => {
         </motion.button>
     
     </>
-  );
-};
-
-const IconNavbar = ({ route, icon, delay }) => {
-  return (
-    <Link href={route}>
-      <motion.div
-        initial={{ scale: 0.3, opacity: 0.3 }}
-        whileInView={{ scale: 1, opacity: 1 }}
-        transition={{ delay: delay }}
-      >
-        <FontAwesomeIcon
-          icon={icon}
-          color="#BBF7D0"
-          size="2x"
-          className="w-8 hover:scale-105"
-        />
-      </motion.div>
-    </Link>
   );
 };
 

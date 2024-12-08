@@ -1,7 +1,7 @@
 "use client";
 import Unauthenticate from "@/components/Unauthenticate";
 import LoaderPage from "@/components/loaders/loaderPage";
-import NavbarPage from "@/components/navbars/NavbarPage";
+import NavbarPage from "@/components/Navbars/NavbarPage";
 import ReportStats from "@/components/reports/ReportStats";
 import tempTransaction from "@/components/tempTransactions";
 import { useAuth } from "@/contexts/AuthContext";

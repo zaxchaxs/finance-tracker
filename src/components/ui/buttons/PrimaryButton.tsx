@@ -1,7 +1,15 @@
 import { useEffect, useState } from "react";
 import SolidShadow from "../solidShadow/SolidShadow";
 
-const PrimaryButton = ({handleClick, text, type, value, className}) => {
+type PropsType = {
+    handleClick: () => void;
+    text: any;
+    value: string;
+    type: string;
+    className?: string;
+}
+
+const PrimaryButton = ({handleClick, text, type, value, className}: PropsType) => {
     const [background, setBackground] = useState({bg: "", bgSolid: ""});
 
     useEffect(() => {

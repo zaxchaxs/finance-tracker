@@ -1,6 +1,6 @@
 "use client";
 import LoaderPage from "@/components/loaders/loaderPage";
-import NavbarPage from "@/components/navbars/NavbarPage";
+import NavbarPage from "@/components/Navbars/NavbarPage";
 import FilterSection from "@/components/transactions/FilterSection";
 import Unauthenticate from "@/components/Unauthenticate";
 import { useAuth } from "@/contexts/AuthContext";

@@ -1,6 +1,6 @@
 const SolidShadow = ({background}) => {
     return (
-        <div className={`group-hover:top-1.5 group-hover:left-1.5 transition-all ease-in-out duration-200 absolute w-full z-10 h-full rounded-lg top-1 left-1 ${background}`}></div>
+        <div className={`transition-all ease-in-out absolute w-full z-10 h-full rounded-lg top-0 left-0 ${background}`}></div>
     )
 };
 
