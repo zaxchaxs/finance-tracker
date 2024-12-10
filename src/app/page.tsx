@@ -12,6 +12,7 @@ import LoaderLightSection from "@/components/loaders/loaderLightSection";
 import { Button } from "@/components/ui/button";
 import { AlertDialogs } from "@/components/systems/AlertDialog";
 import TitleSection from "@/components/ui/Title";
+import Link from "next/link";
 
 export default function Home() {
   const { currUser, loading } = useAuth();
@@ -63,21 +64,9 @@ export default function Home() {
       </div>
 
       <div className="flex gap-4 items-center justify-center">
-        <Button
-          variant={currUser ? "destructive" : "default"}
-          onClick={currUser ? handleLogout : () => router.push("/login")}
-        >
-          {currUser ? (
-            loadingAuth ? (
-              <LoaderLightSection width={"w-10"} />
-            ) : (
-              "Logout"
-            )
-          ) : (
-            "Login"
-          )}
-        </Button>
-        <Button className={currUser ? "" : "hidden"}>Start</Button>
+        <Link href={currUser ? '/dashboard' : '/login'} >
+          <Button>{currUser ? "Start" : "Login"}</Button>
+        </Link>
       </div>
     </main>
   );

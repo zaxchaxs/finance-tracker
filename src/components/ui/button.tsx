@@ -18,7 +18,7 @@ const buttonVariants = cva(
           "bg-danger hover:bg-danger-hover text-lightWhite -top-1 -left-1 active:top-0 active:left-0 ring-1 ring-black transition-all ease-in-out duration-75",
         outline:
           "border border-input bg-background shadow-md hover:bg-accent hover:text-accent-foreground",
-        ghost: "hover:bg-accent hover:text-accent-foreground",
+        ghost: "",
         link: "text-primary underline-offset-4 hover:underline",
       },
       size: {

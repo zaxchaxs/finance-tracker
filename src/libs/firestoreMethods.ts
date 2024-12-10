@@ -5,18 +5,22 @@ import {
   collection,
   deleteDoc,
   doc,
+  DocumentData,
+  FirestoreError,
   getDoc,
   getDocs,
   limit,
   onSnapshot,
   orderBy,
   query,
+  QuerySnapshot,
   setDoc,
   Timestamp,
   updateDoc,
   where,
 } from "firebase/firestore";
 import { db } from "./firebase";
+import { WalletType } from "@/types/walletTypes";
 
 const addUser = async (idUser, newData) => {
   try {
@@ -115,39 +119,36 @@ const deleteWalletDoc = async (accountId, userId) => {
   }
 };
 
-const getSnapshotUserWallet = async (idUser, setUserWalletData) => {
-  try {
+const getSnapshotUserWallet = <T,>(idUser: string, onUpdate: (data: T[]) => void): (() => void) => {
     const q = query(
       collection(db, "user-wallets"),
       where("userId", "==", idUser)
     );
 
-    const unsubscribe = onSnapshot(q, (snapshot) => {
-      const newData = snapshot.docs.map((doc) => ({
-        ...doc.data(),
-      }));
-      setUserWalletData(newData);
-      // unsubscribe();
+    const unsubscribe = onSnapshot<DocumentData, DocumentData>(q, (snapshot) => {
+      const response = snapshot.docs.map((doc) => ({ ...doc.data() as T }));
+      onUpdate(response)
+    }, error => {
+      console.error(error.message)
+      throw new Error(error.message);
     });
-  } catch (e) {
-    console.error(e.message);
-    throw e; // Lempar error biar bisa ditangani di luar fungsi
-  }
+    
+    return unsubscribe;
 };
 
 const getSnapshotUserTransaction = async (idUser, setTransaction, limitNum) => {
 
   try {
     const q = limitNum ?
-    query(
-      collection(db, `user-transactions/${idUser}/transactions`),
-      orderBy("createdAt", "desc"),
-      limit(limitNum)
-    ) :
-    query(
-      collection(db, `user-transactions/${idUser}/transactions`),
-      orderBy("date", "desc"),
-    )
+      query(
+        collection(db, `user-transactions/${idUser}/transactions`),
+        orderBy("createdAt", "desc"),
+        limit(limitNum)
+      ) :
+      query(
+        collection(db, `user-transactions/${idUser}/transactions`),
+        orderBy("date", "desc"),
+      )
 
     const unsubscribe = onSnapshot(q, (snapshot) => {
       const data = snapshot.docs.map((e) => ({
@@ -162,27 +163,27 @@ const getSnapshotUserTransaction = async (idUser, setTransaction, limitNum) => {
 
 const getDocsFilterdTransactions = async (idUser, startAt, endAt, walletId, setTransaction) => {
   try {
-    const q = walletId ? 
-    query(
-      collection(db, `user-transactions/${idUser}/transactions`),
-      where("date", ">=", startAt),
-      where("date", "<=", endAt),
-      where('accountId', '==', walletId),
-      orderBy("date", "desc")
-    ) 
-    :
-    query(
-      collection(db, `user-transactions/${idUser}/transactions`),
-      where("date", ">=", startAt),
-      where("date", "<=", endAt),
-      orderBy("date", "desc")
-    )
+    const q = walletId ?
+      query(
+        collection(db, `user-transactions/${idUser}/transactions`),
+        where("date", ">=", startAt),
+        where("date", "<=", endAt),
+        where('accountId', '==', walletId),
+        orderBy("date", "desc")
+      )
+      :
+      query(
+        collection(db, `user-transactions/${idUser}/transactions`),
+        where("date", ">=", startAt),
+        where("date", "<=", endAt),
+        orderBy("date", "desc")
+      )
 
     const docSnap = await getDocs(q);
     const data = docSnap.docs.map(document => document.data());
 
     setTransaction(data);
-    
+
   } catch (error) {
     console.error(error.message);
     throw new Error(`Error getDocs: ${error.message}`)

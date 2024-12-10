@@ -1,6 +1,6 @@
-import {  Blinker, Catamaran, Encode_Sans, Nunito_Sans, Plus_Jakarta_Sans, Quicksand, Roboto } from "next/font/google";
+import {  Catamaran, Nunito_Sans, Roboto } from "next/font/google";
 import "./globals.css";
-import { AuthProviderContext } from "@/contexts/AuthContext";
+import { AuthProviderContext, useAuth } from "@/contexts/AuthContext";
 import Navbar from "@/components/Navbars/Navbar";
 import { ReactNode } from "react";
 import MobileNavbar from "@/components/Navbars/MobileNavbar";
@@ -38,7 +38,7 @@ type PropsType = {
 }
 
 export default function RootLayout({ children }: PropsType) {
-
+  
   return (
     <html lang="en">
       <body className={` ${catamaran.variable} ${nunitoSans.variable} ${roboto.variable}`}>
@@ -47,7 +47,9 @@ export default function RootLayout({ children }: PropsType) {
           {/* <Navbar /> */}
           
           {children}
+          
           <MobileNavbar />
+          
         </AuthProviderContext>
       </body>
     </html>
