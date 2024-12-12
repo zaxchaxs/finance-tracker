@@ -7,7 +7,7 @@ import {
 } from "@/libs/sweetAlert";
 import { v4 as uuidv4 } from "uuid";
 import LoaderSection from "../../../components/loaders/loaderSection";
-import { WalletType } from "@/types/walletTypes";
+import { addWalletSchema, WalletType } from "@/types/walletTypes";
 import { User } from "firebase/auth";
 import TitleSection from "@/components/ui/Title";
 import { Button } from "@/components/ui/button";
@@ -15,6 +15,7 @@ import WalletCard from "@/components/cards/walletCard";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus, faPlusSquare } from "@fortawesome/free-solid-svg-icons";
 import { AddWalletDialog } from "./AddWalletDialog";
+import { z } from "zod";
 
 type PropsType = {
   wallets: WalletType[];
@@ -33,8 +34,11 @@ const WalletAccountSection = ({
   const [loadingAddDoc, setLoadingAddDoc] = useState(false);
 
   //   handler functions
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const handleSubmit = (values: z.infer<typeof addWalletSchema>) => {
+    // e.preventDefault();
+    console.log(values)
+    return;
+
 
     const isWalletAlreadyExist = wallets.find((obj) => obj.name === walletName);
     if (isWalletAlreadyExist) {
@@ -46,7 +50,7 @@ const WalletAccountSection = ({
       try {
         const accountId = uuidv4();
         const newData = {
-          userId: user.uid,
+          userId: user?.uid,
           accountId,
           name: walletName,
           amount: Number(walletAmount),
@@ -64,7 +68,7 @@ const WalletAccountSection = ({
       }
     };
 
-    if (walletName && walletAmount > 0) {
+    if (walletName && walletAmount) {
       addDocWallet();
     } else {
       sideSweetAlertWarning("Please fill the form");
@@ -107,14 +111,16 @@ const WalletAccountSection = ({
                   data={{
                     name: "See More",
                     accoundId: "",
-                    amount: 0,
+                    balance: 0,
                     userId: "",
+                    createdAt: "",
+                    currency: "IDR"
                   }}
                 />
               )}
             </div>
 
-            <AddWalletDialog isOpen={isOpenDialog} setIsOpen={setIsOpenDialog} />
+            <AddWalletDialog isOpen={isOpenDialog} setIsOpen={setIsOpenDialog} onSubmit={handleSubmit} />
           </div>
         )}
       </div>
