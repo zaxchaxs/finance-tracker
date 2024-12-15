@@ -4,6 +4,7 @@ import { AuthProviderContext, useAuth } from "@/contexts/AuthContext";
 import Navbar from "@/components/Navbars/Navbar";
 import { ReactNode } from "react";
 import MobileNavbar from "@/components/Navbars/MobileNavbar";
+import ToastContainer from "@/components/systems/ToastContainer";
 
 const catamaran = Catamaran({
   weight: "900",
@@ -47,7 +48,7 @@ export default function RootLayout({ children }: PropsType) {
           {/* <Navbar /> */}
           
           {children}
-          
+          <ToastContainer />
           <MobileNavbar />
           
         </AuthProviderContext>

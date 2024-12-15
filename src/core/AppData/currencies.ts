@@ -1125,4 +1125,8 @@ export const currencyIcons = [
         fileName: "wallet.svg",
         path: "/assets/icons/wallet/wallet.svg"
     },
+    {
+        fileName: "graduation-cap.svg",
+        path: "/assets/icons/wallet/graduation-cap.svg"
+    },
 ]

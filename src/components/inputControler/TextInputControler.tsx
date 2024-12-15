@@ -37,6 +37,7 @@ const TextInputControler = ({
             placeholder={placeholder}
             customInput={Input}
             onChange={restProps.onChange}
+            inputMode="numeric"
           />
         ) : (
           <Input

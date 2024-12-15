@@ -1,21 +1,15 @@
-import { FormEvent, useState } from "react";
-import Wallet from "../../../components/dahsboard/wallet";
-import {
-  sideSweetAlertError,
-  sideSweetAlertWarning,
-  sweetAlertAddWallet,
-} from "@/libs/sweetAlert";
+import { useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import LoaderSection from "../../../components/loaders/loaderSection";
 import { addWalletSchema, WalletType } from "@/types/walletTypes";
 import { User } from "firebase/auth";
 import TitleSection from "@/components/ui/Title";
-import { Button } from "@/components/ui/button";
 import WalletCard from "@/components/cards/walletCard";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus, faPlusSquare } from "@fortawesome/free-solid-svg-icons";
+import { faPlusSquare } from "@fortawesome/free-solid-svg-icons";
 import { AddWalletDialog } from "./AddWalletDialog";
 import { z } from "zod";
+import { usePostData } from "@/hooks/FirestoreHooks";
 
 type PropsType = {
   wallets: WalletType[];
@@ -23,56 +17,24 @@ type PropsType = {
   isGettingData: boolean;
 };
 
-const WalletAccountSection = ({
-  wallets,
-  user,
-  isGettingData,
-}: PropsType) => {
+const WalletAccountSection = ({ wallets, user, isGettingData }: PropsType) => {
   const [isOpenDialog, setIsOpenDialog] = useState(false);
-  const [walletName, setWalletName] = useState("");
-  const [walletAmount, setwalletAmount] = useState();
-  const [loadingAddDoc, setLoadingAddDoc] = useState(false);
+  const { postData } = usePostData();
 
   //   handler functions
   const handleSubmit = (values: z.infer<typeof addWalletSchema>) => {
-    // e.preventDefault();
-    console.log(values)
-    return;
-
-
-    const isWalletAlreadyExist = wallets.find((obj) => obj.name === walletName);
-    if (isWalletAlreadyExist) {
-      sideSweetAlertWarning(`${walletName} is already exists!`);
-      return;
-    }
-
-    const addDocWallet = () => {
-      try {
-        const accountId = uuidv4();
-        const newData = {
-          userId: user?.uid,
-          accountId,
-          name: walletName,
-          amount: Number(walletAmount),
-          createdAt: new Date(),
-        };
-        sweetAlertAddWallet(
-          newData,
-          setIsOpenDialog,
-          setWalletName,
-          setwalletAmount,
-          setLoadingAddDoc
-        );
-      } catch (error) {
-        sideSweetAlertError("Failed to add wallet!");
-      }
+    const newData: WalletType = {
+      ...values,
+      userId: user?.uid || "",
+      accountId: uuidv4(),
+      createdAt: new Date().toDateString(),
+      balance: Number(values.balance.split(" ")[1]),
+      currency: JSON.parse(values.currency).code,
+      isPinned: false,
     };
 
-    if (walletName && walletAmount) {
-      addDocWallet();
-    } else {
-      sideSweetAlertWarning("Please fill the form");
-    }
+    console.log(newData);
+    postData(newData, "user-wallets");
   };
 
   return (
@@ -110,17 +72,23 @@ const WalletAccountSection = ({
                   isDetailCard
                   data={{
                     name: "See More",
-                    accoundId: "",
+                    accountId: "",
                     balance: 0,
                     userId: "",
                     createdAt: "",
-                    currency: "IDR"
+                    currency: "IDR",
+                    isPinned: true,
+                    icon: "",
                   }}
                 />
               )}
             </div>
 
-            <AddWalletDialog isOpen={isOpenDialog} setIsOpen={setIsOpenDialog} onSubmit={handleSubmit} />
+            <AddWalletDialog
+              isOpen={isOpenDialog}
+              setIsOpen={setIsOpenDialog}
+              onSubmit={handleSubmit}
+            />
           </div>
         )}
       </div>

@@ -5,11 +5,10 @@ import { useAuth } from "@/contexts/AuthContext";
 import { faCaretRight } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
-import { ToastContainer } from "react-toastify";
 import WalletAccountSection from "./WalletSection/WalletAccoutSection";
 import { WalletType } from "@/types/walletTypes";
 import { useSnapshotDatas } from "@/hooks/FirestoreHooks";
-import TitleSection from "@/components/ui/Title";
+import TransactionReportSection from "./TransactionReportSection";
 
 const DashboardModule = () => {
   const [isShowTransac, setIsShowTransac] = useState(false);
@@ -30,14 +29,7 @@ const DashboardModule = () => {
 
   return (
     <main className="min-h-screen text-base relative font-passionOne bg-background w-full flex flex-col gap-3">
-      <div className="w-full px-4 flex flex-col items-center gap-2 relative z-10">
-        <ToastContainer
-          position="top-right"
-          limit={3}
-          className={"flex flex-col items-end rounded-lg mt-20"}
-          style={{ marginTop: "4rem" }}
-        />
-
+      <div className="w-full p-4 flex flex-col items-center gap-4 relative z-10">
         {/* Wallet sections */}
         <WalletAccountSection
           wallets={walletsData}
@@ -46,7 +38,8 @@ const DashboardModule = () => {
         />
 
         {/* New Transaction Section */}
-        <div className="pt-4 w-full text-primary flex flex-col items-center font-title">
+        <TransactionReportSection wallets={walletsData} />
+        {/* <div className="pt-4 w-full text-primary flex flex-col items-center font-title">
           <div className="relative w-full">
             <SolidShadow background={"bg-emerald-900"} />
             <div
@@ -68,7 +61,7 @@ const DashboardModule = () => {
             user={currUser}
             isGettingData={loadingGetWallet}
           />
-        </div>
+        </div> */}
 
         {/* Current Transaction Section */}
         <div className="pt-4 w-full text-primary flex flex-col items-center font-title">

@@ -1,12 +1,14 @@
 import { z } from 'zod';
 
 export interface WalletType {
-    accoundId: string;
+    accountId: string;
     balance: number;
     name: string;
     userId: string;
     createdAt: string;
     currency: string;
+    isPinned: boolean;
+    icon: string;
 }
 
 export const addWalletSchema = z.object({

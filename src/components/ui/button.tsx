@@ -11,11 +11,11 @@ const buttonVariants = cva(
     variants: {
       variant: {
         default:
-          "bg-primary hover:bg-primary-hover text-lightWhite -top-1 -left-1 active:top-0 active:left-0 ring-1 ring-black transition-all ease-in-out duration-75",
+          "bg-primary hover:bg-primary-hover active:bg-primary text-lightWhite ring-1 ring-black transition-all ease-in-out duration-75",
         secondary:
-          "bg-secondary hover:bg-secondary-hover text-lightWhite hover:text-primary -top-1 -left-1 active:top-0 active:left-0 ring-1 ring-black transition-all ease-in-out duration-75",
+          "bg-secondary active:bg-secondary hover:bg-secondary-hover text-lightWhite hover:text-primary ring-1 ring-black transition-all ease-in-out duration-75",
         destructive:
-          "bg-danger hover:bg-danger-hover text-lightWhite -top-1 -left-1 active:top-0 active:left-0 ring-1 ring-black transition-all ease-in-out duration-75",
+          "bg-danger active:bg-danger hover:bg-danger-hover text-lightWhite ring-1 ring-black transition-all ease-in-out duration-75",
         outline:
           "border border-input bg-background shadow-md hover:bg-accent hover:text-accent-foreground",
         ghost: "",
@@ -55,22 +55,26 @@ export interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement>,
     VariantProps<typeof buttonVariants> {
   asChild?: boolean;
+  normalBtn?: boolean
 }
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, variant, size, asChild = false, ...props }, ref) => {
+  ({ className, variant, size, asChild = false, normalBtn, ...props }, ref) => {
     const Comp = asChild ? Slot : "button";
     return (
       <div className="relative z-0 group">
         <Comp
           className={cn(
             buttonVariants({ variant, size, className }),
-            "z-20 relative"
+            "z-20 relative",
+            !normalBtn && "-top-1 -left-1 active:top-0 active:left-0"
           )}
           ref={ref}
           {...props}
         />
-        <SolidShadow background={cn(shadowVariants({ variant }))} />
+        {!normalBtn && (
+          <SolidShadow background={cn(shadowVariants({ variant }))} />
+        )}
       </div>
     );
   }

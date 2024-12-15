@@ -57,7 +57,7 @@ const SelectInputControler = ({
             <SelectValue placeholder={placeholder} />
           </SelectTrigger>
         </FormControl>
-        <SelectContent className="bg-white">
+        <SelectContent className="bg-white max-h-[20rem]">
           {loading && <SelectItem value="loading">Loading...</SelectItem>}
           {type === "icon"
             ? items.map((item, key) => (

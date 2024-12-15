@@ -1,6 +1,5 @@
 import { WalletType } from "@/types/walletTypes";
 import DescriptionSection from "../ui/Description";
-import groceryIcon from "@/../public/assets/icons/wallet/card-dollar.svg";
 import Image from "next/image";
 import { formatRupiah } from "@/utils/formatRupiah";
 import Link from "next/link";
@@ -27,7 +26,7 @@ const WalletCard = ({ data, isDetailCard }: PropsType) => {
         </Link>
       ) : (
         <>
-          <Image alt="" src={groceryIcon} width={30} height={30} />
+          <Image alt={data.icon} src={`/assets/icons/wallet/${data.icon}`} width={30} height={30} />
           <div>
             <DescriptionSection className="font-semibold text-center text-primary">
               {data.name.length > 15

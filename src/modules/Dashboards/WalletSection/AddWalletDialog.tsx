@@ -8,21 +8,9 @@ import {
   DialogFooter,
   DialogHeader,
 } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import TitleSection from "@/components/ui/Title";
 import { Dispatch, FormEvent, SetStateAction, useState } from "react";
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { currencyIcons, listCurrency } from "@/core/AppData/currencies";
-import Image from "next/image";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { addWalletSchema } from "@/types/walletTypes";
@@ -49,9 +37,9 @@ export function AddWalletDialog({ isOpen, setIsOpen, onSubmit }: PropsType) {
     const form = useForm<z.infer<typeof addWalletSchema>>({
       resolver: zodResolver(addWalletSchema),
       mode: "onChange",
-      // reValidateMode: "onSubmit",
-      shouldFocusError: true
-    })
+      reValidateMode: "onSubmit",
+      shouldFocusError: true,
+    });
 
   const handleCurrencyChange = (e: string) => {
     const selectedCurrVal: SelectedCurrValType = JSON.parse(e);
@@ -59,23 +47,23 @@ export function AddWalletDialog({ isOpen, setIsOpen, onSubmit }: PropsType) {
     form.setValue("currency", e)
   };
 
-  const handleControlBalance = (e) => {
-    const balance = e.targe.value.split(" ")[1];
-    console.log(balance)
-    // form.setValue("balance",)s
+  const handleSubmit = (values: z.infer<typeof addWalletSchema>) => {
+    onSubmit(values);
+    form.reset();
+    setIsOpen(!isOpen);
   }
 
   return (
     <Dialog open={isOpen} onOpenChange={() => setIsOpen(!isOpen)}>
       <DialogContent className="sm:max-w-[425px]">
-        <DialogHeader>
+        <DialogHeader onClick={() => console.log(form.getValues())}>
           <TitleSection variant="h2">Add Wallet</TitleSection>
           <DescriptionSection>
             Add new wallet account here. Click save when you&apos;re done
           </DescriptionSection>
         </DialogHeader>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)}>
+          <form onSubmit={form.handleSubmit(handleSubmit)}>
             <FormField
               control={form.control}
               name="name"

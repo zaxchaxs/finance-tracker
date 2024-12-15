@@ -6,6 +6,7 @@ import {
   deleteDoc,
   doc,
   DocumentData,
+  DocumentReference,
   FieldPath,
   FirestoreError,
   getDoc,
@@ -21,9 +22,11 @@ import {
   updateDoc,
   where,
   WhereFilterOp,
+  WithFieldValue,
 } from "firebase/firestore";
 import { db } from "@/libs/firebase";
 import { useEffect, useState } from "react";
+import useToast from "./useToast";
 
 type WhereClauseType = QueryConstraint[];
 
@@ -61,11 +64,67 @@ export const useSnapshotDatas = <T,>(
         setLoading(false);
       }
     );
-  }
+  };
 
   useEffect(() => {
     getData();
   }, []);
 
-  return { data, loading, error};
+  return { data, loading, error };
+};
+
+export const usePostData = () => {
+  const [error, setError] = useState<string | null>(null);
+  const [response, setResponse] =
+    useState<DocumentReference<object, DocumentData>>();
+  const [loading, setLoading] = useState<boolean>(false);
+  const { pushToast, updateToast } = useToast();
+
+  const postData = async (
+    data: object,
+    collectionName: string
+  ): Promise<DocumentReference<object, DocumentData> | null> => {
+    setLoading(true);
+    const toastId = pushToast({ message: "Loading...", isLoading: true });
+    try {
+      const docRef = collection(db, collectionName);
+      const response = await addDoc(docRef, data);
+      setResponse(response);
+      updateToast({ toastId, message: "Success" });
+      return response;
+    } catch (error) {
+      if (error instanceof FirestoreError) {
+        console.error(error.message);
+        setError(error.message);
+        updateToast({
+          toastId,
+          message: error.message,
+          isError: true,
+        });
+        throw new Error(error.message);
+      } else if (error instanceof Error) {
+        console.error(error.message);
+        setError(error.message);
+        updateToast({
+          toastId,
+          message: error.message,
+          isError: true,
+        });
+        throw new Error(error.message);
+      } else {
+        console.error("Something Wrong!");
+        setError("Something Wrong!");
+        updateToast({
+          toastId,
+          message: "Something Wrong!",
+          isError: true,
+        });
+        throw new Error("Something Wrong!");
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return { postData, loading, error, response };
 };
