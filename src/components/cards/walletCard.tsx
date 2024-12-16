@@ -14,7 +14,7 @@ type PropsType = {
 const WalletCard = ({ data, isDetailCard }: PropsType) => {
   return (
     <Link
-      href={`#${data.accoundId}`}
+      href={`#${data.accountId}`}
       className="flex gap-2 p-2 bg-secondary-hover rounded-md"
     >
       {isDetailCard ? (
@@ -28,13 +28,13 @@ const WalletCard = ({ data, isDetailCard }: PropsType) => {
         <>
           <Image alt={data.icon} src={`/assets/icons/wallet/${data.icon}`} width={30} height={30} />
           <div>
-            <DescriptionSection className="font-semibold text-center text-primary">
+            <DescriptionSection className="font-semibold text-start text-primary">
               {data.name.length > 15
                 ? `${data.name.slice(0, 15)}...`
                 : data.name}
             </DescriptionSection>
             <DescriptionSection className="text-primary">
-              {formatRupiah(data.balance)}
+              {formatRupiah(data.balance, data.currency)}
             </DescriptionSection>
           </div>
         </>

@@ -11,7 +11,8 @@ const TransactionDetail = ({ data }) => {
   const date = dateToString(currDate);
 
   // const date = dateToString(data.date);
-  const amount = formatRupiah(data.amount);
+  // const amount = formatRupiah(data.amount, data.currency);
+  const amount = data.amount;
 
   return (
     <div className="w-full border-secondary rounded-lg text-sm mb-2 p-2 border-b-2">

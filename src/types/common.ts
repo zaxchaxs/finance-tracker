@@ -9,3 +9,9 @@ export interface ApiResponse<T> {
 	status: string;
 	message: string;
 }
+
+export interface ConvertedSumTransactionData {
+	dataKey: string;
+	income: number;
+	expanse: number;
+}

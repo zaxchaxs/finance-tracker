@@ -13,11 +13,12 @@ type PropsType = {
   variant?: "h1" | "h2" | "h3" | "h4",
   children: ReactNode,
   className?: string
+  ref?: string;
 }
 
-const TitleSection = ({ variant = "h3", children, className }: PropsType) => {
+const TitleSection = ({ variant = "h3", children, className, ref }: PropsType) => {
   const Tag = variant;
-  return <Tag className={cn(`font-title`, titleStyles[variant], className)}>{children}</Tag>;
+  return <Tag ref={ref} className={cn(`font-title`, titleStyles[variant], className)}>{children}</Tag>;
 };
 
 export default TitleSection;

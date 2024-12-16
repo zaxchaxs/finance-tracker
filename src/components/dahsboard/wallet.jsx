@@ -9,7 +9,7 @@ import { useState } from "react";
 
 const Wallet = ({ data }) => {
   const [isInfoClicked, setIsInfoClicked] = useState(false);
-  const amountConverted = formatRupiah(data.amount);
+  const amountConverted = formatRupiah(data.amount, data.currency);
 
   return (
     <div className="flex justify-between border-b-2 p-2 rounded-md border-secondary">

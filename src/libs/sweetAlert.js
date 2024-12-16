@@ -20,7 +20,7 @@ export const sweetAlertAddTransac = (
   callback
 ) => {
 
-  const convertedAmount = formatRupiah(newData.amount);
+  const convertedAmount = formatRupiah(newData.amount, "IDR");
   const convertedDate = newData.date.toDateString();
 
   Swal.fire({
@@ -71,7 +71,7 @@ export const sweetAlertAddWallet = (
   setwalletAmount,
   setLoadingAddDoc,
 ) => {
-  const convertedAmount = formatRupiah(newData.amount);
+  const convertedAmount = formatRupiah(newData.amount, "IDR");
 
   Swal.fire({
     title: "Are you sure?",
@@ -106,7 +106,7 @@ export const sweetAlertAddWallet = (
 };
 
 export const sweetAlertDeleteWallet = (data) => {
-  const convertedAmount = formatRupiah(data.amount);
+  const convertedAmount = formatRupiah(data.amount, "IDR");
 
   Swal.fire({
     title: "Are you sure?",

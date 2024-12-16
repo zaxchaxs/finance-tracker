@@ -14,6 +14,7 @@ import {
   limit,
   onSnapshot,
   orderBy,
+  OrderByDirection,
   query,
   QueryConstraint,
   QuerySnapshot,
@@ -25,32 +26,91 @@ import {
   WithFieldValue,
 } from "firebase/firestore";
 import { db } from "@/libs/firebase";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import useToast from "./useToast";
+import isEqual from "lodash.isequal";
 
-type WhereClauseType = QueryConstraint[];
+
+export interface FilterFirestoreType {
+  fieldPath: string | FieldPath;
+  opStf: WhereFilterOp;
+  value: unknown;
+};
 
 export const useSnapshotDatas = <T,>(
   collectionName: string,
-  whereClause: {
+  filters: FilterFirestoreType[],
+  initialCall?: boolean,
+  orderData?: {
     fieldPath: string | FieldPath;
-    opStf: WhereFilterOp;
-    value: unknown;
-  }[]
-): { data: T[]; loading: boolean; error: FirestoreError | null } => {
+    directionStr?: OrderByDirection;
+  }[],
+  limitData?: number | null
+): {
+  data: T[];
+  loading: boolean;
+  error: FirestoreError | null;
+  snapshotData: () => void;
+} => {
   const [data, setData] = useState<T[]>([]);
   const [error, setError] = useState<FirestoreError | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
+  const { pushToast, updateToast } = useToast();
+  const filterRef = useRef(filters);
+  const orderDataRef = useRef(orderData);
 
-  const whereQueries: WhereClauseType = whereClause.map((query) => {
-    return where(query.fieldPath, query.opStf, query.value);
-  });
-  const q = query(collection(db, collectionName), ...whereQueries);
+  const q = useMemo(() => {
+    const whereQueries = filters.map(({ fieldPath, opStf, value }) =>
+      where(fieldPath, opStf, value)
+    );
+    const orderQueries =
+      orderData?.map(({ fieldPath, directionStr }) =>
+        orderBy(fieldPath, directionStr)
+      ) || [];
 
-  const getData = () => {
+    const baseQuery = query(collection(db, collectionName), ...whereQueries);
+
+    if (limitData && orderData) {
+      return query(baseQuery, limit(limitData), ...orderQueries);
+    } else if (limitData) {
+      return query(baseQuery, limit(limitData));
+    } else if (orderData) {
+      return query(baseQuery, ...orderQueries);
+    } else {
+      return baseQuery;
+    }
+  }, [collectionName, filters, limitData, orderData]);
+
+  // const snapshotData = () => {
+  //   setLoading(true);
+  //   console.log(q);
+
+  //   const unsubscribe = onSnapshot<DocumentData, DocumentData>(
+  //     q,
+  //     (snapshot) => {
+  //       const response = snapshot.docs.map((doc) => ({ ...(doc.data() as T) }));
+  //       setData(response);
+  //       console.log(response);
+  //       setLoading(false);
+  //     },
+  //     (error) => {
+  //       console.error(error.message);
+  //       pushToast({
+  //         message: "Failed getting wallet!",
+  //         isError: true,
+  //       });
+  //       setError(error);
+  //       setLoading(false);
+  //     }
+  //   );
+
+  //   return unsubscribe;
+  // };
+
+  const snapshotData = useCallback(() => {
     setLoading(true);
 
-    const unsubscribe = onSnapshot<DocumentData, DocumentData>(
+    const unsubscribe = onSnapshot(
       q,
       (snapshot) => {
         const response = snapshot.docs.map((doc) => ({ ...(doc.data() as T) }));
@@ -59,18 +119,30 @@ export const useSnapshotDatas = <T,>(
         setLoading(false);
       },
       (error) => {
-        console.error(error.message);
         setError(error);
         setLoading(false);
       }
     );
-  };
+    return unsubscribe;
+  }, [q]);
 
   useEffect(() => {
-    getData();
-  }, []);
+    if (initialCall) {
+      const unsubscribe = snapshotData();
+      console.log("call");
+      return () => unsubscribe?.();
+    }
+  }, [filterRef.current, orderDataRef.current]);
 
-  return { data, loading, error };
+  useEffect(() => {  
+    if (!isEqual(filterRef.current, filters) || !isEqual(orderDataRef.current, orderData)) {
+      filterRef.current = filters;
+      orderDataRef.current = orderData;
+      console.log("Changed");
+    }
+  }, [filters, orderData]);
+  
+  return { data, loading, error, snapshotData };
 };
 
 export const usePostData = () => {

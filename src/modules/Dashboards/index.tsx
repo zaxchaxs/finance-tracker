@@ -4,7 +4,7 @@ import SolidShadow from "@/components/ui/solidShadow/SolidShadow";
 import { useAuth } from "@/contexts/AuthContext";
 import { faCaretRight } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import WalletAccountSection from "./WalletSection/WalletAccoutSection";
 import { WalletType } from "@/types/walletTypes";
 import { useSnapshotDatas } from "@/hooks/FirestoreHooks";
@@ -19,13 +19,23 @@ const DashboardModule = () => {
     data: walletsData,
     error,
     loading: loadingGetWallet,
-  } = useSnapshotDatas<WalletType>("user-wallets", [
-    {
-      fieldPath: "userId",
-      opStf: "==",
-      value: currUser?.uid,
-    },
-  ]);
+  } = useSnapshotDatas<WalletType>(
+    "user-wallets",
+    [
+      {
+        fieldPath: "userId",
+        opStf: "==",
+        value: currUser?.uid,
+      },
+    ],
+    true,
+    [
+      {
+        fieldPath: "name",
+        directionStr: "desc",
+      },
+    ]
+  );
 
   return (
     <main className="min-h-screen text-base relative font-passionOne bg-background w-full flex flex-col gap-3">

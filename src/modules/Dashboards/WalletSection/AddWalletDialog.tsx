@@ -7,6 +7,7 @@ import {
   DialogContent,
   DialogFooter,
   DialogHeader,
+  DialogTitle,
 } from "@/components/ui/dialog";
 import TitleSection from "@/components/ui/Title";
 import { Dispatch, FormEvent, SetStateAction, useState } from "react";
@@ -57,13 +58,15 @@ export function AddWalletDialog({ isOpen, setIsOpen, onSubmit }: PropsType) {
     <Dialog open={isOpen} onOpenChange={() => setIsOpen(!isOpen)}>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader onClick={() => console.log(form.getValues())}>
-          <TitleSection variant="h2">Add Wallet</TitleSection>
+          <DialogTitle className="text-lg sm:text-xl font-semibold sm:font-bold font-title">
+            Add Wallet
+          </DialogTitle>
           <DescriptionSection>
             Add new wallet account here. Click save when you&apos;re done
           </DescriptionSection>
         </DialogHeader>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(handleSubmit)}>
+          <form onSubmit={form.handleSubmit(handleSubmit)} className="gap-2 flex flex-col">
             <FormField
               control={form.control}
               name="name"
@@ -127,7 +130,7 @@ export function AddWalletDialog({ isOpen, setIsOpen, onSubmit }: PropsType) {
                 />
               )}
             />
-            <div className="w-fit">
+            <div className="w-full flex items-center mt-4 justify-end">
               <Button type="submit">
                 Save
               </Button>
