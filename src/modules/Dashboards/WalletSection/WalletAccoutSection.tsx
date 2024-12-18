@@ -9,7 +9,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlusSquare } from "@fortawesome/free-solid-svg-icons";
 import { AddWalletDialog } from "./AddWalletDialog";
 import { z } from "zod";
-import { usePostData } from "@/hooks/FirestoreHooks";
+import { usePostData } from "@/hooks/FirestoreApiHooks";
 
 type PropsType = {
   wallets: WalletType[];

@@ -25,7 +25,7 @@ type PropsType = {
 const BarReChart = ({ data, bars, xAxisDataKey, yAxisDataKey, legens, width = 900, height = 400 }: PropsType) => {
   return (
     <div className="w-full rounded-lg border-2 border-secondary border-opacity-15 shadow-md shadow-gray-600 p-2 flex flex-col justify-center items-center">
-      <div className="w-full overflow-x-scroll z-0">
+      <div className="w-full  overflow-x-scroll z-0">
         <BarChart
           className="text-xs z-0"
           data={data}
@@ -50,13 +50,6 @@ const BarReChart = ({ data, bars, xAxisDataKey, yAxisDataKey, legens, width = 90
         </BarChart>
       </div>
     </div>
-    // <ResponsiveContainer
-    // className={"z-0"}
-    //   width={"100%"}
-    //   height={400}
-
-    // >
-    // {/* </ResponsiveContainer> */}
   );
 };
 

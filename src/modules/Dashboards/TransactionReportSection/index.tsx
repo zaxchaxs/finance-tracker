@@ -12,13 +12,17 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import TitleSection from "@/components/ui/Title";
 import { useAuth } from "@/contexts/AuthContext";
-import { FilterFirestoreType, useSnapshotDatas } from "@/hooks/FirestoreHooks";
+import {
+  FilterFirestoreType,
+  useSnapshotDatas,
+} from "@/hooks/FirestoreApiHooks";
+import useFirestoreFilteringQueries from "@/hooks/useFirestoreFilteringQueries";
 import { ConvertedSumTransactionData } from "@/types/common";
 import { TransactionType } from "@/types/transactionTypes";
 import { WalletType } from "@/types/walletTypes";
 import {
-  todayFilteringTransaction,
-  weekFilteringTransaction,
+  todayConvertingTransactions,
+  weekConvertingTransactions,
 } from "@/utils/filteringData";
 import { faCaretRight } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -30,84 +34,72 @@ type PropsType = {
 const TransactionReportSection = ({ wallets }: PropsType) => {
   const { currUser } = useAuth();
   const [isShowTransac, setIsShowTransac] = useState(false);
+  const [selectedTab, setSelectedTab] = useState<"today" | "thisWeek">("today");
   const [selectedWallet, setSelectedWallet] = useState<string>();
-  const [transactionFilters, setTransactionFilters] = useState<FilterFirestoreType[]>([
-    {
-      fieldPath: "date",
-      opStf: ">=",
-      value: new Date(new Date().setHours(0, 0, 0, 0)),
-    },
-    {
-      fieldPath: "date",
-      opStf: "<=",
-      value: new Date(new Date().setHours(23, 59, 59, 999)),
-    },
-  ]);
+  const { setTodayFiltering, setOneWeekFiltering } =
+    useFirestoreFilteringQueries();
+  const [transactionFilters, setTransactionFilters] = useState<
+    FilterFirestoreType[]
+  >(() => setTodayFiltering());
+  
   const {
     data: transactionsData,
-    error,
     loading,
+    updateSnapshotParams,
   } = useSnapshotDatas<TransactionType>(
     `user-transactions/${currUser?.uid}/transactions`,
-    [...transactionFilters],
     true,
+    [...transactionFilters],
     [
       {
         fieldPath: "createdAt",
         directionStr: "desc",
       },
-    ],
-    5
+    ]
   );
   const [convertedTransaction, setConvertedTransaction] = useState<
     ConvertedSumTransactionData[] | null
-  >(todayFilteringTransaction(transactionsData));
+  >(() => todayConvertingTransactions(transactionsData));
 
   useEffect(() => {
-    setConvertedTransaction(todayFilteringTransaction(transactionsData));
-  }, [transactionsData])
+    if (selectedTab === "today") {
+      setConvertedTransaction(() =>
+        todayConvertingTransactions(transactionsData)
+      );
+    } else {
+      setConvertedTransaction(() =>
+        weekConvertingTransactions(transactionsData)
+      );
+    }
+  }, [transactionsData]);
 
-  // func handler
-  const handleChangeTab = (val: string) => {
-    const today = new Date();
-
-    if (val === "today") {
-      const startOfDay = new Date(today.setHours(0, 0, 0, 0));
-      const endOfDay = new Date(today.setHours(23, 59, 59, 999));
-      setTransactionFilters([
-        {
-          fieldPath: "date",
-          opStf: ">=",
-          value: startOfDay,
-        },
-        {
-          fieldPath: "date",
-          opStf: "<=",
-          value: endOfDay,
-        },
-      ]);
-
-      const todayTransaction = todayFilteringTransaction(transactionsData);
-      setConvertedTransaction(todayTransaction);
-    } else if (val === "thisWeek") {
-      const startOfWeek = today;
-      startOfWeek.setDate(today.getDate() - today.getDay());
-      const endOfWeek = new Date(startOfWeek.getDate() + 6);
-      setTransactionFilters([
-        {
-          fieldPath: "date",
-          opStf: ">=",
-          value: startOfWeek,
-        },
-        {
-          fieldPath: "date",
-          opStf: "<=",
-          value: endOfWeek,
-        },
-      ]);
-
-      const transactionInWeek = weekFilteringTransaction(transactionsData);
-      setConvertedTransaction(transactionInWeek);
+  const handleChangeTab = (value: "today" | "thisWeek") => {
+    if (value === "today") {
+      setSelectedTab("today");
+      const todayFilterQuery = setTodayFiltering();
+      updateSnapshotParams(
+        `user-transactions/${currUser?.uid}/transactions`,
+        todayFilterQuery,
+        [
+          {
+            fieldPath: "createdAt",
+            directionStr: "desc",
+          },
+        ]
+      );
+    } else if (value === "thisWeek") {
+      setSelectedTab("thisWeek");
+      const weekFilterQuery = setOneWeekFiltering();
+      updateSnapshotParams(
+        `user-transactions/${currUser?.uid}/transactions`,
+        weekFilterQuery,
+        [
+          {
+            fieldPath: "createdAt",
+            directionStr: "desc",
+          },
+        ]
+      );
     }
   };
 
@@ -170,7 +162,14 @@ const TransactionReportSection = ({ wallets }: PropsType) => {
                   </SelectContent>
                 </Select>
               </div>
-              <Button className="w-full">Add Transaction</Button>
+              <Button
+                onClick={() =>
+                  console.log(transactionsData, convertedTransaction)
+                }
+                className="w-full"
+              >
+                {loading ? "Loading...." : "Add Transaction"}
+              </Button>
             </div>
             <Tabs defaultValue="today" className="w-full">
               <TabsList>
@@ -187,22 +186,25 @@ const TransactionReportSection = ({ wallets }: PropsType) => {
                   This Week
                 </TabsTrigger>
               </TabsList>
-              <TabsContent value="today">
-                {/* <BarReChart
+              <TabsContent
+                value="today"
+                className="flex justify-center items-center"
+              >
+                <BarReChart
                   data={convertedTransaction || []}
                   bars={[
                     {
                       dataKey: "income",
-                      color: "#FFFFF",
+                      color: "#4B5945",
                     },
                     {
                       dataKey: "expanse",
-                      color: "#F12323",
+                      color: "#FF1D48",
                     },
                   ]}
                   xAxisDataKey="dataKey"
-                  width={1200}
-                /> */}
+                  width={350}
+                />
               </TabsContent>
               <TabsContent value="thisWeek">
                 <BarReChart
@@ -210,141 +212,17 @@ const TransactionReportSection = ({ wallets }: PropsType) => {
                   bars={[
                     {
                       dataKey: "income",
-                      color: "#FFFFF",
+                      color: "#4B5945",
                     },
                     {
                       dataKey: "expanse",
-                      color: "#F12323",
+                      color: "#FF1D48",
                     },
                   ]}
                   xAxisDataKey="dataKey"
                 />
               </TabsContent>
             </Tabs>
-
-            {/* <PrimaryButton
-                    handleClick={() => setIsShowWallet(!isShowWallet)}
-                    text={
-                      selectedWallet.name
-                        ? selectedWallet.name
-                        : isShowWallet
-                        ? "Close "
-                        : "To:"
-                    }
-                    type={"secondary"}
-                    value={"isShowwallet"}
-                  /> */}
-
-            {/* <div
-                    className={`${
-                      isShowWallet ? "" : "hidden"
-                    } flex flex-col gap-2 py-4`}
-                  >
-                    {walletAcountData.map((e, i) => {
-                      const detailsWallet = {
-                        accountId: e.accountId,
-                        name: e.name,
-                      };
-
-                      return (
-                        <div
-                          onClick={() => handleSelectedWallet(detailsWallet)}
-                          key={i}
-                          className="cursor-pointer ring-2 ring-secondary w-full rounded-md p-1 px-3 group"
-                        >
-                          <button className="group-hover:translate-x-3 transition-all ease-in-out duration-200">
-                            {e.name}
-                          </button>
-                        </div>
-                      );
-                    })}
-                  </div> */}
-
-            {/* <div
-                    className={`text-secondary font-passionOne w-full justify-between flex flex-col gap-2.5 py-4 ${
-                      selectedWallet.accountId ? "" : "hidden"
-                    }`}
-                  >
-                    <input
-                      className="bg-transparent w-full py-2 focus:outline-none border-b-2 border-black p-2 rounded-lg"
-                      type="date"
-                      value={selectedDate}
-                      onChange={handleDateChange}
-                      name="Test"
-                    />
-                    <div
-                      className={`${
-                        selectedType === "income" ? "scale-105" : ""
-                      }`}
-                    >
-                      <PrimaryButton
-                        handleClick={handleSelectedType}
-                        value={"income"}
-                        text={"Income"}
-                        type={"primary"}
-                      />
-                    </div>
-
-                    <div
-                      className={`${
-                        selectedType === "expanse" ? "scale-105" : ""
-                      }`}
-                    >
-                      <PrimaryButton
-                        handleClick={handleSelectedType}
-                        value={"expanse"}
-                        text={"Expanse"}
-                        type={"danger"}
-                      />
-                    </div>
-
-                    <form
-                      className="flex flex-col items-center py-4 gap-3 "
-                      onSubmit={handleSubmit}
-                    >
-                      <InputForm
-                        handleChange={handleAmountChange}
-                        isRequired={true}
-                        name={"Amount"}
-                        type={"text"}
-                        value={amount}
-                        inputMode={"numeric"}
-                      />
-
-                      <div className="flex justify-between gap-3 w-full items-center">
-                        <InputForm
-                          handleChange={handleDescChange}
-                          isRequired={false}
-                          name={"Description"}
-                          type={"text"}
-                          value={description}
-                        />
-                        <div
-                          className={`${
-                            selectedDate &&
-                            selectedWallet.accountId &&
-                            selectedType &&
-                            amount > 0
-                              ? ""
-                              : "hidden"
-                          }`}
-                        >
-                          <PrimaryButton
-                            handleClick={handleSubmit}
-                            text={
-                              loadingAddDoc ? (
-                                <LoaderLightSection width={"w-7"} />
-                              ) : (
-                                "Submit"
-                              )
-                            }
-                            type={"primary"}
-                            value={"submit"}
-                          />
-                        </div>
-                      </div>
-                    </form>
-                  </div> */}
           </>
         )}
       </div>

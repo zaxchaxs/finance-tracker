@@ -7,7 +7,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useMemo, useState } from "react";
 import WalletAccountSection from "./WalletSection/WalletAccoutSection";
 import { WalletType } from "@/types/walletTypes";
-import { useSnapshotDatas } from "@/hooks/FirestoreHooks";
+import { useSnapshotDatas } from "@/hooks/FirestoreApiHooks";
 import TransactionReportSection from "./TransactionReportSection";
 
 const DashboardModule = () => {
@@ -21,6 +21,7 @@ const DashboardModule = () => {
     loading: loadingGetWallet,
   } = useSnapshotDatas<WalletType>(
     "user-wallets",
+    true,
     [
       {
         fieldPath: "userId",
@@ -28,7 +29,6 @@ const DashboardModule = () => {
         value: currUser?.uid,
       },
     ],
-    true,
     [
       {
         fieldPath: "name",

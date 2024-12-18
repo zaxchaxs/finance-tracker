@@ -30,84 +30,79 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import useToast from "./useToast";
 import isEqual from "lodash.isequal";
 
-
 export interface FilterFirestoreType {
   fieldPath: string | FieldPath;
   opStf: WhereFilterOp;
   value: unknown;
-};
+}
+
+export interface OrderFirestoreType {
+  fieldPath: string | FieldPath;
+  directionStr?: OrderByDirection;
+}
 
 export const useSnapshotDatas = <T,>(
   collectionName: string,
-  filters: FilterFirestoreType[],
   initialCall?: boolean,
-  orderData?: {
-    fieldPath: string | FieldPath;
-    directionStr?: OrderByDirection;
-  }[],
-  limitData?: number | null
-): {
-  data: T[];
-  loading: boolean;
-  error: FirestoreError | null;
-  snapshotData: () => void;
-} => {
-  const [data, setData] = useState<T[]>([]);
+  filters?: FilterFirestoreType[],
+  orders?: OrderFirestoreType[],
+  limitSnap?: number
+) => {
+  const [colName, setColName] = useState<string>(collectionName)
+  const [filterQueries, setFilterQueries] = useState<FilterFirestoreType[]>(
+    filters || []
+  );
+  const [orderQueries, setOrderQueries] = useState<OrderFirestoreType[]>(
+    orders || []
+  );
+  const [limitData, setLimitData] = useState<number | null>(limitSnap || null);
+  const [loading, setLoading] = useState<boolean>(initialCall || false);
   const [error, setError] = useState<FirestoreError | null>(null);
-  const [loading, setLoading] = useState<boolean>(false);
+  const [data, setData] = useState<T[]>([]);
   const { pushToast, updateToast } = useToast();
-  const filterRef = useRef(filters);
-  const orderDataRef = useRef(orderData);
+  const isCanSnapshotRef = useRef<boolean>(false);
+  const queriesChangedRef = useRef<boolean>(false);
 
   const q = useMemo(() => {
-    const whereQueries = filters.map(({ fieldPath, opStf, value }) =>
-      where(fieldPath, opStf, value)
-    );
-    const orderQueries =
-      orderData?.map(({ fieldPath, directionStr }) =>
+    const whereQ =
+      filterQueries.map(({ fieldPath, opStf, value }) =>
+        where(fieldPath, opStf, value)
+      ) || [];
+    const orderQ =
+      orderQueries.map(({ fieldPath, directionStr }) =>
         orderBy(fieldPath, directionStr)
       ) || [];
 
-    const baseQuery = query(collection(db, collectionName), ...whereQueries);
+    let baseQuery = query(collection(db, colName), ...whereQ, ...orderQ);
 
-    if (limitData && orderData) {
-      return query(baseQuery, limit(limitData), ...orderQueries);
-    } else if (limitData) {
-      return query(baseQuery, limit(limitData));
-    } else if (orderData) {
-      return query(baseQuery, ...orderQueries);
-    } else {
-      return baseQuery;
+    if (limitData) {
+      baseQuery = query(
+        collection(db, colName),
+        ...whereQ,
+        ...orderQ,
+        limit(limitData)
+      );
     }
-  }, [collectionName, filters, limitData, orderData]);
 
-  // const snapshotData = () => {
-  //   setLoading(true);
-  //   console.log(q);
+    return baseQuery;
+  }, [queriesChangedRef.current]);
 
-  //   const unsubscribe = onSnapshot<DocumentData, DocumentData>(
-  //     q,
-  //     (snapshot) => {
-  //       const response = snapshot.docs.map((doc) => ({ ...(doc.data() as T) }));
-  //       setData(response);
-  //       console.log(response);
-  //       setLoading(false);
-  //     },
-  //     (error) => {
-  //       console.error(error.message);
-  //       pushToast({
-  //         message: "Failed getting wallet!",
-  //         isError: true,
-  //       });
-  //       setError(error);
-  //       setLoading(false);
-  //     }
-  //   );
+  const updateSnapshotParams = (
+    collectionName: string,
+    filters?: FilterFirestoreType[],
+    orders?: OrderFirestoreType[],
+    limit?: number
+  ) => {
+    setColName(collectionName);
+    setFilterQueries(filters || filterQueries);
+    setOrderQueries(orders || orderQueries);
+    setLimitData(limit || limitData);
+    isCanSnapshotRef.current = true;
 
-  //   return unsubscribe;
-  // };
+    queriesChangedRef.current = !queriesChangedRef.current;
+  };
 
-  const snapshotData = useCallback(() => {
+  const snapshotData = () => {
     setLoading(true);
 
     const unsubscribe = onSnapshot(
@@ -121,28 +116,34 @@ export const useSnapshotDatas = <T,>(
       (error) => {
         setError(error);
         setLoading(false);
+        pushToast({
+          isError: true,
+          message: error.name,
+        });
+        console.error(error);
       }
     );
+
+    console.log("snapshot");
     return unsubscribe;
-  }, [q]);
+  };
 
   useEffect(() => {
-    if (initialCall) {
-      const unsubscribe = snapshotData();
-      console.log("call");
-      return () => unsubscribe?.();
-    }
-  }, [filterRef.current, orderDataRef.current]);
+    if(initialCall || isCanSnapshotRef.current) {
+      snapshotData();
+      console.log("inital call")
+    };
 
-  useEffect(() => {  
-    if (!isEqual(filterRef.current, filters) || !isEqual(orderDataRef.current, orderData)) {
-      filterRef.current = filters;
-      orderDataRef.current = orderData;
-      console.log("Changed");
-    }
-  }, [filters, orderData]);
-  
-  return { data, loading, error, snapshotData };
+    console.log("looping useEffect");
+  }, [q]);
+
+  return {
+    reSnapshot: snapshotData,
+    updateSnapshotParams,
+    data,
+    error,
+    loading,
+  };
 };
 
 export const usePostData = () => {

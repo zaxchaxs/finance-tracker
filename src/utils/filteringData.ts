@@ -73,39 +73,30 @@ export const monthDataFilter = (data, month, year) => {
     return newData;
 };
 
-export const todayFilteringTransaction = (transactions?: TransactionType[]): ConvertedSumTransactionData[] | null => {
-    const hoursInDay: string[] = Array(24).fill(null);
-    
-    if(!transactions) return null;
+export const todayConvertingTransactions = (transactions?: TransactionType[]): ConvertedSumTransactionData[] | null => {
+    if(!transactions || transactions.length < 0) return null;
 
-    const newData:ConvertedSumTransactionData[] = Array(24).fill(null).map((_, idx) => {
-        const hour = hourToLocaleTimeString(idx);
-        return {
-            dataKey: hour,
-            income: 0,
-            expanse: 0
-        }
-    });
-
+    const newData:ConvertedSumTransactionData[] = [{
+        dataKey: "Income/Expanse",
+        income: 0,
+        expanse: 0
+    }]
     transactions.forEach(transaction => {
-        const transactionHours = transaction.date.toDate().getHours()
-
         if (transaction.type == "income") {
-            // newData[transactionHours.hour].dataKey = hour;
-            newData[transactionHours].income += transaction.amount;
+            newData[0].income += transaction.amount;
         } else if (transaction.type == "expanse") {
-            // newData[transactionHours.hour].dataKey = hour;
-            newData[transactionHours].expanse += transaction.amount;
+            newData[0].expanse += transaction.amount;
         }
     })
 
+    // console.log(newData);
     return newData;
 }
 
-export const weekFilteringTransaction = (transactions?: TransactionType[]): ConvertedSumTransactionData[] | null => {
+export const weekConvertingTransactions = (transactions?: TransactionType[]): ConvertedSumTransactionData[] | null => {
     const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
-    if (!transactions) return null;
+    if (!transactions || transactions.length < 0) return null;
 
     const newData: ConvertedSumTransactionData[] = Array(days.length).fill(null).map((_, idx) => ({
         dataKey: days[idx],
@@ -122,16 +113,8 @@ export const weekFilteringTransaction = (transactions?: TransactionType[]): Conv
         }
     })
 
+    // console.log(newData);
     return newData;
-}
-
-const hourToLocaleTimeString = (hour: number) => {
-    const date = new Date();
-    date.setHours(hour);
-
-    return date.toLocaleTimeString("en-EN", {
-        hour: "2-digit"
-    })
 }
 
 // const convertTimestampToTime = (seconds: number, nanoseconds: number) => {
