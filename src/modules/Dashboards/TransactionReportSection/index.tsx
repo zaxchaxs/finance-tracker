@@ -36,12 +36,9 @@ const TransactionReportSection = ({ wallets }: PropsType) => {
   const [isShowTransac, setIsShowTransac] = useState(false);
   const [selectedTab, setSelectedTab] = useState<"today" | "thisWeek">("today");
   const [selectedWallet, setSelectedWallet] = useState<string>();
-  const { setTodayFiltering, setOneWeekFiltering } =
-    useFirestoreFilteringQueries();
-  const [transactionFilters, setTransactionFilters] = useState<
-    FilterFirestoreType[]
-  >(() => setTodayFiltering());
-  
+  const { setTodayFiltering, setOneWeekFiltering } = useFirestoreFilteringQueries();
+  const [transactionFilters, setTransactionFilters] = useState<FilterFirestoreType[]>(() => setTodayFiltering());
+
   const {
     data: transactionsData,
     loading,
@@ -50,12 +47,6 @@ const TransactionReportSection = ({ wallets }: PropsType) => {
     `user-transactions/${currUser?.uid}/transactions`,
     true,
     [...transactionFilters],
-    [
-      {
-        fieldPath: "createdAt",
-        directionStr: "desc",
-      },
-    ]
   );
   const [convertedTransaction, setConvertedTransaction] = useState<
     ConvertedSumTransactionData[] | null
@@ -73,6 +64,29 @@ const TransactionReportSection = ({ wallets }: PropsType) => {
     }
   }, [transactionsData]);
 
+  // func handler
+
+  const handleChangeWallet = (val: string) => {
+    let tabFilter;
+    if(selectedTab === "today"){
+      tabFilter = setTodayFiltering();
+    } else {
+      tabFilter = setOneWeekFiltering();
+    };
+
+    const newFilter:FilterFirestoreType[] = [
+      {
+        fieldPath: "accountId",
+        opStf: "==",
+        value: ""
+      },
+      ...tabFilter
+    ]
+    updateSnapshotParams(
+      `user-transactions/${currUser?.uid}/transactions`,
+      newFilter
+    );
+  }
   const handleChangeTab = (value: "today" | "thisWeek") => {
     if (value === "today") {
       setSelectedTab("today");
@@ -144,7 +158,7 @@ const TransactionReportSection = ({ wallets }: PropsType) => {
               <div className="flex items-center bg-foreground rounded-lg">
                 <Select
                   value={selectedWallet}
-                  onValueChange={(val) => setSelectedWallet(val)}
+                  onValueChange={(val) => handleChangeWallet(val)}
                 >
                   <SelectTrigger className="bg-primary ring-black text-lightWhite">
                     <SelectValue placeholder="Select Wallet" />

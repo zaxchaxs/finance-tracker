@@ -11,9 +11,8 @@ import { useSnapshotDatas } from "@/hooks/FirestoreApiHooks";
 import TransactionReportSection from "./TransactionReportSection";
 
 const DashboardModule = () => {
-  const [isShowTransac, setIsShowTransac] = useState(false);
   const [isShowCurrTransac, setIsShowCurrTransac] = useState(false);
-  const { currUser, loading } = useAuth();
+  const { currUser } = useAuth();
 
   const {
     data: walletsData,
@@ -40,38 +39,13 @@ const DashboardModule = () => {
   return (
     <main className="min-h-screen text-base relative font-passionOne bg-background w-full flex flex-col gap-3">
       <div className="w-full p-4 flex flex-col items-center gap-4 relative z-10">
-        {/* Wallet sections */}
         <WalletAccountSection
           wallets={walletsData}
           user={currUser}
           isGettingData={loadingGetWallet}
         />
 
-        {/* New Transaction Section */}
         <TransactionReportSection wallets={walletsData} />
-        {/* <div className="pt-4 w-full text-primary flex flex-col items-center font-title">
-          <div className="relative w-full">
-            <SolidShadow background={"bg-emerald-900"} />
-            <div
-              className="w-full flex gap-3 items-center ring-2 ring-black cursor-pointer p-2 rounded-lg relative z-10 bg-primary"
-              onClick={() => setIsShowTransac(!isShowTransac)}
-            >
-              <FontAwesomeIcon
-                className="w-2"
-                size="1x"
-                icon={faCaretRight}
-                rotation={isShowTransac ? 90 : undefined}
-              />
-              <h1>New Transaction</h1>
-            </div>
-          </div>
-          <NewTransactionSec
-            isShowed={isShowTransac}
-            walletAcountData={walletsData}
-            user={currUser}
-            isGettingData={loadingGetWallet}
-          />
-        </div> */}
 
         {/* Current Transaction Section */}
         <div className="pt-4 w-full text-primary flex flex-col items-center font-title">
