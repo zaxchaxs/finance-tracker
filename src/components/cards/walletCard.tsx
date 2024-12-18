@@ -1,7 +1,7 @@
 import { WalletType } from "@/types/walletTypes";
 import DescriptionSection from "../ui/Description";
 import Image from "next/image";
-import { formatRupiah } from "@/utils/formatRupiah";
+import { currencyFormat } from "@/utils/currencyFormat";
 import Link from "next/link";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBarsStaggered } from "@fortawesome/free-solid-svg-icons";
@@ -34,7 +34,7 @@ const WalletCard = ({ data, isDetailCard }: PropsType) => {
                 : data.name}
             </DescriptionSection>
             <DescriptionSection className="text-primary">
-              {formatRupiah(data.balance, data.currency)}
+              {currencyFormat(data.balance, data.currency)}
             </DescriptionSection>
           </div>
         </>

@@ -34,8 +34,6 @@ export const useFirestoreFilteringQueries = () => {
     const endOfWeek = new Date();
     endOfWeek.setHours(23, 59, 59, 999);
 
-    // console.log("Start", startOfWeek);
-    // console.log("end", endOfWeek);
     return [
       {
         fieldPath: "date",

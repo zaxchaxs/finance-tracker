@@ -61,6 +61,8 @@ export const useSnapshotDatas = <T,>(
   const [data, setData] = useState<T[]>([]);
   const { pushToast, updateToast } = useToast();
   const isCanSnapshotRef = useRef<boolean>(false);
+
+  // menggunakan ref ini untuk mengakali setiap ada perubahan di filters/orders, karena berbentuk array jadi referensinya berubah setiap kali komponen dirender ulang.
   const queriesChangedRef = useRef<boolean>(false);
 
   const q = useMemo(() => {

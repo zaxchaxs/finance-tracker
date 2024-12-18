@@ -1,6 +1,6 @@
 "use client";
 import LoaderSection from "@/components/loaders/loaderSection";
-import BarReChart from "@/components/reports/BarChart";
+import BarReChart from "@/components/systems/BarChart";
 import { Button } from "@/components/ui/button";
 import {
   Select,
@@ -17,16 +17,16 @@ import {
   useSnapshotDatas,
 } from "@/hooks/FirestoreApiHooks";
 import useFirestoreFilteringQueries from "@/hooks/useFirestoreFilteringQueries";
-import { ConvertedSumTransactionData } from "@/types/common";
 import { TransactionType } from "@/types/transactionTypes";
 import { WalletType } from "@/types/walletTypes";
 import {
   todayConvertingTransactions,
   weekConvertingTransactions,
 } from "@/utils/filteringData";
+import { getRandomAdvice } from "@/utils/randomAdvice";
 import { faCaretRight } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useEffect, useState } from "react";
+import { useMemo, useState } from "react";
 
 type PropsType = {
   wallets: WalletType[];
@@ -36,8 +36,11 @@ const TransactionReportSection = ({ wallets }: PropsType) => {
   const [isShowTransac, setIsShowTransac] = useState(false);
   const [selectedTab, setSelectedTab] = useState<"today" | "thisWeek">("today");
   const [selectedWallet, setSelectedWallet] = useState<string>();
-  const { setTodayFiltering, setOneWeekFiltering } = useFirestoreFilteringQueries();
-  const [transactionFilters, setTransactionFilters] = useState<FilterFirestoreType[]>(() => setTodayFiltering());
+  const { setTodayFiltering, setOneWeekFiltering } =
+    useFirestoreFilteringQueries();
+  const [selectedFilter, setSelectedFilter] = useState<FilterFirestoreType[]>(
+    () => setTodayFiltering()
+  );
 
   const {
     data: transactionsData,
@@ -46,77 +49,133 @@ const TransactionReportSection = ({ wallets }: PropsType) => {
   } = useSnapshotDatas<TransactionType>(
     `user-transactions/${currUser?.uid}/transactions`,
     true,
-    [...transactionFilters],
+    [...selectedFilter]
   );
-  const [convertedTransaction, setConvertedTransaction] = useState<
-    ConvertedSumTransactionData[] | null
-  >(() => todayConvertingTransactions(transactionsData));
 
-  useEffect(() => {
+  const transactionDesc = useMemo(() => {
     if (selectedTab === "today") {
-      setConvertedTransaction(() =>
-        todayConvertingTransactions(transactionsData)
-      );
+      const convertedTransaction =
+        todayConvertingTransactions(transactionsData);
+      return {
+        convertedTransaction,
+        sumTransaction: {
+          income: convertedTransaction?.reduce(
+            (acc, curr) => ({
+              ...acc,
+              income: acc.income + curr.income,
+            }),
+            { income: 0 }
+          ).income,
+          expanse: convertedTransaction?.reduce(
+            (acc, curr) => ({
+              ...acc,
+              expanse: acc.expanse + curr.expanse,
+            }),
+            { expanse: 0 }
+          ).expanse,
+        },
+      };
     } else {
-      setConvertedTransaction(() =>
-        weekConvertingTransactions(transactionsData)
-      );
+      const convertedTransaction = weekConvertingTransactions(transactionsData);
+      return {
+        convertedTransaction,
+        sumTransaction: {
+          income: convertedTransaction?.reduce(
+            (acc, curr) => ({
+              ...acc,
+              income: acc.income + curr.income,
+            }),
+            { income: 0 }
+          ).income,
+          expanse: convertedTransaction?.reduce(
+            (acc, curr) => ({
+              ...acc,
+              expanse: acc.expanse + curr.expanse,
+            }),
+            { expanse: 0 }
+          ).expanse,
+        },
+      };
     }
   }, [transactionsData]);
 
   // func handler
-
   const handleChangeWallet = (val: string) => {
-    let tabFilter;
-    if(selectedTab === "today"){
-      tabFilter = setTodayFiltering();
+    if (val === "all") {
+      setSelectedWallet("");
     } else {
-      tabFilter = setOneWeekFiltering();
-    };
+      setSelectedWallet(val);
+    }
 
-    const newFilter:FilterFirestoreType[] = [
+    const newFilter: FilterFirestoreType[] = [
       {
         fieldPath: "accountId",
         opStf: "==",
-        value: ""
+        value: val,
       },
-      ...tabFilter
-    ]
+      ...selectedFilter,
+    ];
     updateSnapshotParams(
       `user-transactions/${currUser?.uid}/transactions`,
       newFilter
     );
-  }
+  };
+
   const handleChangeTab = (value: "today" | "thisWeek") => {
+    if(selectedTab === value) return;
+    
     if (value === "today") {
       setSelectedTab("today");
       const todayFilterQuery = setTodayFiltering();
+      setSelectedFilter(todayFilterQuery);
+
+      if (selectedWallet) {
+        updateSnapshotParams(
+          `user-transactions/${currUser?.uid}/transactions`,
+          [
+            {
+              fieldPath: "accountId",
+              opStf: "==",
+              value: selectedWallet,
+            },
+            ...todayFilterQuery,
+          ]
+        );
+        return;
+      }
+
       updateSnapshotParams(
         `user-transactions/${currUser?.uid}/transactions`,
-        todayFilterQuery,
-        [
-          {
-            fieldPath: "createdAt",
-            directionStr: "desc",
-          },
-        ]
+        todayFilterQuery
       );
     } else if (value === "thisWeek") {
       setSelectedTab("thisWeek");
       const weekFilterQuery = setOneWeekFiltering();
+      setSelectedFilter(weekFilterQuery);
+
+      if (selectedWallet) {
+        updateSnapshotParams(
+          `user-transactions/${currUser?.uid}/transactions`,
+          [
+            {
+              fieldPath: "accountId",
+              opStf: "==",
+              value: selectedWallet,
+            },
+            ...weekFilterQuery,
+          ]
+        );
+        return;
+      }
+
       updateSnapshotParams(
         `user-transactions/${currUser?.uid}/transactions`,
-        weekFilterQuery,
-        [
-          {
-            fieldPath: "createdAt",
-            directionStr: "desc",
-          },
-        ]
+        weekFilterQuery
       );
     }
   };
 
+  const totalTransactions = transactionDesc.sumTransaction;
   return (
     <div
       className={`w-full flex flex-col items-center font-title shadow-md shadow-gray-400 rounded-lg`}
@@ -145,10 +204,7 @@ const TransactionReportSection = ({ wallets }: PropsType) => {
           isShowTransac ? "" : "hidden "
         }`}
       >
-        {false ? (
-          //   {isGettingData ? (
-          <LoaderSection width={"w-14"} />
-        ) : wallets?.length === 0 || !wallets ? (
+        {wallets?.length === 0 || !wallets ? (
           <div className="flex justify-center items-end w-full text-center py-2">
             <p>{`It seem you don't have a wallet account yet, try creating one.`}</p>
           </div>
@@ -178,65 +234,93 @@ const TransactionReportSection = ({ wallets }: PropsType) => {
               </div>
               <Button
                 onClick={() =>
-                  console.log(transactionsData, convertedTransaction)
+                  // console.log(transactionsData, transactionDesc.convertedTransaction)
+                  console.log(
+                    transactionDesc.sumTransaction.income,
+                    transactionDesc.sumTransaction.expanse
+                  )
                 }
                 className="w-full"
               >
                 {loading ? "Loading...." : "Add Transaction"}
               </Button>
             </div>
-            <Tabs defaultValue="today" className="w-full">
-              <TabsList>
-                <TabsTrigger
-                  onClick={() => handleChangeTab("today")}
+            <>
+              <Tabs defaultValue="today" className="w-full">
+                <TabsList>
+                  <TabsTrigger
+                    onClick={() => handleChangeTab("today")}
+                    value="today"
+                  >
+                    Today
+                  </TabsTrigger>
+                  <TabsTrigger
+                    onClick={() => handleChangeTab("thisWeek")}
+                    value="thisWeek"
+                  >
+                    This Week
+                  </TabsTrigger>
+                </TabsList>
+                <TabsContent
                   value="today"
+                  className="flex justify-center items-center"
                 >
-                  Today
-                </TabsTrigger>
-                <TabsTrigger
-                  onClick={() => handleChangeTab("thisWeek")}
-                  value="thisWeek"
-                >
-                  This Week
-                </TabsTrigger>
-              </TabsList>
-              <TabsContent
-                value="today"
-                className="flex justify-center items-center"
-              >
-                <BarReChart
-                  data={convertedTransaction || []}
-                  bars={[
-                    {
-                      dataKey: "income",
-                      color: "#4B5945",
-                    },
-                    {
-                      dataKey: "expanse",
-                      color: "#FF1D48",
-                    },
-                  ]}
-                  xAxisDataKey="dataKey"
-                  width={350}
-                />
-              </TabsContent>
-              <TabsContent value="thisWeek">
-                <BarReChart
-                  data={convertedTransaction || []}
-                  bars={[
-                    {
-                      dataKey: "income",
-                      color: "#4B5945",
-                    },
-                    {
-                      dataKey: "expanse",
-                      color: "#FF1D48",
-                    },
-                  ]}
-                  xAxisDataKey="dataKey"
-                />
-              </TabsContent>
-            </Tabs>
+                  {loading ? (
+                    <LoaderSection width="w-14" className="h-[20rem]" />
+                  ) : (
+                    <BarReChart
+                      data={transactionDesc.convertedTransaction || []}
+                      bars={[
+                        {
+                          dataKey: "income",
+                          color: "#4B5945",
+                        },
+                        {
+                          dataKey: "expanse",
+                          color: "#FF1D48",
+                        },
+                      ]}
+                      xAxisDataKey="dataKey"
+                      width={350}
+                    />
+                  )}
+                </TabsContent>
+                <TabsContent value="thisWeek">
+                  {loading ? (
+                    <LoaderSection width="w-14" className="h-[20rem]" />
+                  ) : (
+                    <BarReChart
+                      data={transactionDesc.convertedTransaction || []}
+                      bars={[
+                        {
+                          dataKey: "income",
+                          color: "#4B5945",
+                        },
+                        {
+                          dataKey: "expanse",
+                          color: "#FF1D48",
+                        },
+                      ]}
+                      xAxisDataKey="dataKey"
+                    />
+                  )}
+                </TabsContent>
+              </Tabs>
+              {!loading && (
+                <div className="flex flex-col gap-4">
+                  <div>
+                    <TitleSection className="text-primary">{`Income: ${totalTransactions.income}`}</TitleSection>
+                    <TitleSection className="text-danger">{`Expanse: ${totalTransactions.expanse}`}</TitleSection>
+                  </div>
+                  <TitleSection variant="h2" className="text-center">
+                    {getRandomAdvice(
+                      totalTransactions.income,
+                      totalTransactions.expanse
+                    )}
+                  </TitleSection>
+                </div>
+              )}
+            </>
           </>
         )}
       </div>

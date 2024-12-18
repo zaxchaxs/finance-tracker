@@ -1,4 +1,4 @@
-import { formatRupiah } from "@/utils/formatRupiah";
+import { currencyFormat } from "@/utils/currencyFormat";
 import Swal from "sweetalert2";
 import {
   addDocTransaction,
@@ -20,7 +20,7 @@ export const sweetAlertAddTransac = (
   callback
 ) => {
 
-  const convertedAmount = formatRupiah(newData.amount, "IDR");
+  const convertedAmount = currencyFormat(newData.amount, "IDR");
   const convertedDate = newData.date.toDateString();
 
   Swal.fire({
@@ -71,7 +71,7 @@ export const sweetAlertAddWallet = (
   setwalletAmount,
   setLoadingAddDoc,
 ) => {
-  const convertedAmount = formatRupiah(newData.amount, "IDR");
+  const convertedAmount = currencyFormat(newData.amount, "IDR");
 
   Swal.fire({
     title: "Are you sure?",
@@ -106,7 +106,7 @@ export const sweetAlertAddWallet = (
 };
 
 export const sweetAlertDeleteWallet = (data) => {
-  const convertedAmount = formatRupiah(data.amount, "IDR");
+  const convertedAmount = currencyFormat(data.amount, "IDR");
 
   Swal.fire({
     title: "Are you sure?",

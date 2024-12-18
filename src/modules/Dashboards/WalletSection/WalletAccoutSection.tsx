@@ -32,8 +32,6 @@ const WalletAccountSection = ({ wallets, user, isGettingData }: PropsType) => {
       currency: JSON.parse(values.currency).code,
       isPinned: false,
     };
-
-    console.log(newData);
     postData(newData, "user-wallets");
   };
 
