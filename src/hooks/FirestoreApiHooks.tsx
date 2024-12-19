@@ -17,6 +17,7 @@ import {
   OrderByDirection,
   query,
   QueryConstraint,
+  QueryDocumentSnapshot,
   QuerySnapshot,
   setDoc,
   Timestamp,
@@ -29,6 +30,7 @@ import { db } from "@/libs/firebase";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import useToast from "./useToast";
 import isEqual from "lodash.isequal";
+import { FirebaseError } from "firebase/app";
 
 export interface FilterFirestoreType {
   fieldPath: string | FieldPath;
@@ -48,7 +50,7 @@ export const useSnapshotDatas = <T,>(
   orders?: OrderFirestoreType[],
   limitSnap?: number
 ) => {
-  const [colName, setColName] = useState<string>(collectionName)
+  const [colName, setColName] = useState<string>(collectionName);
   const [filterQueries, setFilterQueries] = useState<FilterFirestoreType[]>(
     filters || []
   );
@@ -131,10 +133,10 @@ export const useSnapshotDatas = <T,>(
   };
 
   useEffect(() => {
-    if(initialCall || isCanSnapshotRef.current) {
+    if (initialCall || isCanSnapshotRef.current) {
       snapshotData();
-      console.log("inital call")
-    };
+      console.log("inital call");
+    }
 
     console.log("looping useEffect");
   }, [q]);
@@ -149,7 +151,7 @@ export const useSnapshotDatas = <T,>(
 };
 
 export const usePostData = () => {
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState<FirestoreError | string | null>(null);
   const [response, setResponse] =
     useState<DocumentReference<object, DocumentData>>();
   const [loading, setLoading] = useState<boolean>(false);
@@ -159,6 +161,7 @@ export const usePostData = () => {
     data: object,
     collectionName: string
   ): Promise<DocumentReference<object, DocumentData> | null> => {
+    console.log(data);
     setLoading(true);
     const toastId = pushToast({ message: "Loading...", isLoading: true });
     try {
@@ -170,10 +173,19 @@ export const usePostData = () => {
     } catch (error) {
       if (error instanceof FirestoreError) {
         console.error(error.message);
+        setError(error);
+        updateToast({
+          toastId,
+          message: error.name,
+          isError: true,
+        });
+        throw new Error(error.message);
+      } else if (error instanceof FirebaseError) {
+        console.error(error.message);
         setError(error.message);
         updateToast({
           toastId,
-          message: error.message,
+          message: error.name,
           isError: true,
         });
         throw new Error(error.message);
@@ -202,4 +214,107 @@ export const usePostData = () => {
   };
 
   return { postData, loading, error, response };
+};
+
+export const useUpdateData = () => {
+  const [error, setError] = useState<FirestoreError | string | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
+  const { pushToast } = useToast();
+
+  const getDocsReference = async <T,> (
+    collectionName: string,
+    filters?: FilterFirestoreType[]
+  ): Promise<{
+    ref: DocumentReference<DocumentData, DocumentData>;
+    data: T;
+  } | null> => {
+    setLoading(true);
+    try {
+      const whereQ =
+        filters?.map(({ fieldPath, opStf, value }) =>
+          where(fieldPath, opStf, value)
+        ) || [];
+
+      const q = query(collection(db, collectionName), ...whereQ);
+      const docSnapshot = await getDocs(q);
+
+      if (docSnapshot.empty) return null;
+
+      const docRef = docSnapshot.docs[0].ref;
+
+
+      return {
+        ref: docRef,
+        data: docSnapshot.docs[0].data() as T
+      };
+    } catch (error) {
+      if (error instanceof FirestoreError) {
+        console.error(error.message);
+        setError(error);
+        pushToast({
+          message: error.name,
+          isError: true,
+        });
+      } else if (error instanceof Error) {
+        console.error(error.message);
+        setError(error.message);
+        pushToast({
+          message: error.message,
+          isError: true,
+        });
+      } else {
+        console.error("Something Wrong!");
+        setError("Something Wrong!");
+        pushToast({
+          message: "Something Wrong!",
+          isError: true,
+        });
+      }
+      return null;
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const updateData = async (
+    collectionRef: DocumentReference<DocumentData, DocumentData>,
+    data: object
+  ) => {
+    setLoading(true);
+    try {
+      await updateDoc(collectionRef, data);
+    } catch (error) {
+      if (error instanceof FirestoreError) {
+        console.error(error.message);
+        setError(error);
+        pushToast({
+          message: error.name,
+          isError: true,
+        });
+      } else if (error instanceof Error) {
+        console.error(error.message);
+        setError(error.message);
+        pushToast({
+          message: error.message,
+          isError: true,
+        });
+      } else {
+        console.error("Something Wrong!");
+        setError("Something Wrong!");
+        pushToast({
+          message: "Something Wrong!",
+          isError: true,
+        });
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return {
+    error,
+    loading,
+    updateData,
+    getDocsReference
+  };
 };

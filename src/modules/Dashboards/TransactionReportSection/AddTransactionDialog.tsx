@@ -2,8 +2,10 @@ import SelectInputControler from "@/components/inputControler/SelectInputControl
 import TextInputControler from "@/components/inputControler/TextInputControler";
 import FormDialog from "@/components/systems/FormDialog";
 import { FormField } from "@/components/ui/form";
-import { usePostData } from "@/hooks/FirestoreApiHooks";
-import { addTransactionSchema } from "@/types/transactionTypes";
+import { useAuth } from "@/contexts/AuthContext";
+import { usePostData, useUpdateData } from "@/hooks/FirestoreApiHooks";
+import useToast from "@/hooks/useToast";
+import { addTransactionSchema, TransactionType } from "@/types/transactionTypes";
 import { WalletType } from "@/types/walletTypes";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Dispatch, SetStateAction } from "react";
@@ -21,6 +23,9 @@ export default function AddTransactionDialog({
   setIsOpen,
 }: PropsType) {
   const { postData } = usePostData();
+  const {error, loading, getDocsReference, updateData} = useUpdateData();
+  const {currUser:user} = useAuth();
+  const { pushToast } = useToast();
   const form = useForm<z.infer<typeof addTransactionSchema>>({
     resolver: zodResolver(addTransactionSchema),
     mode: "onChange",
@@ -28,8 +33,50 @@ export default function AddTransactionDialog({
     shouldFocusError: true,
   });
 
-  const handleSubmitForm = (values: z.infer<typeof addTransactionSchema>) => {
-    console.log(values);
+  const handleSubmitForm = async (values: z.infer<typeof addTransactionSchema>) => {
+    const selectedWallet: {
+      walletId: string;
+      name: string;
+    } = JSON.parse(values.walletId);
+
+    const walletDoc = await getDocsReference<WalletType>("user-wallets", [{
+      fieldPath: "accountId",
+      opStf: "==",
+      value: selectedWallet.walletId
+    }]);
+
+    if(!walletDoc) {
+      pushToast({
+        message: "Ops! Wallet not found!",
+        isError: true
+      })
+      return;
+    };
+
+    if(values.type === "income") {
+      await updateData(walletDoc.ref, {
+        balance: walletDoc.data.balance + Number(values.amount)
+      });
+    } else {
+      await updateData(walletDoc.ref, {
+        balance: walletDoc.data.balance - Number(values.amount)
+      })
+    }
+
+    const newData = {
+      accountId: selectedWallet.walletId,
+      amount: values.amount,
+      date: new Date(values.date),
+      description: values.description || "",
+      type: values.type,
+      createdAt: new Date(),
+      name: selectedWallet.name,
+      userId: user?.uid || ""
+    };
+
+    // return;
+
+    await postData(newData,`user-transactions/${user?.uid}/transactions`);
     
     setIsOpen(false);
     form.reset();
@@ -43,6 +90,7 @@ export default function AddTransactionDialog({
       isOpen={isOpen}
       setIsOpen={setIsOpen}
       onSubmit={handleSubmitForm}
+      loading={loading}
     >
       <FormField
         control={form.control}
@@ -51,7 +99,10 @@ export default function AddTransactionDialog({
           <SelectInputControler
             items={wallets.map((wallet) => ({
               label: wallet.name,
-              value: wallet.accountId,
+              value: JSON.stringify({
+                walletId: wallet.accountId,
+                name: wallet.name
+              }),
             }))}
             label="Wallet"
             placeholder="Select Wallet"

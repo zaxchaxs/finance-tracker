@@ -26,7 +26,7 @@
 .loaderSection {
   /* width: 60px; */
   aspect-ratio: 4;
-  --_g: no-repeat radial-gradient(circle closest-side,#059669 90%,#0000);
+  --_g: no-repeat radial-gradient(circle closest-side,#91AC8F 90%,#0000);
   background: 
     var(--_g) 0%   50%,
     var(--_g) 50%  50%,

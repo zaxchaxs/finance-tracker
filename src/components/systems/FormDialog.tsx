@@ -6,6 +6,7 @@ import DescriptionSection from "../ui/Description";
 import { Button } from "../ui/button";
 import { Form } from "../ui/form";
 import { cn } from "@/lib/utils";
+import LoaderSection from "../loaders/loaderSection";
 
 type PropsType<TSchema extends ZodType<any, ZodTypeDef, any>> = {
   title: string;
@@ -15,6 +16,7 @@ type PropsType<TSchema extends ZodType<any, ZodTypeDef, any>> = {
   onSubmit: (values: z.infer<TSchema>) => void;
   form: UseFormReturn<any, any, undefined>;
   children: ReactNode;
+  loading?: boolean;
   className?: string;
 };
 
@@ -26,6 +28,7 @@ const FormDialog = <TSchema extends ZodType<any, ZodTypeDef, any>> ({
     setIsOpen,
     form,
     className,
+    loading,
     children,
 }: PropsType<TSchema>) => {
     return (
@@ -44,7 +47,13 @@ const FormDialog = <TSchema extends ZodType<any, ZodTypeDef, any>> ({
             >
               {children}
               <div className="w-full flex items-center mt-4 justify-end">
-                <Button type="submit">Save</Button>
+                <Button type="submit">
+                  {
+                    loading ? (
+                      <LoaderSection width="w-10" />
+                    ) : "Save"
+                  }
+                  </Button>
               </div>
             </form>
           </Form>

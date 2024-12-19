@@ -29,7 +29,7 @@ export function AddWalletDialog({ isOpen, setIsOpen }: PropsType) {
     useState<SelectedCurrValType>();
   const { currUser: user } = useAuth();
 
-  const { postData } = usePostData();
+  const { postData, loading } = usePostData();
 
   const form = useForm<z.infer<typeof addWalletSchema>>({
     resolver: zodResolver(addWalletSchema),
@@ -67,6 +67,7 @@ export function AddWalletDialog({ isOpen, setIsOpen }: PropsType) {
       isOpen={isOpen}
       setIsOpen={setIsOpen}
       onSubmit={handleSubmitForm}
+      loading={loading}
     >
       <FormField
         control={form.control}
