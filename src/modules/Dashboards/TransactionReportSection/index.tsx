@@ -27,6 +27,7 @@ import { getRandomAdvice } from "@/utils/randomAdvice";
 import { faCaretRight } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useMemo, useState } from "react";
+import AddTransactionDialog from "./AddTransactionDialog";
 
 type PropsType = {
   wallets: WalletType[];
@@ -34,6 +35,7 @@ type PropsType = {
 const TransactionReportSection = ({ wallets }: PropsType) => {
   const { currUser } = useAuth();
   const [isShowTransac, setIsShowTransac] = useState(false);
+  const [isShowDialog, setIsShowDialog] = useState<boolean>(false);
   const [selectedTab, setSelectedTab] = useState<"today" | "thisWeek">("today");
   const [selectedWallet, setSelectedWallet] = useState<string>();
   const { setTodayFiltering, setOneWeekFiltering } =
@@ -235,10 +237,11 @@ const TransactionReportSection = ({ wallets }: PropsType) => {
               <Button
                 onClick={() =>
                   // console.log(transactionsData, transactionDesc.convertedTransaction)
-                  console.log(
-                    transactionDesc.sumTransaction.income,
-                    transactionDesc.sumTransaction.expanse
-                  )
+                  // console.log(
+                  //   transactionDesc.sumTransaction.income,
+                  //   transactionDesc.sumTransaction.expanse
+                  // )
+                  setIsShowDialog(true)
                 }
                 className="w-full"
               >
@@ -324,6 +327,8 @@ const TransactionReportSection = ({ wallets }: PropsType) => {
           </>
         )}
       </div>
+
+      <AddTransactionDialog isOpen={isShowDialog} setIsOpen={setIsShowDialog} wallets={wallets} />
     </div>
   );
 };

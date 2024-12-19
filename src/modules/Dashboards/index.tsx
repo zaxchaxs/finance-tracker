@@ -41,7 +41,6 @@ const DashboardModule = () => {
       <div className="w-full p-4 flex flex-col items-center gap-4 relative z-10">
         <WalletAccountSection
           wallets={walletsData}
-          user={currUser}
           isGettingData={loadingGetWallet}
         />
 

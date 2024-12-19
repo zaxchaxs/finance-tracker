@@ -1,39 +1,19 @@
 import { useState } from "react";
-import { v4 as uuidv4 } from "uuid";
 import LoaderSection from "../../../components/loaders/loaderSection";
-import { addWalletSchema, WalletType } from "@/types/walletTypes";
-import { User } from "firebase/auth";
+import { WalletType } from "@/types/walletTypes";
 import TitleSection from "@/components/ui/Title";
 import WalletCard from "@/components/cards/walletCard";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlusSquare } from "@fortawesome/free-solid-svg-icons";
 import { AddWalletDialog } from "./AddWalletDialog";
-import { z } from "zod";
-import { usePostData } from "@/hooks/FirestoreApiHooks";
 
 type PropsType = {
   wallets: WalletType[];
-  user: User | null;
   isGettingData: boolean;
 };
 
-const WalletAccountSection = ({ wallets, user, isGettingData }: PropsType) => {
+const WalletAccountSection = ({ wallets, isGettingData }: PropsType) => {
   const [isOpenDialog, setIsOpenDialog] = useState(false);
-  const { postData } = usePostData();
-
-  //   handler functions
-  const handleSubmit = (values: z.infer<typeof addWalletSchema>) => {
-    const newData: WalletType = {
-      ...values,
-      userId: user?.uid || "",
-      accountId: uuidv4(),
-      createdAt: new Date().toDateString(),
-      balance: Number(values.balance.split(" ")[1]),
-      currency: JSON.parse(values.currency).code,
-      isPinned: false,
-    };
-    postData(newData, "user-wallets");
-  };
 
   return (
     <div className="w-full flex flex-col items-center shadow-md shadow-gray-400 rounded-lg overflow-hidden">
@@ -47,9 +27,9 @@ const WalletAccountSection = ({ wallets, user, isGettingData }: PropsType) => {
           color="#F1F5F9"
           onClick={() => {
             console.log(isOpenDialog);
-            
-            setIsOpenDialog(true)
-          } }
+
+            setIsOpenDialog(true);
+          }}
         />
       </div>
       <div className={`w-full py-2 px-4 `}>
@@ -89,7 +69,6 @@ const WalletAccountSection = ({ wallets, user, isGettingData }: PropsType) => {
             <AddWalletDialog
               isOpen={isOpenDialog}
               setIsOpen={setIsOpenDialog}
-              onSubmit={handleSubmit}
             />
           </div>
         )}
