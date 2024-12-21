@@ -21,7 +21,6 @@ const MobileNavbar = () => {
     } else {
       setActivedPath(paths[1]);
     }
-    console.log(paths);
   }, [pathName])
 
   return (

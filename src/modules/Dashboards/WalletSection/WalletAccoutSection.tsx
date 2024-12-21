@@ -2,10 +2,10 @@ import { useState } from "react";
 import LoaderSection from "../../../components/loaders/loaderSection";
 import { WalletType } from "@/types/walletTypes";
 import TitleSection from "@/components/ui/Title";
-import WalletCard from "@/components/cards/walletCard";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlusSquare } from "@fortawesome/free-solid-svg-icons";
 import { AddWalletDialog } from "./AddWalletDialog";
+import WalletCard from "@/components/cards/WalletCard";
 
 type PropsType = {
   wallets: WalletType[];

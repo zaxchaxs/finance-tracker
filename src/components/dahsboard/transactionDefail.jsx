@@ -1,4 +1,4 @@
-import { dateToString } from "@/utils/dates";
+import { dateToString } from "@/utils/dateConverts";
 import { Timestamp } from "firebase/firestore";
 
 const TransactionDetail = ({ data }) => {

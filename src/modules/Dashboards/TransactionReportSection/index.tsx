@@ -124,8 +124,8 @@ const TransactionReportSection = ({ wallets }: PropsType) => {
   };
 
   const handleChangeTab = (value: "today" | "thisWeek") => {
-    if(selectedTab === value) return;
-    
+    if (selectedTab === value) return;
+
     if (value === "today") {
       setSelectedTab("today");
       const todayFilterQuery = setTodayFiltering();
@@ -234,17 +234,7 @@ const TransactionReportSection = ({ wallets }: PropsType) => {
                   </SelectContent>
                 </Select>
               </div>
-              <Button
-                onClick={() =>
-                  // console.log(transactionsData, transactionDesc.convertedTransaction)
-                  // console.log(
-                  //   transactionDesc.sumTransaction.income,
-                  //   transactionDesc.sumTransaction.expanse
-                  // )
-                  setIsShowDialog(true)
-                }
-                className="w-full"
-              >
+              <Button onClick={() => setIsShowDialog(true)} className="w-full">
                 {loading ? "Loading...." : "Add Transaction"}
               </Button>
             </div>
@@ -328,7 +318,11 @@ const TransactionReportSection = ({ wallets }: PropsType) => {
         )}
       </div>
 
-      <AddTransactionDialog isOpen={isShowDialog} setIsOpen={setIsShowDialog} wallets={wallets} />
+      <AddTransactionDialog
+        isOpen={isShowDialog}
+        setIsOpen={setIsShowDialog}
+        wallets={wallets}
+      />
     </div>
   );
 };

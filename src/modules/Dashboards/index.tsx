@@ -1,21 +1,16 @@
-import CurrentTransaction from "@/components/dahsboard/currentTransaction";
-import NewTransactionSec from "@/components/dahsboard/newTransaction";
-import SolidShadow from "@/components/ui/solidShadow/SolidShadow";
 import { useAuth } from "@/contexts/AuthContext";
-import { faCaretRight } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useMemo, useState } from "react";
 import WalletAccountSection from "./WalletSection/WalletAccoutSection";
 import { WalletType } from "@/types/walletTypes";
 import { useSnapshotDatas } from "@/hooks/FirestoreApiHooks";
 import TransactionReportSection from "./TransactionReportSection";
+import CurrentTransactionSection from "./CurrentTransactionSection";
+import { TransactionType } from "@/types/transactionTypes";
 
 const DashboardModule = () => {
-  const [isShowCurrTransac, setIsShowCurrTransac] = useState(false);
   const { currUser } = useAuth();
 
   const {
-    data: walletsData,
+    data: walletData,
     error,
     loading: loadingGetWallet,
   } = useSnapshotDatas<WalletType>(
@@ -36,18 +31,32 @@ const DashboardModule = () => {
     ]
   );
 
+  const {data: transactionsData, loading: transactionLoading} = useSnapshotDatas<TransactionType>(
+    `user-transactions/${currUser?.uid}/transactions`,
+    true,
+    [],
+    [
+      {
+        fieldPath: "createdAt",
+        directionStr: "desc",
+      },
+    ],
+    10
+  );
+
   return (
     <main className="min-h-screen text-base relative font-passionOne bg-background w-full flex flex-col gap-3">
       <div className="w-full p-4 flex flex-col items-center gap-4 relative z-10">
         <WalletAccountSection
-          wallets={walletsData}
+          wallets={walletData}
           isGettingData={loadingGetWallet}
         />
 
-        <TransactionReportSection wallets={walletsData} />
+        <TransactionReportSection wallets={walletData} />
 
         {/* Current Transaction Section */}
-        <div className="pt-4 w-full text-primary flex flex-col items-center font-title">
+        <CurrentTransactionSection transactions={transactionsData} />
+        {/* <div className="pt-4 w-full text-primary flex flex-col items-center font-title">
           <div className="relative w-full">
             <SolidShadow background={"bg-emerald-900"} />
             <div
@@ -64,7 +73,7 @@ const DashboardModule = () => {
             </div>
           </div>
         </div>
-        <CurrentTransaction isShowed={isShowCurrTransac} user={currUser} />
+        <CurrentTransaction isShowed={isShowCurrTransac} user={currUser} /> */}
       </div>
     </main>
   );

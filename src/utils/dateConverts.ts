@@ -1,14 +1,13 @@
 import { customDateSweetAlert, successSignupSweetAlert } from "@/libs/sweetAlert";
+import { Timestamp } from "firebase/firestore";
 
-// Is this used??
-export const dateToString = (date) => {
-  const option = {
+export const dateToString = (date: Timestamp) => {
+  const newDate = date.toDate();
+  return newDate.toLocaleDateString("en-EN", {
     year: "numeric",
     month: "2-digit",
     day: "2-digit",
-  };
-  const newDate = date.toDate();
-  return newDate.toLocaleDateString("id-ID", option);
+  });
 };
 
 export const selectedFilterConverting = (value) => {

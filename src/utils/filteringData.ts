@@ -81,15 +81,16 @@ export const todayConvertingTransactions = (transactions?: TransactionType[]): C
         income: 0,
         expanse: 0
     }]
+
     transactions.forEach(transaction => {
         if (transaction.type == "income") {
             newData[0].income += transaction.amount;
+            
         } else if (transaction.type == "expanse") {
             newData[0].expanse += transaction.amount;
         }
     })
 
-    // console.log(newData);
     return newData;
 }
 

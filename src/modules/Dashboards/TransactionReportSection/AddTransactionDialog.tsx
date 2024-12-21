@@ -22,9 +22,9 @@ export default function AddTransactionDialog({
   isOpen,
   setIsOpen,
 }: PropsType) {
+  const {currUser:user} = useAuth();
   const { postData } = usePostData();
   const {error, loading, getDocsReference, updateData} = useUpdateData();
-  const {currUser:user} = useAuth();
   const { pushToast } = useToast();
   const form = useForm<z.infer<typeof addTransactionSchema>>({
     resolver: zodResolver(addTransactionSchema),
@@ -65,13 +65,14 @@ export default function AddTransactionDialog({
 
     const newData = {
       accountId: selectedWallet.walletId,
-      amount: values.amount,
+      amount: Number(values.amount),
       date: new Date(values.date),
       description: values.description || "",
       type: values.type,
       createdAt: new Date(),
       name: selectedWallet.name,
-      userId: user?.uid || ""
+      userId: user?.uid || "",
+      currency: walletDoc.data.currency,
     };
 
     // return;

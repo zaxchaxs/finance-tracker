@@ -114,7 +114,6 @@ export const useSnapshotDatas = <T,>(
       (snapshot) => {
         const response = snapshot.docs.map((doc) => ({ ...(doc.data() as T) }));
         setData(response);
-        console.log(response);
         setLoading(false);
       },
       (error) => {
@@ -135,10 +134,9 @@ export const useSnapshotDatas = <T,>(
   useEffect(() => {
     if (initialCall || isCanSnapshotRef.current) {
       snapshotData();
-      console.log("inital call");
+      console.log("looping useEffect");
     }
 
-    console.log("looping useEffect");
   }, [q]);
 
   return {

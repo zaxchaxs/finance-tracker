@@ -10,6 +10,7 @@ export interface TransactionType {
     name: string;
     type: "income" | "expanse";
     userId: string;
+    currency: string;
 }
 
 export const addTransactionSchema = z.object({
