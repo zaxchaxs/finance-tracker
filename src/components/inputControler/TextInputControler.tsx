@@ -34,6 +34,7 @@ const TextInputControler = ({
           children
         ) : type === "numeric-currency" ? (
           <NumericFormat 
+            value={restProps.value}
             disabled={disabled} 
             prefix={prefix}
             placeholder={placeholder}

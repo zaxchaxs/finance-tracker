@@ -106,7 +106,6 @@ const TransactionAddSection = ({ wallets }: PropsType) => {
                 label="Wallet"
                 placeholder="Select Wallet"
                 field={field}
-                onChange={(val) => form.setValue("walletId", val)}
               />
             )}
           />
@@ -144,7 +143,6 @@ const TransactionAddSection = ({ wallets }: PropsType) => {
                   label="Type"
                   placeholder="Select Type"
                   field={field}
-                  onChange={(val) => form.setValue("type", val)}
                 />
               )}
             />

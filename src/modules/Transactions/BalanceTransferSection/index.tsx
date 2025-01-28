@@ -51,6 +51,15 @@ const BalanceTransferSection = ({ wallets }: PropsType) => {
   });
 
   const handleSaveClick = async () => {
+    form.reset({
+      amount: "",
+      date: "",
+      description: "",
+      destinationWalletId: "",
+      sourceWalletId: ""
+    });
+    return;
+    
     const toastId = pushToast({
       message: "Converting amount...",
       isLoading: true
@@ -196,7 +205,6 @@ const BalanceTransferSection = ({ wallets }: PropsType) => {
                   label="From"
                   placeholder="Select Wallet"
                   field={field}
-                  onChange={(val) => form.setValue("sourceWalletId", val)}
                 />
               )}
             />
@@ -212,7 +220,6 @@ const BalanceTransferSection = ({ wallets }: PropsType) => {
                   label="To"
                   placeholder="Select Wallet"
                   field={field}
-                  onChange={(val) => form.setValue("destinationWalletId", val)}
                 />
               )}
             />
@@ -260,8 +267,14 @@ const BalanceTransferSection = ({ wallets }: PropsType) => {
           </div>
         </form>
       </Form>
-      
-      <AlertModal title={alertTitle} description={alertDescription} isOpen={isAlertOpen} confirmText="Ok" onAlertClose={() => setIsAlertOpen(false)} />
+
+      <AlertModal
+        title={alertTitle}
+        description={alertDescription}
+        isOpen={isAlertOpen}
+        confirmText="Ok"
+        onAlertClose={() => setIsAlertOpen(false)}
+      />
 
       <ConfirmSubmitDialog
         title="Are you sure?"

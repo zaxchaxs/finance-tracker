@@ -26,7 +26,6 @@ interface SelectInputControllerProps extends SelectProps {
   disabled?: boolean;
   loading?: boolean;
   isRequired?: boolean;
-  onChange: (value: string) => void;
   type?: "icon";
   className?: string;
 }
@@ -38,7 +37,6 @@ const SelectInputControler = ({
   items,
   field,
   loading,
-  onChange,
   isRequired = true,
   disabled,
   type,
@@ -50,7 +48,7 @@ const SelectInputControler = ({
       <FormLabel className="font-bold text-sm sm:text-base">{label}</FormLabel>
       <Select
         defaultValue={field.value}
-        onValueChange={(val) => val && onChange(val)}
+        onValueChange={field.onChange}
         value={field.value}
         disabled={disabled}
         {...restProps}
