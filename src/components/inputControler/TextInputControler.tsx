@@ -15,7 +15,7 @@ interface TextInputControllerProps extends InputProps {
   }
 
 const TextInputControler = ({
-    prefix,
+  prefix,
   label,
   description,
   placeholder,
@@ -24,6 +24,7 @@ const TextInputControler = ({
   isRequired = true,
   disabled,
   className,
+  value = "",
   ...restProps
 }: TextInputControllerProps) => {
   return (
@@ -33,9 +34,9 @@ const TextInputControler = ({
         {children ? (
           children
         ) : type === "numeric-currency" ? (
-          <NumericFormat 
-            value={restProps.value}
-            disabled={disabled} 
+          <NumericFormat
+            value={value}
+            disabled={disabled}
             prefix={prefix}
             placeholder={placeholder}
             customInput={Input}
@@ -45,6 +46,7 @@ const TextInputControler = ({
         ) : (
           <Input
             {...restProps}
+            value={value}
             onChange={restProps.onChange}
             type={type ?? ""}
             placeholder={placeholder}

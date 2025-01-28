@@ -36,11 +36,17 @@ export const addTransactionSchema = z.object({
 export const transferBalanceSchema = z.object({
     sourceWalletId: z.string({
         message: "From wallet is required"
+    }).min(1, {
+        message: "From wallet is required"
     }),
     destinationWalletId: z.string({
         message: "Destionation wallet is required"
+    }).min(1, {
+        message: "Destionation wallet is required"
     }),
     date: z.string({
+        message: "Date is required"
+    }).min(1, {
         message: "Date is required"
     }),
     amount: z.string({

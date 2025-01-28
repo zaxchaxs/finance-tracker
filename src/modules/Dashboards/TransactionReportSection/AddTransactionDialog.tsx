@@ -108,7 +108,6 @@ export default function AddTransactionDialog({
             label="Wallet"
             placeholder="Select Wallet"
             field={field}
-            onChange={(val) => form.setValue("walletId", val)}
           />
         )}
       />
@@ -146,7 +145,6 @@ export default function AddTransactionDialog({
               label="Type"
               placeholder="Select Type"
               field={field}
-              onChange={(val) => form.setValue("type", val)}
             />
           )}
         />

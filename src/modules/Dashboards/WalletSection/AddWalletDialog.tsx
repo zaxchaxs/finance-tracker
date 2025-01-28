@@ -95,7 +95,6 @@ export function AddWalletDialog({ isOpen, setIsOpen }: PropsType) {
             label="Currency"
             placeholder="Select Currency"
             field={field}
-            onChange={(val) => handleCurrencyChange(val)}
           />
         )}
       />
@@ -130,7 +129,6 @@ export function AddWalletDialog({ isOpen, setIsOpen }: PropsType) {
             label="Icon"
             placeholder="Select Icon"
             field={field}
-            onChange={(val) => form.setValue("icon", val)}
             type="icon"
           />
         )}

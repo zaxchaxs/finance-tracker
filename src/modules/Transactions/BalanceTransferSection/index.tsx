@@ -51,39 +51,36 @@ const BalanceTransferSection = ({ wallets }: PropsType) => {
   });
 
   const handleSaveClick = async () => {
-    form.reset({
-      amount: "",
-      date: "",
-      description: "",
-      destinationWalletId: "",
-      sourceWalletId: ""
-    });
-    return;
-    
     const toastId = pushToast({
       message: "Converting amount...",
-      isLoading: true
+      isLoading: true,
     });
 
     try {
-      const sourceWallet: WalletType = JSON.parse(form.getValues("sourceWalletId"));
-      const destinationWallet: WalletType = JSON.parse(form.getValues("destinationWalletId"));
+      const sourceWallet: WalletType = JSON.parse(
+        form.getValues("sourceWalletId")
+      );
+      const destinationWallet: WalletType = JSON.parse(
+        form.getValues("destinationWalletId")
+      );
       const amount = Number(form.getValues("amount"));
 
-      if(sourceWallet.balance < amount) {
+      if (sourceWallet.balance < amount) {
         updateToast({
           toastId,
           message: `Balance from ${sourceWallet.name} is not enough`,
-          isError: true
+          isError: true,
         });
         return;
-      };
+      }
 
-      const response = await fetch(`${EXCHANGERATES_EP}/latest/${sourceWallet.currency}`);
+      const response = await fetch(
+        `${EXCHANGERATES_EP}/latest/${sourceWallet.currency}`
+      );
       const data: ExchangeRateDataType = await response.json();
 
-      const conversionRate = data.conversion_rates[`${destinationWallet.currency}`];
-      
+      const conversionRate =
+        data.conversion_rates[`${destinationWallet.currency}`];
 
       if (!conversionRate) {
         setAlertTitle("Ops! Something wrong!");
@@ -109,13 +106,13 @@ const BalanceTransferSection = ({ wallets }: PropsType) => {
       dismissToast();
 
       setIsDialogOpen(true);
-
     } catch (error) {
       dismissToast();
-      const errorMessage = error instanceof Error ? error.message : "Something wrong!";
+      const errorMessage =
+        error instanceof Error ? error.message : "Something wrong!";
       console.error(errorMessage);
       setAlertTitle("Error");
-      setAlertDescription(errorMessage);
+      setAlertDescription("Ops! Error converting currency. Try again later!");
       setIsAlertOpen(true); // Open the alert dialog
     }
   };
@@ -123,13 +120,17 @@ const BalanceTransferSection = ({ wallets }: PropsType) => {
   const handleSubmit = async () => {
     const toastId = pushToast({
       message: "Loading...",
-      isLoading: true
+      isLoading: true,
     });
     const amount = Number(form.getValues("amount"));
-    
+
     try {
-      const sourceWallet: WalletType = JSON.parse(form.getValues("sourceWalletId"));
-        const destinationWallet: WalletType = JSON.parse(form.getValues("destinationWalletId"));
+      const sourceWallet: WalletType = JSON.parse(
+        form.getValues("sourceWalletId")
+      );
+      const destinationWallet: WalletType = JSON.parse(
+        form.getValues("destinationWalletId")
+      );
 
       const sourceWalletDoc = await getDocsReference<WalletType>(
         "user-wallets",
@@ -167,21 +168,38 @@ const BalanceTransferSection = ({ wallets }: PropsType) => {
       await updateData(destinationWalletDoc.ref, {
         balance: destinationWalletDoc.data.balance + convertedAmount,
       });
-      
+
       updateToast({
         toastId,
         message: "Success",
       });
 
+      resetFormValue();
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : "Something wrong!";
+      const errorMessage =
+        error instanceof Error ? error.message : "Something wrong!";
       updateToast({
         toastId,
         message: errorMessage,
-        isError: true
+        isError: true,
       });
       console.error(errorMessage);
     }
+  };
+
+  const resetFormValue = () => {
+    form.reset({
+      amount: "",
+      date: "",
+      description: "",
+      destinationWalletId: "",
+      sourceWalletId: "",
+    });
+    setAlertTitle("");
+    setAlertDescription("");
+    setIsAlertOpen(false);
+    setIsDialogOpen(false);
+    setConvertedAmount(0);
   };
 
   return (
@@ -302,9 +320,8 @@ const ConfirmSubmitDialog = ({
   description,
   isOpen,
   onDialogClose,
-  onSubmit
+  onSubmit,
 }: DialogPropsType) => {
-
   return (
     <Dialog open={isOpen} onOpenChange={onDialogClose}>
       <DialogContent>
@@ -314,8 +331,16 @@ const ConfirmSubmitDialog = ({
         </DialogHeader>
         <DialogFooter>
           <div className="w-full justify-between items-center flex">
-            <Button variant={"destructive"} onClick={onDialogClose} className="w-fit">Cancel</Button>
-            <Button onClick={onSubmit} className="w-fit">Sure</Button>
+            <Button
+              variant={"destructive"}
+              onClick={onDialogClose}
+              className="w-fit"
+            >
+              Cancel
+            </Button>
+            <Button onClick={onSubmit} className="w-fit">
+              Sure
+            </Button>
           </div>
         </DialogFooter>
       </DialogContent>
