@@ -1,6 +1,7 @@
 "use client";
 
 import TransactionCard from "@/components/cards/TransactionCard";
+import TransactionCardSkeleton from "@/components/skeletons/TransactionCardSkeleton";
 import TitleSection from "@/components/ui/Title";
 import { TransactionType } from "@/types/transactionTypes";
 import { faCaretRight } from "@fortawesome/free-solid-svg-icons";
@@ -8,10 +9,11 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
 type PropsType = {
     transactions: TransactionType[]
+    loadingGetTransaction: boolean;
 };
 
 
-const CurrentTransactionSection = ({ transactions }: PropsType) => {
+const CurrentTransactionSection = ({ transactions, loadingGetTransaction }: PropsType) => {
   const [isShowSection, setIsShowSection] = useState<boolean>(false);
   return (
     <div
@@ -42,9 +44,13 @@ const CurrentTransactionSection = ({ transactions }: PropsType) => {
           isShowSection ? "" : "hidden "
         }`}
       >
-        {transactions.map((transaction, i) => (
-          <TransactionCard key={i} data={transaction} />
-        ))}
+        {loadingGetTransaction
+          ? Array(5)
+              .fill(null)
+              .map((_, idx) => <TransactionCardSkeleton key={idx} />)
+          : transactions.map((transaction, i) => (
+              <TransactionCard key={i} data={transaction} />
+            ))}
       </div>
     </div>
   );

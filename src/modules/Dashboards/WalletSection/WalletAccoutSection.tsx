@@ -6,6 +6,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlusSquare } from "@fortawesome/free-solid-svg-icons";
 import { AddWalletDialog } from "./AddWalletDialog";
 import WalletCard from "@/components/cards/WalletCard";
+import WalletCardSkeleton from "@/components/skeletons/WalletCardSkeleton";
 
 type PropsType = {
   wallets: WalletType[];
@@ -30,7 +31,11 @@ const WalletAccountSection = ({ wallets, isGettingData }: PropsType) => {
       </div>
       <div className={`w-full py-2 px-4 `}>
         {isGettingData ? (
-          <LoaderSection width={"w-14"} />
+          <div className="w-full grid grid-cols-2 gap-2">
+            {[1, 2, 3, 4].map((_, idx) => (
+              <WalletCardSkeleton key={idx} />
+            ))}
+          </div>
         ) : !wallets || wallets.length < 1 ? (
           <div className="flex justify-center items-end w-full text-center py-2">
             <p>{`It seem you don't have a wallet account yet, try creating one.`}</p>

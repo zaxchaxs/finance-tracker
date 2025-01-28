@@ -1,11 +1,12 @@
 "use client";
-import LoaderSection from "@/components/loaders/loaderSection";
 import BarReChart from "@/components/systems/BarChart";
 import { Button } from "@/components/ui/button";
 import {
   Select,
   SelectContent,
+  SelectGroup,
   SelectItem,
+  SelectLabel,
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
@@ -28,11 +29,13 @@ import { faCaretRight } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useMemo, useState } from "react";
 import AddTransactionDialog from "./AddTransactionDialog";
+import { Skeleton } from "@/components/ui/skeleton";
 
 type PropsType = {
   wallets: WalletType[];
+  isGettingWallets: boolean;
 };
-const TransactionReportSection = ({ wallets }: PropsType) => {
+const TransactionReportSection = ({ wallets, isGettingWallets }: PropsType) => {
   const { currUser } = useAuth();
   const [isShowTransac, setIsShowTransac] = useState(false);
   const [isShowDialog, setIsShowDialog] = useState<boolean>(false);
@@ -222,15 +225,21 @@ const TransactionReportSection = ({ wallets }: PropsType) => {
                     <SelectValue placeholder="Select Wallet" />
                   </SelectTrigger>
                   <SelectContent className="max-h-[20rem]">
-                    {wallets.map((wallet, idx) => (
-                      <SelectItem
-                        key={idx}
-                        value={wallet.accountId}
-                        className="hover:border cursor-pointer rounded-md"
-                      >
-                        {wallet.name}
-                      </SelectItem>
-                    ))}
+                    {true ? (
+                      <SelectGroup>
+                        <SelectLabel>Loading...</SelectLabel>
+                      </SelectGroup>
+                    ) : (
+                      wallets.map((wallet, idx) => (
+                        <SelectItem
+                          key={idx}
+                          value={wallet.accountId}
+                          className="hover:border cursor-pointer rounded-md"
+                        >
+                          {wallet.name}
+                        </SelectItem>
+                      ))
+                    )}
                   </SelectContent>
                 </Select>
               </div>
@@ -259,7 +268,7 @@ const TransactionReportSection = ({ wallets }: PropsType) => {
                   className="flex justify-center items-center"
                 >
                   {loading ? (
-                    <LoaderSection width="w-14" className="h-[20rem]" />
+                    <Skeleton className="w-full h-[25rem] rounded-lg" />
                   ) : (
                     <BarReChart
                       data={transactionDesc.convertedTransaction || []}
@@ -280,7 +289,7 @@ const TransactionReportSection = ({ wallets }: PropsType) => {
                 </TabsContent>
                 <TabsContent value="thisWeek">
                   {loading ? (
-                    <LoaderSection width="w-14" className="h-[20rem]" />
+                    <Skeleton className="w-full h-[25rem] rounded-lg" />
                   ) : (
                     <BarReChart
                       data={transactionDesc.convertedTransaction || []}
