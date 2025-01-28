@@ -46,7 +46,7 @@ const ReportPage = () => {
       {/* nav */}
       <NavbarPage title={"Reports"} />
 
-      <ReportStats
+      {/* <ReportStats
         transactions={
           filteredTransactions.length === 0
             ? transactions
@@ -55,7 +55,7 @@ const ReportPage = () => {
         isGettingData={isGettingData}
         wallets={wallets}
         setDataFilter={handleFilterData}
-      />
+      /> */}
     </main>
   ) : (
     <Unauthenticate />

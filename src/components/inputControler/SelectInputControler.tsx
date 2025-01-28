@@ -15,6 +15,7 @@ import {
   SelectValue,
 } from "../ui/select";
 import Image from "next/image";
+import { cn } from "@/lib/utils";
 
 interface SelectInputControllerProps extends SelectProps {
   label: string;
@@ -27,6 +28,7 @@ interface SelectInputControllerProps extends SelectProps {
   isRequired?: boolean;
   onChange: (value: string) => void;
   type?: "icon";
+  className?: string;
 }
 
 const SelectInputControler = ({
@@ -40,10 +42,11 @@ const SelectInputControler = ({
   isRequired = true,
   disabled,
   type,
+  className,
   ...restProps
 }: SelectInputControllerProps) => {
   return (
-    <FormItem>
+    <FormItem className={cn("w-full relative", className)}>
       <FormLabel className="font-bold text-sm sm:text-base">{label}</FormLabel>
       <Select
         defaultValue={field.value}

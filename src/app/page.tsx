@@ -10,11 +10,12 @@ import { useState } from "react";
 import { sideSweetAlertError, sideSweetAlertSuccess } from "@/libs/sweetAlert";
 import LoaderLightSection from "@/components/loaders/loaderLightSection";
 import { Button } from "@/components/ui/button";
-import { AlertDialogs } from "@/components/systems/AlertDialog";
+import { AlertModal } from "@/components/systems/AlertModal";
 import TitleSection from "@/components/ui/Title";
 import Link from "next/link";
 
 export default function Home() {
+  const [isAlertOpen, setIsAlertOpen] = useState<boolean>(true);
   const { currUser, loading } = useAuth();
   const router = useRouter();
   const [loadingAuth, setLoadingAuth] = useState(false);
@@ -35,10 +36,11 @@ export default function Home() {
     <LoaderPage />
   ) : (
     <main className="min-h-screen p-5 relative z-10 text-secondary bg-background w-full flex flex-col items-center justify-center py-10 gap-4">
-      <AlertDialogs
+      <AlertModal
         title="Hello There"
         description="This web only works well on mobile view, and the only available currency is IDR for now. Cuz I’m just too lazy 😁."
-        isOpen
+        isOpen={isAlertOpen}
+        onAlertClose={() => setIsAlertOpen(false)}
       />
       <ToastContainer
         position="top-right"

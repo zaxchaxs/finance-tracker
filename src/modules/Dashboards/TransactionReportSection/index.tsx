@@ -235,7 +235,7 @@ const TransactionReportSection = ({ wallets }: PropsType) => {
                 </Select>
               </div>
               <Button onClick={() => setIsShowDialog(true)} className="w-full">
-                {loading ? "Loading...." : "Add Transaction"}
+                {"Add Transaction"}
               </Button>
             </div>
             <>

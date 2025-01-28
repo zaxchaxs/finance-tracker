@@ -5,6 +5,7 @@ import Navbar from "@/components/Navbars/Navbar";
 import { ReactNode } from "react";
 import MobileNavbar from "@/components/Navbars/MobileNavbar";
 import ToastContainer from "@/components/systems/ToastContainer";
+import PageInfoBadge from "@/components/systems/PageInfoBadge";
 
 const catamaran = Catamaran({
   weight: "900",
@@ -42,12 +43,14 @@ export default function RootLayout({ children }: PropsType) {
   
   return (
     <html lang="en">
-      <body className={` ${catamaran.variable} ${nunitoSans.variable} ${roboto.variable}`}>
+      <body className={`bg-background ${catamaran.variable} ${nunitoSans.variable} ${roboto.variable}`}>
         <AuthProviderContext>
 
           {/* <Navbar /> */}
-          
-          {children}
+          {/* <PageInfoBadge pageName="Dashboard" /> */}
+          {/* <main className="relative mt-10"> */}
+            {children}
+          {/* </main> */}
           <ToastContainer />
           <MobileNavbar />
           

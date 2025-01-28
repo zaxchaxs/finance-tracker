@@ -25,11 +25,7 @@ const WalletAccountSection = ({ wallets, isGettingData }: PropsType) => {
           icon={faPlusSquare}
           size="2x"
           color="#F1F5F9"
-          onClick={() => {
-            console.log(isOpenDialog);
-
-            setIsOpenDialog(true);
-          }}
+          onClick={() => setIsOpenDialog(true)}
         />
       </div>
       <div className={`w-full py-2 px-4 `}>

@@ -32,7 +32,7 @@ const IconNavbar = ({ path, icon, delay, label, isHome, isActive }: PropsType) =
           size="2x"
           className="w-8 group-hover:scale-105"
         />
-        <DescriptionSection className="font-title">
+        <DescriptionSection className="font-title text-[12px]">
           {label}
         </DescriptionSection>
       </motion.div>
