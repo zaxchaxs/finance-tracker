@@ -24,7 +24,7 @@ export default function AddTransactionDialog({
 }: PropsType) {
   const {currUser:user} = useAuth();
   const { postData } = usePostData();
-  const {error, loading, getDocsReference, updateData} = useUpdateData();
+  const {loading, getDocsReference, updateData} = useUpdateData();
   const { pushToast } = useToast();
   const form = useForm<z.infer<typeof addTransactionSchema>>({
     resolver: zodResolver(addTransactionSchema),
@@ -77,7 +77,7 @@ export default function AddTransactionDialog({
 
     // return;
 
-    await postData(newData,`user-transactions/${user?.uid}/transactions`);
+    await postData(newData,`user-transactions/${user?.uid}/transactions`, true);
     
     setIsOpen(false);
     form.reset();

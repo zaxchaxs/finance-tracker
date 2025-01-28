@@ -136,7 +136,6 @@ export const useSnapshotDatas = <T,>(
       snapshotData();
       console.log("looping useEffect");
     }
-
   }, [q]);
 
   return {
@@ -149,7 +148,7 @@ export const useSnapshotDatas = <T,>(
 };
 
 export const usePostData = () => {
-  const [error, setError] = useState<FirestoreError | string | null>(null);
+  const [error, setError] = useState<string>("");
   const [response, setResponse] =
     useState<DocumentReference<object, DocumentData>>();
   const [loading, setLoading] = useState<boolean>(false);
@@ -157,55 +156,32 @@ export const usePostData = () => {
 
   const postData = async (
     data: object,
-    collectionName: string
+    collectionName: string,
+    isUseToast?: boolean
   ): Promise<DocumentReference<object, DocumentData> | null> => {
-    console.log(data);
     setLoading(true);
-    const toastId = pushToast({ message: "Loading...", isLoading: true });
+
+    let toastId;
+    if (isUseToast) {
+      toastId = pushToast({ message: "Loading...", isLoading: true });
+    }
+
     try {
       const docRef = collection(db, collectionName);
       const response = await addDoc(docRef, data);
       setResponse(response);
-      updateToast({ toastId, message: "Success" });
+
+      isUseToast && updateToast({ toastId, message: "Success" });
+
       return response;
     } catch (error) {
-      if (error instanceof FirestoreError) {
-        console.error(error.message);
-        setError(error);
-        updateToast({
-          toastId,
-          message: error.name,
-          isError: true,
-        });
-        throw new Error(error.message);
-      } else if (error instanceof FirebaseError) {
-        console.error(error.message);
-        setError(error.message);
-        updateToast({
-          toastId,
-          message: error.name,
-          isError: true,
-        });
-        throw new Error(error.message);
-      } else if (error instanceof Error) {
-        console.error(error.message);
-        setError(error.message);
-        updateToast({
-          toastId,
-          message: error.message,
-          isError: true,
-        });
-        throw new Error(error.message);
-      } else {
-        console.error("Something Wrong!");
-        setError("Something Wrong!");
-        updateToast({
-          toastId,
-          message: "Something Wrong!",
-          isError: true,
-        });
-        throw new Error("Something Wrong!");
-      }
+      const errorMessage =
+        error instanceof Error ? error.message : "Something wrong!";
+      console.error(errorMessage);
+      setError(errorMessage);
+      isUseToast &&
+        updateToast({ toastId, message: errorMessage, isError: true });
+      throw new Error(errorMessage);
     } finally {
       setLoading(false);
     }
@@ -215,11 +191,11 @@ export const usePostData = () => {
 };
 
 export const useUpdateData = () => {
-  const [error, setError] = useState<FirestoreError | string | null>(null);
+  const [error, setError] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
   const { pushToast } = useToast();
 
-  const getDocsReference = async <T,> (
+  const getDocsReference = async <T,>(
     collectionName: string,
     filters?: FilterFirestoreType[]
   ): Promise<{
@@ -240,35 +216,17 @@ export const useUpdateData = () => {
 
       const docRef = docSnapshot.docs[0].ref;
 
-
       return {
         ref: docRef,
-        data: docSnapshot.docs[0].data() as T
+        data: docSnapshot.docs[0].data() as T,
       };
     } catch (error) {
-      if (error instanceof FirestoreError) {
-        console.error(error.message);
-        setError(error);
-        pushToast({
-          message: error.name,
-          isError: true,
-        });
-      } else if (error instanceof Error) {
-        console.error(error.message);
-        setError(error.message);
-        pushToast({
-          message: error.message,
-          isError: true,
-        });
-      } else {
-        console.error("Something Wrong!");
-        setError("Something Wrong!");
-        pushToast({
-          message: "Something Wrong!",
-          isError: true,
-        });
-      }
-      return null;
+      const errorMessage =
+        error instanceof Error ? error.message : "Something wrong!";
+      console.error(errorMessage);
+      setError(errorMessage);
+      pushToast({ message: errorMessage, isError: true });
+      throw new Error(errorMessage);
     } finally {
       setLoading(false);
     }
@@ -282,28 +240,12 @@ export const useUpdateData = () => {
     try {
       await updateDoc(collectionRef, data);
     } catch (error) {
-      if (error instanceof FirestoreError) {
-        console.error(error.message);
-        setError(error);
-        pushToast({
-          message: error.name,
-          isError: true,
-        });
-      } else if (error instanceof Error) {
-        console.error(error.message);
-        setError(error.message);
-        pushToast({
-          message: error.message,
-          isError: true,
-        });
-      } else {
-        console.error("Something Wrong!");
-        setError("Something Wrong!");
-        pushToast({
-          message: "Something Wrong!",
-          isError: true,
-        });
-      }
+      const errorMessage =
+        error instanceof Error ? error.message : "Something wrong!";
+      console.error(errorMessage);
+      setError(errorMessage);
+      pushToast({ message: errorMessage, isError: true });
+      throw new Error(errorMessage);
     } finally {
       setLoading(false);
     }
@@ -313,6 +255,6 @@ export const useUpdateData = () => {
     error,
     loading,
     updateData,
-    getDocsReference
+    getDocsReference,
   };
 };

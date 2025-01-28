@@ -20,7 +20,7 @@ type PropsType = {
 
 const TransactionAddSection = ({ wallets }: PropsType) => {
   const { currUser: user } = useAuth();
-  const { error, loading, getDocsReference, updateData } = useUpdateData();
+  const { loading, getDocsReference, updateData } = useUpdateData();
   const { postData } = usePostData();
   const { pushToast } = useToast();
 
@@ -77,8 +77,18 @@ const TransactionAddSection = ({ wallets }: PropsType) => {
       currency: walletDoc.data.currency,
     };
 
-    await postData(newData, `user-transactions/${user?.uid}/transactions`);
-    form.reset();
+    await postData(
+      newData,
+      `user-transactions/${user?.uid}/transactions`,
+      true
+    );
+    form.reset({
+      amount: "",
+      date: "",
+      description: "",
+      type: "",
+      walletId: "",
+    });
   };
 
   return (

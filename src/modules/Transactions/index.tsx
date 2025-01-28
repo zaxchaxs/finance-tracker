@@ -59,7 +59,6 @@ const TransactionModule = () => {
           <BalanceTransferSection wallets={walletData} />
         </TabsContent>
       </Tabs>
-      
       <CurrentTransactionSection transactions={transactionsData} />
     </div>
   );

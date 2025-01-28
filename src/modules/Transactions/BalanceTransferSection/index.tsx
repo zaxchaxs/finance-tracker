@@ -3,25 +3,16 @@ import SelectInputControler from "@/components/inputControler/SelectInputControl
 import TextInputControler from "@/components/inputControler/TextInputControler";
 import LoaderSection from "@/components/loaders/loaderSection";
 import { AlertModal } from "@/components/systems/AlertModal";
+import ConfirmSubmitDialog from "@/components/systems/ConfirmSubmitDialog";
 import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
 import { Form, FormField } from "@/components/ui/form";
 import TitleSection from "@/components/ui/Title";
+import { useAuth } from "@/contexts/AuthContext";
 import { EXCHANGERATES_EP } from "@/core/endpoints";
-import { useUpdateData } from "@/hooks/FirestoreApiHooks";
+import { usePostData, useUpdateData } from "@/hooks/FirestoreApiHooks";
 import useToast from "@/hooks/useToast";
 import { ExchangeRateDataType } from "@/types/common";
-import {
-  addTransactionSchema,
-  transferBalanceSchema,
-} from "@/types/transactionTypes";
+import { transferBalanceSchema } from "@/types/transactionTypes";
 import { WalletType } from "@/types/walletTypes";
 import { currencyFormat } from "@/utils/currencyFormat";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -35,13 +26,15 @@ type PropsType = {
 };
 
 const BalanceTransferSection = ({ wallets }: PropsType) => {
+  const { currUser: user } = useAuth();
   const [convertedAmount, setConvertedAmount] = useState<number>(0);
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
   const [isAlertOpen, setIsAlertOpen] = useState(false);
   const [alertTitle, setAlertTitle] = useState("");
   const [alertDescription, setAlertDescription] = useState("");
   const { pushToast, dismissToast, updateToast } = useToast();
-  const { error, loading, getDocsReference, updateData } = useUpdateData();
+  const { getDocsReference, updateData } = useUpdateData();
+  const { postData } = usePostData();
 
   const form = useForm<z.infer<typeof transferBalanceSchema>>({
     resolver: zodResolver(transferBalanceSchema),
@@ -154,20 +147,67 @@ const BalanceTransferSection = ({ wallets }: PropsType) => {
       );
 
       if (!sourceWalletDoc || !destinationWalletDoc) {
-        pushToast({
+        updateToast({
+          toastId,
           message: "Ops! It Seems your wallet is not found!",
           isError: true,
         });
         return;
       }
 
+      // updating balance
       await updateData(sourceWalletDoc.ref, {
         balance: sourceWalletDoc.data.balance - amount,
       });
-
       await updateData(destinationWalletDoc.ref, {
         balance: destinationWalletDoc.data.balance + convertedAmount,
       });
+
+      const selectedDate = new Date(form.getValues("date"));
+      const description = form.getValues("description");
+
+      // add transaction documents
+      const sourceWalletTransactionData = {
+        accountId: sourceWallet.accountId,
+        amount: amount,
+        date: selectedDate,
+        description: description
+          ? description
+          : `Transfering balance ${currencyFormat(
+              amount,
+              sourceWallet.currency
+            )} to ${destinationWallet.name}`,
+        type: "expanse",
+        createdAt: new Date(),
+        name: sourceWallet.name,
+        userId: user?.uid || "",
+        currency: sourceWallet.currency,
+      };
+      await postData(
+        sourceWalletTransactionData,
+        `user-transactions/${user?.uid}/transactions`
+      );
+
+      const destinationWalletTransactionData = {
+        accountId: destinationWallet.accountId,
+        amount: convertedAmount,
+        date: selectedDate,
+        description: description
+          ? description
+          : `Transfered balance ${currencyFormat(
+              convertedAmount,
+              destinationWallet.currency
+            )} from ${sourceWallet.name}`,
+        type: "income",
+        createdAt: new Date(),
+        name: destinationWallet.name,
+        userId: user?.uid || "",
+        currency: destinationWallet.currency,
+      };
+      await postData(
+        destinationWalletTransactionData,
+        `user-transactions/${user?.uid}/transactions`
+      );
 
       updateToast({
         toastId,
@@ -248,6 +288,7 @@ const BalanceTransferSection = ({ wallets }: PropsType) => {
             render={({ field }) => (
               <TextInputControler
                 {...field}
+                className="w-fit"
                 label="Date"
                 placeholder="Select Date"
                 type="date"
@@ -300,50 +341,10 @@ const BalanceTransferSection = ({ wallets }: PropsType) => {
         isOpen={isDialogOpen}
         onDialogClose={() => setIsDialogOpen(false)}
         onSubmit={handleSubmit}
+        confirmText="Sure"
       />
     </div>
   );
 };
 
 export default BalanceTransferSection;
-
-type DialogPropsType = {
-  isOpen: boolean;
-  onDialogClose: () => void;
-  onSubmit: () => void;
-  title: string;
-  description: string;
-};
-
-const ConfirmSubmitDialog = ({
-  title,
-  description,
-  isOpen,
-  onDialogClose,
-  onSubmit,
-}: DialogPropsType) => {
-  return (
-    <Dialog open={isOpen} onOpenChange={onDialogClose}>
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle>{title}</DialogTitle>
-          <DialogDescription>{description}</DialogDescription>
-        </DialogHeader>
-        <DialogFooter>
-          <div className="w-full justify-between items-center flex">
-            <Button
-              variant={"destructive"}
-              onClick={onDialogClose}
-              className="w-fit"
-            >
-              Cancel
-            </Button>
-            <Button onClick={onSubmit} className="w-fit">
-              Sure
-            </Button>
-          </div>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
-  );
-};

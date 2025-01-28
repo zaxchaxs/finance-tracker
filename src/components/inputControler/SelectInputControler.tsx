@@ -67,7 +67,12 @@ const SelectInputControler = ({
                   value={item.value}
                   className="hover:border cursor-pointer rounded-md"
                 >
-                  <Image width={30} height={30} src={item.iconPath} alt={item.label} />
+                  <Image
+                    width={30}
+                    height={30}
+                    src={item.iconPath}
+                    alt={item.label}
+                  />
                 </SelectItem>
               ))
             : items.map((item, key) => (
