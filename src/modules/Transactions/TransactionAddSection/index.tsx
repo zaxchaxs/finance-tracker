@@ -119,14 +119,13 @@ const TransactionAddSection = ({ wallets }: PropsType) => {
               />
             )}
           />
-          <div className="flex justify-between items-center gap-2">
+          <div className="flex sm:block justify-between items-center gap-2">
             <FormField
               control={form.control}
               name="date"
               render={({ field }) => (
                 <TextInputControler
                   {...field}
-                  className="w-fit"
                   label="Date"
                   placeholder="Select Date"
                   type="date"

@@ -45,7 +45,7 @@ const DashboardModule = () => {
   );
 
   return (
-    <main className="min-h-screen text-base relative font-passionOne w-full flex flex-col gap-3">
+    <main className="min-h-screen text-base relative w-full flex flex-col gap-3">
       <div className="w-full p-4 flex flex-col items-center gap-4 relative z-10">
         <WalletAccountSection
           wallets={walletData}

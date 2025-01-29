@@ -48,10 +48,12 @@ const TransactionModule = () => {
   return (
     <div className="p-4 w-full flex flex-col gap-4">
       <Tabs defaultValue="addTransaction">
-        <TabsList className="w-full gap-4">
-          <TabsTrigger value="addTransaction">Add New Transaction</TabsTrigger>
-          <TabsTrigger value="transferBalance">Transfer Balance</TabsTrigger>
-        </TabsList>
+        <div className="w-full flex flex-col justify-center items-center">
+          <TabsList className="w-fit gap-4">
+            <TabsTrigger value="addTransaction">Add New Transaction</TabsTrigger>
+            <TabsTrigger value="transferBalance">Transfer Balance</TabsTrigger>
+          </TabsList>
+        </div>
         <TabsContent value="addTransaction" className="w-full">
           <TransactionAddSection wallets={walletData} />
         </TabsContent>
