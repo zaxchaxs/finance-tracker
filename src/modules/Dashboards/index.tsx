@@ -11,7 +11,6 @@ const DashboardModule = () => {
 
   const {
     data: walletData,
-    error,
     loading: loadingGetWallet,
   } = useSnapshotDatas<WalletType>(
     "user-wallets",

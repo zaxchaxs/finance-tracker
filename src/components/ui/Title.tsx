@@ -18,7 +18,7 @@ type PropsType = {
 
 const TitleSection = ({ variant = "h3", children, className, ref }: PropsType) => {
   const Tag = variant;
-  return <Tag ref={ref} className={cn(`font-title`, titleStyles[variant], className)}>{children}</Tag>;
+  return <Tag ref={ref} className={cn(`font-title text-primary`, titleStyles[variant], className)}>{children}</Tag>;
 };
 
 export default TitleSection;
