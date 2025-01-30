@@ -48,7 +48,27 @@ export const useFirestoreFilteringQueries = () => {
     ];
   };
 
-  return { setTodayFiltering, setOneWeekFiltering };
+  const setOneMonthFiltering = (year: number, month: number): FilterFirestoreType[] => {
+    const firstDay = new Date(year, month, 1, 0, 0, 0, 0);
+    const lastDay = new Date(year, month + 1, 0, 23, 59, 59, 999);
+
+    return [
+        { fieldPath: "date", opStf: ">=", value: firstDay },
+        { fieldPath: "date", opStf: "<=", value: lastDay }
+    ];
+  };
+
+  const setOneYearFiltering = (year: number): FilterFirestoreType[] => {
+    const firstDay = new Date(year, 0, 1, 0, 0, 0, 0);
+    const lastDay = new Date(year, 11, 31, 23, 59, 59, 999);
+
+    return [
+      { fieldPath: "date", opStf: ">=", value: firstDay },
+      { fieldPath: "date", opStf: "<=", value: lastDay },
+    ];
+};
+
+  return { setTodayFiltering, setOneWeekFiltering, setOneMonthFiltering, setOneYearFiltering };
 };
 
 export default useFirestoreFilteringQueries;

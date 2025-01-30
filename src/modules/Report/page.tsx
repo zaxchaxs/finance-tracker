@@ -37,10 +37,10 @@ export default function ReportPageModule() {
       ]
     );
 
-  const { data: transactionsData, loading: transactionLoading } =
+  const { data: transactionsData, loading: transactionLoading, updateSnapshotParams } =
     useSnapshotDatas<TransactionType>(
       `user-transactions/${currUser?.uid}/transactions`,
-      true,
+      false,
       [],
       [
         {
@@ -60,11 +60,13 @@ export default function ReportPageModule() {
   ) : currUser ? (
     <main className="min-h-screen text-lg w-full py-4 flex flex-col gap-5">
       <ChartReportSection
+        user={currUser}
         setDataFilter={() => {}}
         wallets={walletData}
         loadingGetWallet={loadingGetWallet}
         transactions={transactionsData}
         loadingGetTransaction={transactionLoading}
+        updateTransaction={updateSnapshotParams}
       />
     </main>
   ) : (

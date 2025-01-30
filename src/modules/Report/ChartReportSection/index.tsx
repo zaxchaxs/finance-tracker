@@ -1,5 +1,5 @@
 import { monthConvert } from "@/utils/monthConverting";
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useMemo } from "react";
 import { sumTotalAmount } from "@/utils/sumAmount";
 import { currencyFormat } from "@/utils/currencyFormat";
 import { TransactionType } from "@/types/transactionTypes";
@@ -13,31 +13,114 @@ import BarReChart from "@/components/systems/BarChart";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCaretLeft, faCaretRight } from "@fortawesome/free-solid-svg-icons";
 import DescriptionSection from "@/components/ui/Description";
+import { monthTransactionFilter, yearTransactionFilter } from "@/utils/filteringData";
+import { FilterFirestoreType, OrderFirestoreType } from "@/hooks/FirestoreApiHooks";
+import { User } from "firebase/auth";
+import useFirestoreFilteringQueries from "@/hooks/useFirestoreFilteringQueries";
 
 type PropsType = {
+  user: User;
   transactions: TransactionType[],
   loadingGetTransaction: boolean,
+  updateTransaction: (collectionName: string, filters?: FilterFirestoreType[], orders?: OrderFirestoreType[], limit?: number) => void,
   wallets: WalletType[],
   loadingGetWallet: boolean,
   setDataFilter: () => void,
 };
 
 const ChartReportSection = ({
+  user,
   transactions,
   loadingGetTransaction,
+  updateTransaction,
   wallets,
   loadingGetWallet,
   setDataFilter,
 }: PropsType) => {
-  const [data, setData] = useState(transactions);
   const [year, setYear] = useState<number>(new Date().getFullYear());
   const [month, setMonth] = useState<number>(new Date().getMonth());
   const [selectedWallet, setSelectedWallet] = useState<string>();
   const [selectedFilter, setSelectedFilter] = useState<"year" | "month">("year");
-  const [isWalletOpen, setIsWalletOpen] = useState(false);
-  const dropdownRef = useRef(null);
+  const [firestoreFilter, setFirestoreFilter] = useState<FilterFirestoreType[]>([]);
 
-  const convertedMonth = monthConvert(month);
+  const {setOneMonthFiltering, setOneYearFiltering} = useFirestoreFilteringQueries();
+
+  const convertedMonth = useMemo(() => {
+    return monthConvert(month);
+  }, [month]);
+
+  const transactionData = useMemo(() => {
+    if(selectedFilter == "year") {
+      return yearTransactionFilter(transactions, year);
+    } else {
+      return monthTransactionFilter(transactions, month, year);
+    }
+  }, [month, year, selectedFilter, transactions])
+
+  // get default selected wallet
+  useEffect(() => {
+    if(wallets.length !== 0) {
+      const defaultWallet = wallets[0];
+      setSelectedWallet(() => JSON.stringify(defaultWallet))
+      setFirestoreFilter([{
+        fieldPath: "accountId",
+        opStf: "==",
+        value: defaultWallet.accountId
+      }])
+    }
+  }, [wallets]);
+
+  // get filtered transaction
+  useEffect(() => {
+    console.log(firestoreFilter);
+    
+    // updateTransaction(`user-transactions/${user.uid}/transactions`, firestoreFilter);
+  }, [firestoreFilter])
+
+  const handleSelectedWallet = (value: string) => {
+    if(!value) return;
+    setSelectedWallet(value);
+
+    const selectedWalletData:WalletType = JSON.parse(value);
+    setFirestoreFilter([
+      {
+        fieldPath: "accountId",
+        opStf: "==",
+        value: selectedWalletData.accountId,
+      },
+    ]);
+  }
+
+  const handleSelectedFilter = (val: "year" | "month") => {
+    if(val === "year") {
+      setSelectedFilter("year")
+      if(selectedWallet) {
+        const selectedWalletData:WalletType = JSON.parse(selectedWallet);
+        setFirestoreFilter([
+          {
+            fieldPath: "accountId",
+            opStf: "==",
+            value: selectedWalletData.accountId,
+          },
+          ...setOneYearFiltering(year)
+        ]); 
+      }
+    } else {
+      setSelectedFilter("month");
+      if(selectedWallet) {
+        const selectedWalletData:WalletType = JSON.parse(selectedWallet);
+        setFirestoreFilter([
+          {
+            fieldPath: "accountId",
+            opStf: "==",
+            value: selectedWalletData.accountId,
+          },
+          ...setOneMonthFiltering(year, month),
+        ]); 
+      }
+    }
+  };
+
   // const totalAmount = sumTotalAmount(data);
 
   // useEffect(() => {
@@ -64,21 +147,17 @@ const ChartReportSection = ({
   //   };
   // }, []);
 
-  useEffect(() => {
-    if(wallets.length !== 0) {
-      setSelectedWallet(() => JSON.stringify(wallets[0]))
-    }
-  }, [])
-
   // handler functions
   // const toggleWalletDropDown = () => {
   //   setIsWalletOpen(!isWalletOpen);
   // };
-  const handleClickOutside = (event) => {
-    if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-      setIsWalletOpen(isWalletOpen);
-    }
-  };
+
+  // const handleClickOutside = (event) => {
+  //   if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+  //     setIsWalletOpen(isWalletOpen);
+  //   }
+  // };
+
   // const handleSelectedFilter = (e) => {
   //   setSelectedFilter(e.target.value);
   // };
@@ -95,6 +174,7 @@ const ChartReportSection = ({
       setMonth(month + 1);
     }
   };
+
   const handleLeftBtnClick = () => {
     if (selectedFilter === "year") {
       setYear(year - 1);
@@ -135,7 +215,8 @@ const ChartReportSection = ({
                 normalBtn
                 variant={selectedFilter === "year" ? "default" : "secondary"}
                 className="rounded-r-none"
-                onClick={() => setSelectedFilter("year")}
+                value={"year"}
+                onClick={() => handleSelectedFilter("year")}
               >
                 Year
               </Button>
@@ -143,7 +224,7 @@ const ChartReportSection = ({
                 normalBtn
                 variant={selectedFilter === "month" ? "default" : "secondary"}
                 className="rounded-l-none"
-                onClick={() => setSelectedFilter("month")}
+                onClick={() => handleSelectedFilter("month")}
               >
                 Month
               </Button>
@@ -157,14 +238,15 @@ const ChartReportSection = ({
                 >
                   <FontAwesomeIcon icon={faCaretLeft} />
                 </Button>
-                <div className="bg-secondary h-full w-full text-center">
-                  <DescriptionSection className="text-lightWhite">
-                    {" "}
-                    {selectedFilter === "year"
-                      ? year
-                      : `${convertedMonth}, ${year}`}
-                  </DescriptionSection>
-                </div>
+                <Button
+                  normalBtn
+                  className="bg-secondary h-max w-full text-center rounded-none"
+                  onClick={() => console.log(transactions)}
+                >
+                  {selectedFilter === "year"
+                    ? year
+                    : `${convertedMonth}, ${year}`}
+                </Button>
                 <Button
                   normalBtn
                   onClick={handleRightBtnClick}
@@ -172,27 +254,6 @@ const ChartReportSection = ({
                 >
                   <FontAwesomeIcon icon={faCaretRight} />
                 </Button>
-                {/* <button
-                      value={"left"}
-                      // onClick={handleLeftBtnClick}
-                      className={`relative ring-1 ring-black z-10 h-full p-1.5 px-3 rounded-l-lg bg-third hover:bg-third-hover text-secondary active:bg-third`}
-                    >
-                    </button> */}
-                {/* <button
-                      value={"middle"}
-                      className={`relative w-full ring-1 ring-black z-10 h-full p-1.5 px-3  bg-secondary text-lightWhite hover:bg-secondary active:bg-secondary`}
-                    >
-                      {selectedFilter === "year"
-                        ? year
-                        : `${convertedMonth}, ${year}`}
-                    </button> */}
-                {/* <button
-                      value={"left"}
-                      onClick={handleRightBtnClick}
-                      className={`relative ring-1 ring-black z-10 h-full p-1.5 px-3 rounded-r-lg bg-third hover:bg-third-hover text-secondary active:bg-third`}
-                    >
-                      <FontAwesomeIcon icon={faCaretRight} />
-                    </button> */}
               </div>
             </div>
           </div>
@@ -214,7 +275,7 @@ const ChartReportSection = ({
             Select Wallet
           </TitleSection>
           <Select
-            onValueChange={(val) => setSelectedWallet(val)}
+            onValueChange={handleSelectedWallet}
             value={selectedWallet}
           >
             <SelectTrigger className="text-lightWhite font-title font-bold bg-primary">
@@ -231,10 +292,26 @@ const ChartReportSection = ({
         </div>
 
         {/* chart graph */}
-        {/* <BarReChart /> */}
+        <BarReChart
+          data={transactionData}
+          bars={[
+            {
+              dataKey: "income",
+              color: "#4B5945",
+            },
+            {
+              dataKey: "expanse",
+              color: "#FF1D48",
+            },
+          ]}
+          xAxisDataKey="name"
+          width={1000}
+        />
+
+        <h1>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sequi modi eveniet culpa. Exercitationem nihil, voluptates culpa tempora labore aut, sint dignissimos reprehenderit accusantium alias ipsa repellendus enim consequatur? Ad, voluptatibus?</h1>
 
         {/* info */}
-        {/* <AdviceInfo totalAmount={totalAmount} /> */}
+        {/* <AdviceInfo totalAmount={10000} /> */}
 
         {/* All filtered transactions */}
         {/* <div className="w-full p-1 text-base rounded-md shadow-md items-center flex justify-center bg-secondary hover:bg-secondary-hover active:bg-secondary cursor-pointer">

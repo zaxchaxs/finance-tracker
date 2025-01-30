@@ -1,10 +1,8 @@
 import { ConvertedSumTransactionData } from "@/types/common";
 import { TransactionType } from "@/types/transactionTypes";
 
-export const yearDataFilter = (data, year) => {
-    const yearFiltered = data?.filter(obj => {
-        ;
-
+export const yearTransactionFilter = (data: TransactionType[], year: number) => {
+    const yearFiltered = data.filter(obj => {
         // toDate() is firestore method for timmestamp. Inget ya
         const date = new Date(obj.date.toDate());
         return year === date.getFullYear();
@@ -23,7 +21,7 @@ export const yearDataFilter = (data, year) => {
 
     }));
 
-    yearFiltered?.forEach(transaction => {
+    yearFiltered.forEach(transaction => {
         // toDate() is firestore method for timmestamp. Inget ya
         const date = new Date(transaction.date.toDate());
         const monthIdx = date.getMonth();
@@ -37,8 +35,7 @@ export const yearDataFilter = (data, year) => {
     return newData;
 };
 
-export const monthDataFilter = (data, month, year) => {
-
+export const monthTransactionFilter = (data: TransactionType[], month: number, year: number) => {
     const monthFiltered = data?.filter(obj => {
 
         // toDate() is firestore method for timmestamp. Inget ya
@@ -47,9 +44,10 @@ export const monthDataFilter = (data, month, year) => {
     });
 
     // create days in every month. anjai juga ini baru tau.
-    const getDaysInMonth = (inYear, inMonth) => {
+    const getDaysInMonth = (inYear: number, inMonth: number) => {
         return new Date(inYear, inMonth + 1, 0).getDate();
     };
+
     // console.log(getDaysInMonth(year, month));
     const numOfDays = getDaysInMonth(year, month);
     const newData = Array(numOfDays).fill(null).map((_, idx) => ({
@@ -74,9 +72,9 @@ export const monthDataFilter = (data, month, year) => {
 };
 
 export const todayConvertingTransactions = (transactions?: TransactionType[]): ConvertedSumTransactionData[] | null => {
-    if(!transactions || transactions.length < 0) return null;
+    if (!transactions || transactions.length < 0) return null;
 
-    const newData:ConvertedSumTransactionData[] = [{
+    const newData: ConvertedSumTransactionData[] = [{
         dataKey: "Income/Expanse",
         income: 0,
         expanse: 0
@@ -85,7 +83,7 @@ export const todayConvertingTransactions = (transactions?: TransactionType[]): C
     transactions.forEach(transaction => {
         if (transaction.type == "income") {
             newData[0].income += transaction.amount;
-            
+
         } else if (transaction.type == "expanse") {
             newData[0].expanse += transaction.amount;
         }
@@ -114,7 +112,6 @@ export const weekConvertingTransactions = (transactions?: TransactionType[]): Co
         }
     })
 
-    // console.log(newData);
     return newData;
 }
 
