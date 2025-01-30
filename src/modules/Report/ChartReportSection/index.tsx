@@ -7,25 +7,42 @@ import { WalletType } from "@/types/walletTypes";
 import { Button } from "@/components/ui/button";
 import TitleSection from "@/components/ui/Title";
 import SelectInputControler from "@/components/inputControler/SelectInputControler";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
 import BarReChart from "@/components/systems/BarChart";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCaretLeft, faCaretRight } from "@fortawesome/free-solid-svg-icons";
 import DescriptionSection from "@/components/ui/Description";
-import { monthTransactionFilter, yearTransactionFilter } from "@/utils/filteringData";
-import { FilterFirestoreType, OrderFirestoreType } from "@/hooks/FirestoreApiHooks";
+import {
+  monthTransactionFilter,
+  yearTransactionFilter,
+} from "@/utils/filteringData";
+import {
+  FilterFirestoreType,
+  OrderFirestoreType,
+} from "@/hooks/FirestoreApiHooks";
 import { User } from "firebase/auth";
 import useFirestoreFilteringQueries from "@/hooks/useFirestoreFilteringQueries";
 
 type PropsType = {
   user: User;
-  transactions: TransactionType[],
-  loadingGetTransaction: boolean,
-  updateTransaction: (collectionName: string, filters?: FilterFirestoreType[], orders?: OrderFirestoreType[], limit?: number) => void,
-  wallets: WalletType[],
-  loadingGetWallet: boolean,
-  setDataFilter: () => void,
+  transactions: TransactionType[];
+  loadingGetTransaction: boolean;
+  updateTransaction: (
+    collectionName: string,
+    filters?: FilterFirestoreType[],
+    orders?: OrderFirestoreType[],
+    limit?: number
+  ) => void;
+  wallets: WalletType[];
+  loadingGetWallet: boolean;
+  setDataFilter: () => void;
 };
 
 const ChartReportSection = ({
@@ -40,165 +57,104 @@ const ChartReportSection = ({
   const [year, setYear] = useState<number>(new Date().getFullYear());
   const [month, setMonth] = useState<number>(new Date().getMonth());
   const [selectedWallet, setSelectedWallet] = useState<string>();
-  const [selectedFilter, setSelectedFilter] = useState<"year" | "month">("year");
-  const [firestoreFilter, setFirestoreFilter] = useState<FilterFirestoreType[]>([]);
+  const [selectedFilter, setSelectedFilter] = useState<"year" | "month">(
+    "year"
+  );
+  const [firestoreFilter, setFirestoreFilter] = useState<FilterFirestoreType[]>(
+    []
+  );
 
-  const {setOneMonthFiltering, setOneYearFiltering} = useFirestoreFilteringQueries();
+  const { setOneMonthFiltering, setOneYearFiltering } =
+    useFirestoreFilteringQueries();
 
-  const convertedMonth = useMemo(() => {
-    return monthConvert(month);
-  }, [month]);
+  const convertedMonth = useMemo(() => monthConvert(month), [month]);
 
-  const transactionData = useMemo(() => {
-    if(selectedFilter == "year") {
-      return yearTransactionFilter(transactions, year);
-    } else {
-      return monthTransactionFilter(transactions, month, year);
-    }
-  }, [month, year, selectedFilter, transactions])
+  const transactionData = useMemo(
+    () =>
+      selectedFilter === "year"
+        ? yearTransactionFilter(transactions, year)
+        : monthTransactionFilter(transactions, month, year),
+    [month, year, selectedFilter, transactions]
+  );
+
+  const updateFirestoreFilter = (
+    walletId: string,
+    filterData: FilterFirestoreType[]
+  ) => {
+    setFirestoreFilter([
+      { fieldPath: "accountId", opStf: "==", value: walletId },
+      ...filterData,
+    ]);
+  };
 
   // get default selected wallet
   useEffect(() => {
-    if(wallets.length !== 0) {
+    if (wallets.length !== 0) {
       const defaultWallet = wallets[0];
-      setSelectedWallet(() => JSON.stringify(defaultWallet))
-      setFirestoreFilter([{
-        fieldPath: "accountId",
-        opStf: "==",
-        value: defaultWallet.accountId
-      }])
+      setSelectedWallet(() => JSON.stringify(defaultWallet));
+      updateFirestoreFilter(defaultWallet.accountId, []);
     }
   }, [wallets]);
 
   // get filtered transaction
   useEffect(() => {
     console.log(firestoreFilter);
-    
     // updateTransaction(`user-transactions/${user.uid}/transactions`, firestoreFilter);
-  }, [firestoreFilter])
+  }, [firestoreFilter]);
 
+  // event handler
   const handleSelectedWallet = (value: string) => {
-    if(!value) return;
+    if (!value) return;
     setSelectedWallet(value);
 
-    const selectedWalletData:WalletType = JSON.parse(value);
-    setFirestoreFilter([
-      {
-        fieldPath: "accountId",
-        opStf: "==",
-        value: selectedWalletData.accountId,
-      },
-    ]);
-  }
-
+    const walletData: WalletType = JSON.parse(value);
+    updateFirestoreFilter(
+      walletData.accountId,
+      selectedFilter === "year"
+        ? setOneYearFiltering(year)
+        : setOneMonthFiltering(year, month)
+    );
+  };
   const handleSelectedFilter = (val: "year" | "month") => {
-    if(val === "year") {
-      setSelectedFilter("year")
-      if(selectedWallet) {
-        const selectedWalletData:WalletType = JSON.parse(selectedWallet);
-        setFirestoreFilter([
-          {
-            fieldPath: "accountId",
-            opStf: "==",
-            value: selectedWalletData.accountId,
-          },
-          ...setOneYearFiltering(year)
-        ]); 
-      }
+    setSelectedFilter(val);
+    if (selectedWallet) {
+      const walletData: WalletType = JSON.parse(selectedWallet);
+      const filterData =
+        val === "year"
+          ? setOneYearFiltering(year)
+          : setOneMonthFiltering(year, month);
+      updateFirestoreFilter(walletData.accountId, filterData);
+    }
+  };
+  const handleNavigation = (direction: "left" | "right") => {
+    if (!selectedWallet) return;
+    const walletData: WalletType = JSON.parse(selectedWallet);
+
+    let newYear = year;
+    let newMonth = month;
+
+    if (selectedFilter === "year") {
+      newYear = direction === "right" ? year + 1 : year - 1;
+      setYear(newYear);
+      updateFirestoreFilter(walletData.accountId, setOneYearFiltering(newYear));
     } else {
-      setSelectedFilter("month");
-      if(selectedWallet) {
-        const selectedWalletData:WalletType = JSON.parse(selectedWallet);
-        setFirestoreFilter([
-          {
-            fieldPath: "accountId",
-            opStf: "==",
-            value: selectedWalletData.accountId,
-          },
-          ...setOneMonthFiltering(year, month),
-        ]); 
+      if (direction === "right") {
+        newMonth = month === 11 ? 0 : month + 1;
+        newYear = month === 11 ? year + 1 : year;
+      } else {
+        newMonth = month === 0 ? 11 : month - 1;
+        newYear = month === 0 ? year - 1 : year;
       }
+      setYear(newYear);
+      setMonth(newMonth);
+      updateFirestoreFilter(
+        walletData.accountId,
+        setOneMonthFiltering(newYear, newMonth)
+      );
     }
   };
 
   // const totalAmount = sumTotalAmount(data);
-
-  // useEffect(() => {
-  //   if (!isGettingData) {
-  //     if (selectedFilter === "year") {
-  //       const filteredData = yearDataFilter(transactions, year);
-  //       setData(filteredData);
-  //     } else {
-  //       const filteredData = monthDataFilter(transactions, month, year);
-  //       setData(filteredData);
-  //     }
-  //   }
-  // }, [month, year, selectedFilter, transactions, isGettingData]);
-
-  // useEffect(() => {
-  //   // getting current date;
-  //   const currDate = new Date();
-  //   setYear(currDate.getFullYear());
-  //   setMonth(currDate.getMonth());
-  //   // handle for outside dropdown click
-  //   document.addEventListener("mousedown", handleClickOutside);
-  //   return () => {
-  //     document.removeEventListener("mousedown", handleClickOutside);
-  //   };
-  // }, []);
-
-  // handler functions
-  // const toggleWalletDropDown = () => {
-  //   setIsWalletOpen(!isWalletOpen);
-  // };
-
-  // const handleClickOutside = (event) => {
-  //   if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-  //     setIsWalletOpen(isWalletOpen);
-  //   }
-  // };
-
-  // const handleSelectedFilter = (e) => {
-  //   setSelectedFilter(e.target.value);
-  // };
-  
-  const handleRightBtnClick = () => {
-    if (selectedFilter === "year") {
-      setYear(year + 1);
-    } else {
-      if (month === 11) {
-        setMonth(0);
-        setYear(year + 1);
-        return;
-      }
-      setMonth(month + 1);
-    }
-  };
-
-  const handleLeftBtnClick = () => {
-    if (selectedFilter === "year") {
-      setYear(year - 1);
-    } else {
-      if (month === 0) {
-        setMonth(11);
-        setYear(year - 1);
-        return;
-      }
-      setMonth(month - 1);
-    }
-  };
-
-  // const handleSelectedWallet = (e) => {
-  //   if (e.target.name === selectedWallet) {
-  //     setSelectedWallet("Specify Wallet");
-  //     setIsWalletOpen(!isWalletOpen);
-  //     setDataFilter("all");
-  //   } else {
-  //     setSelectedWallet(e.target.name);
-  //     setIsWalletOpen(!isWalletOpen);
-  //     setDataFilter(e.target.value);
-  //   }
-  // };
 
   return (
     <div className="w-full px-5 flex text-base flex-col gap-5 text-lightWhite font-title relative z-10">
@@ -233,7 +189,7 @@ const ChartReportSection = ({
               <div className=" w-full relative flex justify-center items-center font-title">
                 <Button
                   normalBtn
-                  onClick={handleLeftBtnClick}
+                  onClick={() => handleNavigation("left")}
                   className="rounded-r-none"
                 >
                   <FontAwesomeIcon icon={faCaretLeft} />
@@ -249,7 +205,7 @@ const ChartReportSection = ({
                 </Button>
                 <Button
                   normalBtn
-                  onClick={handleRightBtnClick}
+                  onClick={() => handleNavigation("right")}
                   className="rounded-l-none"
                 >
                   <FontAwesomeIcon icon={faCaretRight} />
@@ -274,10 +230,7 @@ const ChartReportSection = ({
           <TitleSection className="text-secondary p-1">
             Select Wallet
           </TitleSection>
-          <Select
-            onValueChange={handleSelectedWallet}
-            value={selectedWallet}
-          >
+          <Select onValueChange={handleSelectedWallet} value={selectedWallet}>
             <SelectTrigger className="text-lightWhite font-title font-bold bg-primary">
               <SelectValue placeholder="Select Wallet" />
             </SelectTrigger>
@@ -308,7 +261,12 @@ const ChartReportSection = ({
           width={1000}
         />
 
-        <h1>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sequi modi eveniet culpa. Exercitationem nihil, voluptates culpa tempora labore aut, sint dignissimos reprehenderit accusantium alias ipsa repellendus enim consequatur? Ad, voluptatibus?</h1>
+        <h1>
+          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sequi modi
+          eveniet culpa. Exercitationem nihil, voluptates culpa tempora labore
+          aut, sint dignissimos reprehenderit accusantium alias ipsa repellendus
+          enim consequatur? Ad, voluptatibus?
+        </h1>
 
         {/* info */}
         {/* <AdviceInfo totalAmount={10000} /> */}
