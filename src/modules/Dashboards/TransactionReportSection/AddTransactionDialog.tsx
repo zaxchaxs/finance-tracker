@@ -23,7 +23,7 @@ export default function AddTransactionDialog({
   setIsOpen,
 }: PropsType) {
   const {currUser:user} = useAuth();
-  const { postData } = usePostData();
+  const { postData, loading: loadingPostData } = usePostData();
   const {loading, getDocsReference, updateData} = useUpdateData();
   const { pushToast } = useToast();
   const form = useForm<z.infer<typeof addTransactionSchema>>({
@@ -75,8 +75,6 @@ export default function AddTransactionDialog({
       currency: walletDoc.data.currency,
     };
 
-    // return;
-
     await postData(newData,`user-transactions/${user?.uid}/transactions`, true);
     
     setIsOpen(false);
@@ -91,7 +89,7 @@ export default function AddTransactionDialog({
       isOpen={isOpen}
       setIsOpen={setIsOpen}
       onSubmit={handleSubmitForm}
-      loading={loading}
+      loading={loading || loadingPostData}
     >
       <FormField
         control={form.control}

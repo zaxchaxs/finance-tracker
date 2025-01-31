@@ -21,7 +21,7 @@ type PropsType = {
 const TransactionAddSection = ({ wallets }: PropsType) => {
   const { currUser: user } = useAuth();
   const { loading, getDocsReference, updateData } = useUpdateData();
-  const { postData } = usePostData();
+  const { postData, loading: loadingPostData } = usePostData();
   const { pushToast } = useToast();
 
   const form = useForm<z.infer<typeof addTransactionSchema>>({
@@ -180,8 +180,8 @@ const TransactionAddSection = ({ wallets }: PropsType) => {
             )}
           />
           <div className="w-full flex items-center mt-4 justify-end">
-            <Button type="submit">
-              {loading ? <LoaderSection width="w-10" /> : "Save"}
+            <Button normalBtn type="submit" disabled={loading || loadingPostData}>
+              {loading || loadingPostData ? <LoaderSection width="w-10" /> : "Save"}
             </Button>
           </div>
         </form>

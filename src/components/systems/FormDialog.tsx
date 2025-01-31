@@ -47,7 +47,7 @@ const FormDialog = <TSchema extends ZodType<any, ZodTypeDef, any>> ({
             >
               {children}
               <div className="w-full flex items-center mt-4 justify-end">
-                <Button type="submit">
+                <Button type="submit" disabled={loading}>
                   {
                     loading ? (
                       <LoaderSection width="w-10" />

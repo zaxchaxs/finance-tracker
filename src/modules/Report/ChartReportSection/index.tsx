@@ -99,7 +99,7 @@ const ChartReportSection = ({
   // get filtered transaction
   useEffect(() => {
     console.log(firestoreFilter);
-    // updateTransaction(`user-transactions/${user.uid}/transactions`, firestoreFilter);
+    updateTransaction(`user-transactions/${user.uid}/transactions`, firestoreFilter);
   }, [firestoreFilter]);
 
   // event handler
