@@ -1,15 +1,15 @@
 'use client'
-import DashboardPageSkeleton from "@/components/skeletons/DashboardPageSkeleton";
+import ReportPageSkeleton from "@/components/skeletons/ReportPageSkeleton";
 import Unauthenticate from "@/components/Unauthenticate";
 import { useAuth } from "@/contexts/AuthContext";
-import ReportPageModule from "@/modules/Report/page";
+import ReportPageModule from "@/modules/Report";
 
 const ReportPage = () => {
   const { currUser, loading: loadingCurrUser } = useAuth();
   return loadingCurrUser ? (
-    <DashboardPageSkeleton />
+    <ReportPageSkeleton />
   ) : currUser ? (
-    <ReportPageModule />
+      <ReportPageModule user={currUser} />
   ) : (
     <Unauthenticate />
   );

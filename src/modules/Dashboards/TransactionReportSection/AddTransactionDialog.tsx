@@ -5,7 +5,7 @@ import { FormField } from "@/components/ui/form";
 import { useAuth } from "@/contexts/AuthContext";
 import { usePostData, useUpdateData } from "@/hooks/FirestoreApiHooks";
 import useToast from "@/hooks/useToast";
-import { addTransactionSchema, TransactionType } from "@/types/transactionTypes";
+import { addTransactionSchema } from "@/types/transactionTypes";
 import { WalletType } from "@/types/walletTypes";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Dispatch, SetStateAction } from "react";

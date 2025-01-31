@@ -34,7 +34,7 @@ const CurrentTransactionSection = ({ transactions, loadingGetTransaction }: Prop
             icon={faCaretRight}
             rotation={isShowSection ? 90 : undefined}
           />
-          <TitleSection>Current Transactions</TitleSection>
+          <TitleSection className="text-lightWhite">Current Transactions</TitleSection>
         </div>
       </div>
 

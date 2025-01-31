@@ -11,11 +11,11 @@ const buttonVariants = cva(
     variants: {
       variant: {
         default:
-          "bg-primary hover:bg-primary-hover active:bg-primary text-lightWhite ring-1 ring-black transition-all ease-in-out duration-75",
+          "bg-primary hover:bg-primary-hover active:bg-primary text-lightWhite transition-all ease-in-out duration-75",
         secondary:
-          "bg-secondary active:bg-secondary hover:bg-secondary-hover text-lightWhite hover:text-primary ring-1 ring-black transition-all ease-in-out duration-75",
+          "bg-secondary active:bg-secondary hover:bg-secondary-hover text-lightWhite hover:text-primary transition-all ease-in-out duration-75",
         destructive:
-          "bg-danger active:bg-danger hover:bg-danger-hover text-lightWhite ring-1 ring-black transition-all ease-in-out duration-75",
+          "bg-danger active:bg-danger hover:bg-danger-hover text-lightWhite transition-all ease-in-out duration-75",
         outline:
           "border border-input bg-background shadow-md hover:bg-accent hover:text-accent-foreground",
         ghost: "",

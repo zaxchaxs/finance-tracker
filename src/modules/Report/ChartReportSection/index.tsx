@@ -10,7 +10,9 @@ import SelectInputControler from "@/components/inputControler/SelectInputControl
 import {
   Select,
   SelectContent,
+  SelectGroup,
   SelectItem,
+  SelectLabel,
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
@@ -29,6 +31,7 @@ import {
 } from "@/hooks/FirestoreApiHooks";
 import { User } from "firebase/auth";
 import useFirestoreFilteringQueries from "@/hooks/useFirestoreFilteringQueries";
+import { Skeleton } from "@/components/ui/skeleton";
 
 type PropsType = {
   user: User;
@@ -235,31 +238,41 @@ const ChartReportSection = ({
               <SelectValue placeholder="Select Wallet" />
             </SelectTrigger>
             <SelectContent className="bg-foreground font-bold text-primary max-h-[20rem]">
-              {wallets.map((wallet, idx) => (
-                <SelectItem key={idx} value={JSON.stringify(wallet)}>
-                  {wallet.name}
-                </SelectItem>
-              ))}
+              {loadingGetWallet ? (
+                <SelectGroup>
+                  <SelectLabel>Loading...</SelectLabel>
+                </SelectGroup>
+              ) : (
+                wallets.map((wallet, idx) => (
+                  <SelectItem key={idx} value={JSON.stringify(wallet)}>
+                    {wallet.name}
+                  </SelectItem>
+                ))
+              )}
             </SelectContent>
           </Select>
         </div>
 
         {/* chart graph */}
-        <BarReChart
-          data={transactionData}
-          bars={[
-            {
-              dataKey: "income",
-              color: "#4B5945",
-            },
-            {
-              dataKey: "expanse",
-              color: "#FF1D48",
-            },
-          ]}
-          xAxisDataKey="name"
-          width={1000}
-        />
+        {loadingGetTransaction ? (
+          <Skeleton className="w-full h-[25rem] rounded-lg" />
+        ) : (
+          <BarReChart
+            data={transactionData}
+            bars={[
+              {
+                dataKey: "income",
+                color: "#4B5945",
+              },
+              {
+                dataKey: "expanse",
+                color: "#FF1D48",
+              },
+            ]}
+            xAxisDataKey="name"
+            width={1000}
+          />
+        )}
 
         <h1>
           Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sequi modi

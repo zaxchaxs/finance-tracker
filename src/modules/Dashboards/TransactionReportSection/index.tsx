@@ -200,7 +200,7 @@ const TransactionReportSection = ({ wallets, isGettingWallets }: PropsType) => {
             icon={faCaretRight}
             rotation={isShowTransac ? 90 : undefined}
           />
-          <TitleSection>Current Reports</TitleSection>
+          <TitleSection className="text-lightWhite">Current Reports</TitleSection>
         </div>
       </div>
 
@@ -225,7 +225,7 @@ const TransactionReportSection = ({ wallets, isGettingWallets }: PropsType) => {
                     <SelectValue placeholder="Select Wallet" />
                   </SelectTrigger>
                   <SelectContent className="max-h-[20rem]">
-                    {true ? (
+                    {isGettingWallets ? (
                       <SelectGroup>
                         <SelectLabel>Loading...</SelectLabel>
                       </SelectGroup>
@@ -243,8 +243,8 @@ const TransactionReportSection = ({ wallets, isGettingWallets }: PropsType) => {
                   </SelectContent>
                 </Select>
               </div>
-              <Button onClick={() => setIsShowDialog(true)} className="w-full">
-                {"Add Transaction"}
+              <Button normalBtn onClick={() => setIsShowDialog(true)} className="w-full">
+                Add Transaction
               </Button>
             </div>
             <>
