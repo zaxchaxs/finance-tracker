@@ -26,28 +26,30 @@ const AuthContext = createContext<AuthContextType>(initialAuthContextState);
 export function AuthProviderContext({ children }: PropType) {
   const [currUser, setCurrUser] = useState<User | null>(null);
   const [docUser, setDocUser] = useState<DocumentData>({});
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
+
+  const userDocSnap = async (user: User) => {
+    const docSnap = await getDocUserById(user.uid)
+    setDocUser(docSnap.data())
+  };
 
   useEffect(() => {
-
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      if(user) {
-        setCurrUser(user);
-      }
-        
-      setLoading(false);
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+      setLoading(true);
+      try {
+        if(user) {
+          setCurrUser(user);
+          await userDocSnap(user);
+        } else {
+          setCurrUser(null);
+        };
+      } catch (error) {
+        const errMessage = error instanceof Error ? error.message : "Something Wrong!"
+        console.error(errMessage)
+      } finally {
+        setLoading(false);
+      };
     });
-
-    const userDocSnap = async () => {
-      const docSnap = await getDocUserById(currUser?.uid)
-      setDocUser(docSnap.data())
-    };
-
-    if(currUser) {
-      userDocSnap()
-    } else {
-      setCurrUser(null);
-    };
 
     return () => unsubscribe();
   }, [currUser]);

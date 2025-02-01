@@ -7,9 +7,7 @@ import LoaderSection from "../loaders/loaderSection";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import AlternatifLogin from "./AlternatifLogin";
-import SolidShadow from "../ui/solidShadow/SolidShadow";
 import PrimaryButton from "../ui/buttons/PrimaryButton";
-
 
 const FormAuthenticate = ({ typePage }) => {
   const [name, setName] = useState('');

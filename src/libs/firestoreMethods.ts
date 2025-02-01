@@ -19,8 +19,9 @@ import {
   updateDoc,
   where,
 } from "firebase/firestore";
-import { db } from "./firebase";
+import { auth, db } from "./firebase";
 import { WalletType } from "@/types/walletTypes";
+import { signInWithEmailAndPassword } from "firebase/auth";
 
 const addUser = async (idUser, newData) => {
   try {
@@ -230,7 +231,20 @@ const addDocTransaction = async (idUser, newData) => {
   }
 };
 
+const loginWithEmailAndPassword = async (email: string, password: string) => {
+    try{
+      const { user } = await signInWithEmailAndPassword(auth, email, password);
+        if(user) await getDocUserById(user.uid);
+        return user;
+    } catch(e) {
+      const errMessage = e instanceof Error ? e.message : "Something wrong!";
+        console.error(errMessage);
+      throw new Error("Email or password wrong.");
+    };
+};
+
 export {
+  loginWithEmailAndPassword,
   getDocUserById,
   getSnapshotUserWallet,
   getSnapshotUserTransaction,

@@ -1,12 +1,7 @@
 "use client";
-
-import { useState } from "react";
 import { FilterFirestoreType } from "./FirestoreApiHooks";
 
 export const useFirestoreFilteringQueries = () => {
-  const [startOfFilter, setStartOfFilter] = useState<FilterFirestoreType[]>();
-  const [endOfFilter, setEndOfFilter] = useState<FilterFirestoreType[]>();
-
   const today = new Date();
 
   const setTodayFiltering = (): FilterFirestoreType[] => {

@@ -200,7 +200,9 @@ const TransactionReportSection = ({ wallets, isGettingWallets }: PropsType) => {
             icon={faCaretRight}
             rotation={isShowTransac ? 90 : undefined}
           />
-          <TitleSection className="text-lightWhite">Current Reports</TitleSection>
+          <TitleSection className="text-lightWhite">
+            Current Reports
+          </TitleSection>
         </div>
       </div>
 
@@ -209,9 +211,11 @@ const TransactionReportSection = ({ wallets, isGettingWallets }: PropsType) => {
           isShowTransac ? "" : "hidden "
         }`}
       >
-        {wallets?.length === 0 || !wallets ? (
+        {wallets.length === 0 || !wallets ? (
           <div className="flex justify-center items-end w-full text-center py-2">
-            <p>{`It seem you don't have a wallet account yet, try creating one.`}</p>
+            <TitleSection>
+              {`It seem you don't have a wallet account yet, try creating one.`}
+            </TitleSection>
           </div>
         ) : (
           <>
@@ -243,7 +247,11 @@ const TransactionReportSection = ({ wallets, isGettingWallets }: PropsType) => {
                   </SelectContent>
                 </Select>
               </div>
-              <Button normalBtn onClick={() => setIsShowDialog(true)} className="w-full">
+              <Button
+                normalBtn
+                onClick={() => setIsShowDialog(true)}
+                className="w-full"
+              >
                 Add Transaction
               </Button>
             </div>

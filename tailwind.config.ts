@@ -87,7 +87,10 @@ const config = {
 				'third-hover': '#F0FDFA',
 				'danger': '#FF1D48',
 				'danger-hover': '#F43F5E',
-			}
+			},
+			borderRadius: {
+				'5xl': '3rem'
+			  }
 		}
 	},
 	plugins: [require("tailwindcss-animate")],

@@ -38,7 +38,9 @@ const WalletAccountSection = ({ wallets, isGettingData }: PropsType) => {
           </div>
         ) : !wallets || wallets.length < 1 ? (
           <div className="flex justify-center items-end w-full text-center py-2">
-            <p>{`It seem you don't have a wallet account yet, try creating one.`}</p>
+            <TitleSection>
+              {`It seem you don't have a wallet account yet, try creating one.`}
+            </TitleSection>
           </div>
         ) : (
           <div className="w-full">
