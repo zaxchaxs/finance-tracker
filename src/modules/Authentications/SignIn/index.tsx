@@ -3,7 +3,7 @@ import TitleSection from "@/components/ui/Title";
 import { useAuth } from "@/contexts/AuthContext";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
-import SignInForm from "../FormAuthentications";
+import SignInForm from "../FormAuthentications/SignInForm";
 
 const SignInModule = () => {
     const { currUser } = useAuth();

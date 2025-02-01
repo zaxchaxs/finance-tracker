@@ -13,12 +13,11 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 export default function SignInForm() {
-      const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
   const router = useRouter();
 
-  const {pushToast, updateToast} = useToast();
+  const { pushToast, updateToast } = useToast();
 
-    
   const form = useForm<z.infer<typeof signInSchema>>({
     resolver: zodResolver(signInSchema),
     mode: "onChange",
@@ -29,8 +28,8 @@ export default function SignInForm() {
   const handleSignIn = async () => {
     setLoading(true);
     const toastId = pushToast({
-        message: "Loading...",
-        isLoading: true
+      message: "Loading...",
+      isLoading: true,
     });
 
     try {
@@ -38,16 +37,16 @@ export default function SignInForm() {
       const password = form.getValues("password");
       await loginWithEmailAndPassword(email, password);
       updateToast({
-          toastId,
+        toastId,
         message: "",
-      })
+      });
       router.push("/dashboard");
     } catch (error) {
-        updateToast({
-          toastId,
-          message: "Incorrect Email or Password",
-          isError: true,
-        });
+      updateToast({
+        toastId,
+        message: "Incorrect Email or Password",
+        isError: true,
+      });
     } finally {
       setLoading(false);
     }
@@ -88,13 +87,19 @@ export default function SignInForm() {
             />
           </div>
           <div className="flex flex-col gap-4 items-center">
-            <Button disabled={loading} normalBtn className="w-fit">Sign In</Button>
+            <Button disabled={loading} normalBtn className="w-fit">
+              Sign In
+            </Button>
             <DescriptionSection>Or login with</DescriptionSection>
             <div className="flex gap-4 items-center">
-              <Button disabled={loading} normalBtn variant={"destructive"}>Google</Button>
-              <Button disabled={loading} normalBtn variant={"secondary"}>Github</Button>
+              <Button disabled={loading} normalBtn variant={"destructive"}>
+                Google
+              </Button>
+              <Button disabled={loading} normalBtn variant={"secondary"}>
+                Github
+              </Button>
             </div>
-            <Link href={"signUp"}>
+            <Link href={"/signUp"}>
               <DescriptionSection className="text-blue-600 underline">
                 Need an account?
               </DescriptionSection>

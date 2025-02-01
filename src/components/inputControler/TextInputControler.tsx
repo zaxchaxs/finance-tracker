@@ -48,14 +48,14 @@ const TextInputControler = ({
             inputMode="numeric"
           />
         ) : type === "password" ? (
-          <div className="items-center flex h-9 w-full rounded-md border border-input group-focus-visible:ring-1">
+          <div className="items-center flex h-9 w-full rounded-md border border-input group-focus-visible:ring-1 bg-background">
             <Input
               {...restProps}
               value={value}
               onChange={restProps.onChange}
               type={showPassword ? "text" : "password"}
               placeholder={placeholder}
-              className="border-none focus-visible:ring-0 group"
+              className="border-none focus-visible:ring-0 group bg-background"
             />
             <div
               className="flex items-center p-2 cursor-pointer"
@@ -71,6 +71,7 @@ const TextInputControler = ({
             onChange={restProps.onChange}
             type={type ?? ""}
             placeholder={placeholder}
+            className="bg-background"
           />
         )}
       </FormControl>

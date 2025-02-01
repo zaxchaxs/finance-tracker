@@ -1,8 +1,8 @@
 'use client'
 import SignInModule from "@/modules/Authentications/SignIn";
 
-const LoginPage = () => {
+const SignInPage = () => {
 return <SignInModule />;
 }
 
-export default LoginPage;
+export default SignInPage;
