@@ -67,7 +67,7 @@ export default function Home() {
 
       <div className="flex gap-4 items-center justify-center">
         <Link href={currUser ? '/dashboard' : '/login'} >
-          <Button>{currUser ? "Start" : "Login"}</Button>
+          <Button normalBtn>{currUser ? "Start" : "Login"}</Button>
         </Link>
       </div>
     </main>

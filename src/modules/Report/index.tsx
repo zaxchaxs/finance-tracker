@@ -1,12 +1,10 @@
 "use client";
-import Unauthenticate from "@/components/Unauthenticate";
-import LoaderPage from "@/components/loaders/loaderPage";
-import { useAuth } from "@/contexts/AuthContext";
 import { useSnapshotDatas } from "@/hooks/FirestoreApiHooks";
 import { WalletType } from "@/types/walletTypes";
 import { TransactionType } from "@/types/transactionTypes";
 import ChartReportSection from "@/modules/Report/ChartReportSection";
 import { User } from "firebase/auth";
+import CurrentTransactionSection from "../Dashboards/CurrentTransactionSection";
 
 type PropsType = {
   user: User
@@ -47,15 +45,21 @@ export default function ReportPageModule({user}: PropsType) {
 
   return (
     <main className="min-h-screen text-lg w-full py-4 flex flex-col gap-5">
-      <ChartReportSection
-        user={user}
-        setDataFilter={() => {}}
-        wallets={walletData}
-        loadingGetWallet={loadingGetWallet}
-        transactions={transactionsData}
-        loadingGetTransaction={transactionLoading}
-        updateTransaction={updateSnapshotParams}
-      />
+      <div className="w-full p-4 flex flex-col items-center gap-4">
+        <ChartReportSection
+          user={user}
+          wallets={walletData}
+          loadingGetWallet={loadingGetWallet}
+          transactions={transactionsData}
+          loadingGetTransaction={transactionLoading}
+          updateTransaction={updateSnapshotParams}
+        />
+        <CurrentTransactionSection
+          title="List Transaction"
+          transactions={transactionsData}
+          loadingGetTransaction={transactionLoading}
+        />
+      </div>
     </main>
   );
 }

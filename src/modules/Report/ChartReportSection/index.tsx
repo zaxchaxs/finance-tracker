@@ -1,12 +1,10 @@
 import { monthConvert } from "@/utils/monthConverting";
 import { useState, useRef, useEffect, useMemo } from "react";
-import { sumTotalAmount } from "@/utils/sumAmount";
-import { currencyFormat } from "@/utils/currencyFormat";
+import { sumTotalTransaction } from "@/utils/sumTotalTransaction";
 import { TransactionType } from "@/types/transactionTypes";
 import { WalletType } from "@/types/walletTypes";
 import { Button } from "@/components/ui/button";
 import TitleSection from "@/components/ui/Title";
-import SelectInputControler from "@/components/inputControler/SelectInputControler";
 import {
   Select,
   SelectContent,
@@ -16,11 +14,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Label } from "@/components/ui/label";
 import BarReChart from "@/components/systems/BarChart";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCaretLeft, faCaretRight } from "@fortawesome/free-solid-svg-icons";
-import DescriptionSection from "@/components/ui/Description";
 import {
   monthTransactionFilter,
   yearTransactionFilter,
@@ -45,7 +41,6 @@ type PropsType = {
   ) => void;
   wallets: WalletType[];
   loadingGetWallet: boolean;
-  setDataFilter: () => void;
 };
 
 const ChartReportSection = ({
@@ -55,7 +50,6 @@ const ChartReportSection = ({
   updateTransaction,
   wallets,
   loadingGetWallet,
-  setDataFilter,
 }: PropsType) => {
   const [year, setYear] = useState<number>(new Date().getFullYear());
   const [month, setMonth] = useState<number>(new Date().getMonth());
@@ -80,15 +74,11 @@ const ChartReportSection = ({
     [month, year, selectedFilter, transactions]
   );
 
-  const updateFirestoreFilter = (
-    walletId: string,
-    filterData: FilterFirestoreType[]
-  ) => {
-    setFirestoreFilter([
-      { fieldPath: "accountId", opStf: "==", value: walletId },
-      ...filterData,
-    ]);
-  };
+  const totalTransaction = useMemo(() => {
+    if (selectedWallet) {
+      return sumTotalTransaction(transactionData, selectedWallet);
+    }
+  }, [transactionData]);
 
   // get default selected wallet
   useEffect(() => {
@@ -101,8 +91,13 @@ const ChartReportSection = ({
 
   // get filtered transaction
   useEffect(() => {
-    console.log(firestoreFilter);
-    updateTransaction(`user-transactions/${user.uid}/transactions`, firestoreFilter);
+    if (firestoreFilter.length !== 0) {
+      console.log(123);
+      updateTransaction(
+        `user-transactions/${user.uid}/transactions`,
+        firestoreFilter
+      );
+    }
   }, [firestoreFilter]);
 
   // event handler
@@ -157,138 +152,142 @@ const ChartReportSection = ({
     }
   };
 
-  // const totalAmount = sumTotalAmount(data);
+  const updateFirestoreFilter = (
+    walletId: string,
+    filterData: FilterFirestoreType[]
+  ) => {
+    setFirestoreFilter([
+      { fieldPath: "accountId", opStf: "==", value: walletId },
+      ...filterData,
+    ]);
+  };
 
   return (
-    <div className="w-full px-5 flex text-base flex-col gap-5 text-lightWhite font-title relative z-10">
-      <>
-        {/* filter input sections */}
-        <div className="w-full flex flex-col items-center gap-2">
-          <TitleSection className="text-secondary p-1 font-bold">
-            Select Filter
-          </TitleSection>
+    <div className="w-full flex text-base flex-col gap-4 text-lightWhite font-title">
+      {/* filter sections */}
+      {!loadingGetWallet && wallets.length === 0 ? (
+        <div className="w-full text-center">
+          <TitleSection>{`It seems you don't have wallet yet.`}</TitleSection>
+          <TitleSection>Try to create one</TitleSection>
+        </div>
+      ) : (
+        <>
+          <div className="w-full flex flex-col items-center gap-2">
+            <TitleSection className="text-secondary p-1 font-bold">
+              Select Filter
+            </TitleSection>
 
-          <div className="w-full flex justify-between items-center gap-2">
-            <div className="flex w-full">
-              <Button
-                normalBtn
-                variant={selectedFilter === "year" ? "default" : "secondary"}
-                className="rounded-r-none"
-                value={"year"}
-                onClick={() => handleSelectedFilter("year")}
-              >
-                Year
-              </Button>
-              <Button
-                normalBtn
-                variant={selectedFilter === "month" ? "default" : "secondary"}
-                className="rounded-l-none"
-                onClick={() => handleSelectedFilter("month")}
-              >
-                Month
-              </Button>
-            </div>
-            <div className="w-full flex items-center relative">
-              <div className=" w-full relative flex justify-center items-center font-title">
+            <div className="w-full flex justify-between items-center gap-2">
+              <div className="flex w-full">
                 <Button
                   normalBtn
-                  onClick={() => handleNavigation("left")}
+                  variant={selectedFilter === "year" ? "default" : "secondary"}
                   className="rounded-r-none"
+                  value={"year"}
+                  onClick={() => handleSelectedFilter("year")}
                 >
-                  <FontAwesomeIcon icon={faCaretLeft} />
+                  Year
                 </Button>
                 <Button
                   normalBtn
-                  className="bg-secondary h-max w-full text-center rounded-none"
-                  onClick={() => console.log(transactions)}
-                >
-                  {selectedFilter === "year"
-                    ? year
-                    : `${convertedMonth}, ${year}`}
-                </Button>
-                <Button
-                  normalBtn
-                  onClick={() => handleNavigation("right")}
+                  variant={selectedFilter === "month" ? "default" : "secondary"}
                   className="rounded-l-none"
+                  onClick={() => handleSelectedFilter("month")}
                 >
-                  <FontAwesomeIcon icon={faCaretRight} />
+                  Month
                 </Button>
+              </div>
+              <div className="w-full flex items-center relative">
+                <div className=" w-full relative flex justify-center items-center font-title">
+                  <Button
+                    normalBtn
+                    onClick={() => handleNavigation("left")}
+                    className="rounded-r-none"
+                  >
+                    <FontAwesomeIcon icon={faCaretLeft} />
+                  </Button>
+                  <Button
+                    normalBtn
+                    className="bg-secondary h-max w-full text-center rounded-none"
+                    onClick={() => console.log(transactions)}
+                  >
+                    {selectedFilter === "year"
+                      ? year
+                      : `${convertedMonth}, ${year}`}
+                  </Button>
+                  <Button
+                    normalBtn
+                    onClick={() => handleNavigation("right")}
+                    className="rounded-l-none"
+                  >
+                    <FontAwesomeIcon icon={faCaretRight} />
+                  </Button>
+                </div>
               </div>
             </div>
           </div>
-        </div>
 
-        <div className="text-secondary">
-          <div className="flex justify-start items-center gap-1">
-            <TitleSection>Total Income:</TitleSection>
-            <TitleSection className="text-primary">1000</TitleSection>
+          <div className="text-secondary">
+            <div className="flex justify-start items-center gap-1">
+              <TitleSection>Total Income:</TitleSection>
+              <TitleSection className="text-primary">
+                {totalTransaction?.income}
+              </TitleSection>
+            </div>
+            <div className="flex justify-start gap-1 items-center">
+              <TitleSection>Total Expense:</TitleSection>
+              <TitleSection className="text-danger">
+                {totalTransaction?.expanse}
+              </TitleSection>
+            </div>
           </div>
-          <div className="flex justify-start gap-1 items-center">
-            <TitleSection>Total Expense:</TitleSection>
-            <TitleSection className="text-danger">5000</TitleSection>
+
+          <div className="w-fit text-base">
+            <TitleSection className="text-secondary p-1">
+              Select Wallet
+            </TitleSection>
+            <Select onValueChange={handleSelectedWallet} value={selectedWallet}>
+              <SelectTrigger className="text-lightWhite font-title font-bold bg-primary">
+                <SelectValue placeholder="Select Wallet" />
+              </SelectTrigger>
+              <SelectContent className="bg-foreground font-bold text-primary max-h-[20rem]">
+                {loadingGetWallet ? (
+                  <SelectGroup>
+                    <SelectLabel>Loading...</SelectLabel>
+                  </SelectGroup>
+                ) : (
+                  wallets.map((wallet, idx) => (
+                    <SelectItem key={idx} value={JSON.stringify(wallet)}>
+                      {wallet.name}
+                    </SelectItem>
+                  ))
+                )}
+              </SelectContent>
+            </Select>
           </div>
-        </div>
+        </>
+      )}
 
-        <div className="w-fit text-base">
-          <TitleSection className="text-secondary p-1">
-            Select Wallet
-          </TitleSection>
-          <Select onValueChange={handleSelectedWallet} value={selectedWallet}>
-            <SelectTrigger className="text-lightWhite font-title font-bold bg-primary">
-              <SelectValue placeholder="Select Wallet" />
-            </SelectTrigger>
-            <SelectContent className="bg-foreground font-bold text-primary max-h-[20rem]">
-              {loadingGetWallet ? (
-                <SelectGroup>
-                  <SelectLabel>Loading...</SelectLabel>
-                </SelectGroup>
-              ) : (
-                wallets.map((wallet, idx) => (
-                  <SelectItem key={idx} value={JSON.stringify(wallet)}>
-                    {wallet.name}
-                  </SelectItem>
-                ))
-              )}
-            </SelectContent>
-          </Select>
-        </div>
-
-        {/* chart graph */}
-        {loadingGetTransaction ? (
-          <Skeleton className="w-full h-[25rem] rounded-lg" />
-        ) : (
-          <BarReChart
-            data={transactionData}
-            bars={[
-              {
-                dataKey: "income",
-                color: "#4B5945",
-              },
-              {
-                dataKey: "expanse",
-                color: "#FF1D48",
-              },
-            ]}
-            xAxisDataKey="name"
-            width={1000}
-          />
-        )}
-
-        <h1>
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sequi modi
-          eveniet culpa. Exercitationem nihil, voluptates culpa tempora labore
-          aut, sint dignissimos reprehenderit accusantium alias ipsa repellendus
-          enim consequatur? Ad, voluptatibus?
-        </h1>
-
-        {/* info */}
-        {/* <AdviceInfo totalAmount={10000} /> */}
-
-        {/* All filtered transactions */}
-        {/* <div className="w-full p-1 text-base rounded-md shadow-md items-center flex justify-center bg-secondary hover:bg-secondary-hover active:bg-secondary cursor-pointer">
-            <button>{`Show all transaction in ${convertedMonth}, ${year}`}</button>
-          </div> */}
-      </>
+      {/* chart graph */}
+      {loadingGetTransaction ? (
+        <Skeleton className="w-full h-[25rem] rounded-lg" />
+      ) : (
+        <BarReChart
+          data={transactionData}
+          bars={[
+            {
+              dataKey: "income",
+              color: "#4B5945",
+            },
+            {
+              dataKey: "expanse",
+              color: "#FF1D48",
+            },
+          ]}
+          xAxisDataKey="name"
+          width={1000}
+        />
+      )}
     </div>
   );
 };
