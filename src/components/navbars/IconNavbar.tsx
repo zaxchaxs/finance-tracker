@@ -1,7 +1,6 @@
 import { IconProp } from "@fortawesome/fontawesome-svg-core";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { motion } from "framer-motion";
-import { Icon } from "next/dist/lib/metadata/types/metadata-types";
 import Link from "next/link";
 import DescriptionSection from "../ui/Description";
 import { cn } from "@/lib/utils";

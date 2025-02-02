@@ -3,7 +3,7 @@ import { createContext, ReactNode, useContext, useEffect, useState } from 'react
 import { auth } from '@/libs/firebase';
 import { onAuthStateChanged, User } from 'firebase/auth';
 import { getDocUserById } from '@/libs/firestoreMethods';
-import { DocumentData } from 'firebase/firestore';
+import { UserDocType } from '@/types/authenticationModel';
 
 type PropType = {
   children: ReactNode;
@@ -12,7 +12,7 @@ type PropType = {
 type AuthContextType = {
   currUser: User | null,
   loading: boolean,
-  docUser: DocumentData | null
+  docUser: UserDocType | null
 }
 
 const initialAuthContextState: AuthContextType = {
@@ -25,12 +25,17 @@ const AuthContext = createContext<AuthContextType>(initialAuthContextState);
 
 export function AuthProviderContext({ children }: PropType) {
   const [currUser, setCurrUser] = useState<User | null>(null);
-  const [docUser, setDocUser] = useState<DocumentData>({});
-  const [loading, setLoading] = useState(false);
+  const [docUser, setDocUser] = useState<UserDocType | null>(null);
+  const [loading, setLoading] = useState(true);
 
   const userDocSnap = async (user: User) => {
-    const docSnap = await getDocUserById(user.uid)
-    setDocUser(docSnap.data())
+    try {
+      const userDocument = await getDocUserById(user.uid);
+      setDocUser(userDocument)
+    } catch (e) {
+      const message = e instanceof Error ? e.message : "Something wrong!"
+      console.error(message);
+    }
   };
 
   useEffect(() => {

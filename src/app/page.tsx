@@ -1,14 +1,9 @@
 "use client";
-import { useRouter } from "next/navigation";
-import { logout } from "@/libs/auth";
 import Image from "next/image";
 import homeIcon from "../../public/homeIcon.svg";
 import { useAuth } from "@/contexts/AuthContext";
 import LoaderPage from "@/components/loaders/loaderPage";
-import { ToastContainer } from "react-toastify";
 import { useState } from "react";
-import { sideSweetAlertError, sideSweetAlertSuccess } from "@/libs/sweetAlert";
-import LoaderLightSection from "@/components/loaders/loaderLightSection";
 import { Button } from "@/components/ui/button";
 import { AlertModal } from "@/components/systems/AlertModal";
 import TitleSection from "@/components/ui/Title";
@@ -17,20 +12,7 @@ import Link from "next/link";
 export default function Home() {
   const [isAlertOpen, setIsAlertOpen] = useState<boolean>(true);
   const { currUser, loading } = useAuth();
-  const router = useRouter();
-  const [loadingAuth, setLoadingAuth] = useState(false);
 
-  const handleLogout = async () => {
-    setLoadingAuth(true);
-    try {
-      await logout();
-      sideSweetAlertSuccess("Success to logout")
-    } catch (error) {
-      sideSweetAlertError("Failed to logout");
-    } finally {
-       setLoadingAuth(false);
-    };
-  };
 
   return loading ? (
     <LoaderPage />
@@ -42,12 +24,12 @@ export default function Home() {
         isOpen={isAlertOpen}
         onAlertClose={() => setIsAlertOpen(false)}
       />
-      <ToastContainer
+      {/* <ToastContainer
         position="top-right"
         limit={3}
         className={"flex flex-col items-end rounded-lg mt-20"}
         style={{ marginTop: "4rem" }}
-      />
+      /> */}
 
       <TitleSection className="text-3xl text-primary text-center font-header font-bold">
         Finance Tracker
@@ -66,8 +48,8 @@ export default function Home() {
       </div>
 
       <div className="flex gap-4 items-center justify-center">
-        <Link href={currUser ? '/dashboard' : '/login'} >
-          <Button normalBtn>{currUser ? "Start" : "Login"}</Button>
+        <Link href={currUser ? '/dashboard' : '/signIn'} >
+          <Button normalBtn>{currUser ? "Start" : "Sign In"}</Button>
         </Link>
       </div>
     </main>

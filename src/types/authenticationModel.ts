@@ -1,4 +1,13 @@
+import { Timestamp } from "firebase/firestore";
 import { z } from "zod";
+
+export interface UserDocType {
+    userId: string;
+    name: string;
+    email: string;
+    photoURL: string | null;
+    createdAt: Timestamp
+};
 
 export const signInSchema = z.object({
     email: z.string({

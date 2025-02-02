@@ -17,7 +17,7 @@ export default function useToast() {
   const pushToast = ({ message, isError, isLoading }: PushProps) => {
     if (!isError && !isLoading) {
       return toast.success(<span className='font-medium'>{message}</span>, {
-        duration: 4000,
+        // duration: 4000,
         position: 'top-right',
         style: {
           maxWidth: 380,

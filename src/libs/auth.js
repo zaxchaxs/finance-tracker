@@ -41,14 +41,6 @@ export const loginWithEmailAndPassword = async (email, password) => {
     };
 };
 
-export const logout = async () => {
-    try {
-        await signOut(auth);
-    } catch(error) {
-        console.error(error.message);
-    }
-}
-
 export const loginWithGithub = async () => {
     const provider = new GithubAuthProvider();
     try {

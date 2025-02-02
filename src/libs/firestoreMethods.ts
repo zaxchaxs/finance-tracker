@@ -6,6 +6,7 @@ import {
   deleteDoc,
   doc,
   DocumentData,
+  getCountFromServer,
   getDoc,
   getDocs,
   limit,
@@ -17,7 +18,8 @@ import {
   where,
 } from "firebase/firestore";
 import { auth, db } from "./firebase";
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "firebase/auth";
+import { UserDocType } from "@/types/authenticationModel";
 
 export const addUser = async (idUser, newData) => {
   try {
@@ -26,21 +28,6 @@ export const addUser = async (idUser, newData) => {
   } catch (error) {
     console.error(error.message);
     throw Error(error.message);
-  }
-};
-
-export const getDocUserById = async (idUser) => {
-  try {
-    const userRef = doc(db, "users", idUser);
-    const docSnap = await getDoc(userRef);
-    if (docSnap.exists()) {
-      return docSnap;
-    } else {
-      throw new Error("User/email not found!");
-    }
-  } catch (e) {
-    console.error(e.message);
-    throw e.message;
   }
 };
 
@@ -227,6 +214,22 @@ export const addDocTransaction = async (idUser, newData) => {
   }
 };
 
+export const getDocUserById = async (idUser: string): Promise<UserDocType> => {
+  try {
+    const userRef = doc(db, "users", idUser);
+    const docSnap = await getDoc(userRef);
+    if (docSnap.exists()) {
+      return docSnap.data() as UserDocType;
+    } else {
+      throw new Error("User not found!");
+    }
+  } catch (e) {
+    const errMessage = e instanceof Error ? e.message : "Something wrong!"
+    console.error(errMessage);
+    throw new Error(errMessage);
+  }
+};
+
 export const loginWithEmailAndPassword = async (email: string, password: string) => {
   try {
     const { user } = await signInWithEmailAndPassword(auth, email, password);
@@ -262,3 +265,25 @@ export const registerWithEmailAndPassword = async (name: string, email: string, 
     console.error(errMessage);
   }
 };
+
+export const logout = async () => {
+    try {
+        await signOut(auth);
+    } catch(error) {
+      const errMessage = error instanceof Error ? error.message : "Something wrong!";
+      console.error(errMessage);
+    }
+}
+
+export const getDocumentCount = async (collectionName: string) => {
+  try {
+    const col = collection(db, collectionName);
+    const snapshot = await getCountFromServer(col);
+    console.log(snapshot.data());
+    return snapshot.data().count;
+  } catch (error) {
+    const errMessage = error instanceof Error ? error.message : "Something wrong!";
+      console.error(errMessage);
+      return 0;
+  }
+}
