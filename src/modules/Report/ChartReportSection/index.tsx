@@ -92,7 +92,6 @@ const ChartReportSection = ({
   // get filtered transaction
   useEffect(() => {
     if (firestoreFilter.length !== 0) {
-      console.log(123);
       updateTransaction(
         `user-transactions/${user.uid}/transactions`,
         firestoreFilter
@@ -209,7 +208,6 @@ const ChartReportSection = ({
                   <Button
                     normalBtn
                     className="bg-secondary h-max w-full text-center rounded-none"
-                    onClick={() => console.log(transactions)}
                   >
                     {selectedFilter === "year"
                       ? year

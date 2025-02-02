@@ -48,7 +48,6 @@ export const monthTransactionFilter = (data: TransactionType[], month: number, y
         return new Date(inYear, inMonth + 1, 0).getDate();
     };
 
-    // console.log(getDaysInMonth(year, month));
     const numOfDays = getDaysInMonth(year, month);
     const newData = Array(numOfDays).fill(null).map((_, idx) => ({
         name: String(idx + 1),

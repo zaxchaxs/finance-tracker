@@ -1,4 +1,4 @@
-export const monthConvert = (index) => {
+export const monthConvert = (index: number) => {
     const months = [
         { idx: 0, name: 'Jan' },
         { idx: 1, name: 'Feb' },

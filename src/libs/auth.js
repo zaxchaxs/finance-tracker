@@ -1,45 +1,7 @@
 import { createUserWithEmailAndPassword, GithubAuthProvider, GoogleAuthProvider, signInWithEmailAndPassword, signInWithPopup, signOut } from "firebase/auth";
 import {  auth, db } from "./firebase";
-import { addUser, getDocUserById } from "./firestoreMethods";
-import { successSignupSweetAlert } from "./sweetAlert";
+import { addUser } from "./firestoreMethods";
 import { doc, getDoc } from "firebase/firestore";
-
-export const registerWithEmailAndPassword = async (email, password, name) => {
-    
-    try{
-        // firebase auth
-        const { user } = await createUserWithEmailAndPassword(auth, email, password);
-
-        // add user to firestore
-        if(user) {
-            const newData = {
-                userId: user.uid,
-                email: user.email,
-                name: name,
-                createdAt: new Date(),
-                photoURL: user.photoURL
-
-            }
-            await addUser(user.uid, newData);
-        }
-    } catch(e) {
-        console.error(e.message);
-        throw Error(e.message);
-    }
-    successSignupSweetAlert();
-};
-
-export const loginWithEmailAndPassword = async (email, password) => {
-    try{
-        const { user } = await signInWithEmailAndPassword(auth, email, password);
-        if(user) await getDocUserById(user.uid);
-
-        return user;
-    } catch(e) {
-        console.error(e);
-        throw new Error("Email or password wrong.");
-    };
-};
 
 export const loginWithGithub = async () => {
     const provider = new GithubAuthProvider();

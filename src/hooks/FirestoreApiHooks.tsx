@@ -116,14 +116,12 @@ export const useSnapshotDatas = <T,>(
       }
     );
 
-    console.log("snapshot");
     return unsubscribe;
   };
 
   useEffect(() => {
     if (initialCall || isCanSnapshotRef.current) {
       snapshotData();
-      console.log("looping useEffect");
     }
   }, [q]);
 

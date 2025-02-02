@@ -1,34 +1,31 @@
-import {  Catamaran, Nunito_Sans, Roboto } from "next/font/google";
+import { Catamaran, Nunito_Sans, Roboto } from "next/font/google";
 import "./globals.css";
-import { AuthProviderContext, useAuth } from "@/contexts/AuthContext";
-import Navbar from "@/components/Navbars/Navbar";
+import { AuthProviderContext } from "@/contexts/AuthContext";
 import { ReactNode } from "react";
 import MobileNavbar from "@/components/Navbars/MobileNavbar";
 import ToastContainer from "@/components/systems/ToastContainer";
-import PageInfoBadge from "@/components/systems/PageInfoBadge";
 
 const catamaran = Catamaran({
   weight: "900",
-  variable: '--font-catamaran',
-  display: 'swap',
-  subsets: ['latin']
+  variable: "--font-catamaran",
+  display: "swap",
+  subsets: ["latin"],
 });
 
 const nunitoSans = Nunito_Sans({
   weight: "400",
-  display: 'swap',
-  variable: '--font-nunito-sans',
-  subsets: ['latin']
-})
+  display: "swap",
+  variable: "--font-nunito-sans",
+  subsets: ["latin"],
+});
 
 const roboto = Roboto({
-  weight: '400',
-  subsets: ['latin'],
-  display: 'swap',
+  weight: "400",
+  subsets: ["latin"],
+  display: "swap",
   // adjustFontFallback: false,
-  variable: '--font-roboto'
-  
-})
+  variable: "--font-roboto",
+});
 
 export const metadata = {
   title: "Zaxch Finance",
@@ -36,24 +33,19 @@ export const metadata = {
 };
 
 type PropsType = {
-  children: ReactNode
-}
+  children: ReactNode;
+};
 
 export default function RootLayout({ children }: PropsType) {
-  
   return (
     <html lang="en">
-      <body className={`bg-background ${catamaran.variable} ${nunitoSans.variable} ${roboto.variable}`}>
+      <body
+        className={`bg-background ${catamaran.variable} ${nunitoSans.variable} ${roboto.variable}`}
+      >
         <AuthProviderContext>
-
-          {/* <Navbar /> */}
-          {/* <PageInfoBadge pageName="Dashboard" /> */}
-          {/* <main className="relative mt-10"> */}
-            {children}
-          {/* </main> */}
+          {children}
           <ToastContainer />
           <MobileNavbar />
-          
         </AuthProviderContext>
       </body>
     </html>
