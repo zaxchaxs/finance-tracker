@@ -6,9 +6,9 @@ import {
   faMoneyBillAlt,
   faMoneyBillTransfer,
 } from "@fortawesome/free-solid-svg-icons";
-import IconNavbar from "./IconNavbar";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
+import IconNavbar from "./IconNavbar";
 
 const MobileNavbar = () => {
   const pathName = usePathname();

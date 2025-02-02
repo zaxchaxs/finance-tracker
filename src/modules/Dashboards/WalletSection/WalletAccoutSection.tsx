@@ -4,8 +4,8 @@ import TitleSection from "@/components/ui/Title";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlusSquare } from "@fortawesome/free-solid-svg-icons";
 import { AddWalletDialog } from "./AddWalletDialog";
-import WalletCard from "@/components/cards/WalletCard";
 import WalletCardSkeleton from "@/components/skeletons/WalletCardSkeleton";
+import WalletCard from "@/components/cards/walletCard";
 
 type PropsType = {
   wallets: WalletType[];

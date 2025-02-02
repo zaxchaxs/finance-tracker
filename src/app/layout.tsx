@@ -2,14 +2,15 @@ import { Catamaran, Nunito_Sans, Roboto } from "next/font/google";
 import "./globals.css";
 import { AuthProviderContext } from "@/contexts/AuthContext";
 import { ReactNode } from "react";
-import MobileNavbar from "@/components/Navbars/MobileNavbar";
 import ToastContainer from "@/components/systems/ToastContainer";
+import MobileNavbar from "@/components/navbars/MobileNavbar";
 
 const catamaran = Catamaran({
   weight: "900",
   variable: "--font-catamaran",
   display: "swap",
   subsets: ["latin"],
+  adjustFontFallback: false,
 });
 
 const nunitoSans = Nunito_Sans({
@@ -17,14 +18,15 @@ const nunitoSans = Nunito_Sans({
   display: "swap",
   variable: "--font-nunito-sans",
   subsets: ["latin"],
+  adjustFontFallback: false,
 });
 
 const roboto = Roboto({
   weight: "400",
   subsets: ["latin"],
   display: "swap",
-  // adjustFontFallback: false,
   variable: "--font-roboto",
+  adjustFontFallback: false,
 });
 
 export const metadata = {
