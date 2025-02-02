@@ -1,0 +1,1 @@
+export const openExchangeRatesApiKey = process.env.NEXT_PUBLIC_EXCHANGERATES_APP_ID
