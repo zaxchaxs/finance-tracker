@@ -31,7 +31,7 @@ export default function SignUpForm() {
       message: "Loading...",
       isLoading: true,
     });
-
+    
     try {
       const name = form.getValues("name");
       const email = form.getValues("email");
@@ -107,6 +107,7 @@ export default function SignUpForm() {
                   label="Confirm Password"
                   placeholder="Confirm Password"
                   className="text-primary"
+                  type="password"
                 />
               )}
             />

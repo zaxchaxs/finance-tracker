@@ -19,7 +19,7 @@ import {
 import { auth, db } from "./firebase";
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
 
-const addUser = async (idUser, newData) => {
+export const addUser = async (idUser, newData) => {
   try {
     const userRef = doc(db, "users", `${idUser}`);
     await setDoc(userRef, newData);
@@ -29,7 +29,7 @@ const addUser = async (idUser, newData) => {
   }
 };
 
-const getDocUserById = async (idUser) => {
+export const getDocUserById = async (idUser) => {
   try {
     const userRef = doc(db, "users", idUser);
     const docSnap = await getDoc(userRef);
@@ -44,7 +44,17 @@ const getDocUserById = async (idUser) => {
   }
 };
 
-const updateWalletDoc = async (accountId, newData) => {
+export const addDocWallet = async (newData) => {
+  try {
+    const docRef = collection(db, "user-wallets");
+    await addDoc(docRef, newData);
+  } catch (error) {
+    console.error(error.message);
+    throw new Error(`Something wrong: ${error.message}`);
+  }
+};
+
+export const updateWalletDoc = async (accountId, newData) => {
   try {
     const q = query(
       collection(db, "user-wallets"),
@@ -64,7 +74,7 @@ const updateWalletDoc = async (accountId, newData) => {
   }
 };
 
-const deleteWalletDoc = async (accountId, userId) => {
+export const deleteWalletDoc = async (accountId, userId) => {
   try {
     // Deleting transactions history of the wallet first
     const queryTransac = query(
@@ -106,7 +116,118 @@ const deleteWalletDoc = async (accountId, userId) => {
   }
 };
 
-const loginWithEmailAndPassword = async (email: string, password: string) => {
+export const getSnapshotUserWallet = <T,>(idUser: string, onUpdate: (data: T[]) => void): (() => void) => {
+    const q = query(
+      collection(db, "user-wallets"),
+      where("userId", "==", idUser)
+    );
+
+    const unsubscribe = onSnapshot<DocumentData, DocumentData>(q, (snapshot) => {
+      const response = snapshot.docs.map((doc) => ({ ...doc.data() as T }));
+      onUpdate(response)
+    }, error => {
+      console.error(error.message)
+      throw new Error(error.message);
+    });
+    
+    return unsubscribe;
+};
+
+export const getSnapshotUserTransaction = async (idUser, setTransaction, limitNum) => {
+
+  try {
+    const q = limitNum ?
+      query(
+        collection(db, `user-transactions/${idUser}/transactions`),
+        orderBy("createdAt", "desc"),
+        limit(limitNum)
+      ) :
+      query(
+        collection(db, `user-transactions/${idUser}/transactions`),
+        orderBy("date", "desc"),
+      )
+
+    const unsubscribe = onSnapshot(q, (snapshot) => {
+      const data = snapshot.docs.map((e) => ({
+        ...e.data(),
+      }));
+      setTransaction(data);
+    });
+  } catch (error) {
+    console.error(error.message);
+  }
+};
+
+export const getDocsFilterdTransactions = async (idUser, startAt, endAt, walletId, setTransaction) => {
+  try {
+    const q = walletId ?
+      query(
+        collection(db, `user-transactions/${idUser}/transactions`),
+        where("date", ">=", startAt),
+        where("date", "<=", endAt),
+        where('accountId', '==', walletId),
+        orderBy("date", "desc")
+      )
+      :
+      query(
+        collection(db, `user-transactions/${idUser}/transactions`),
+        where("date", ">=", startAt),
+        where("date", "<=", endAt),
+        orderBy("date", "desc")
+      )
+
+    const docSnap = await getDocs(q);
+    const data = docSnap.docs.map(document => document.data());
+
+    setTransaction(data);
+
+  } catch (error) {
+    console.error(error.message);
+    throw new Error(`Error getDocs: ${error.message}`)
+  }
+}
+
+export const addDocTransaction = async (idUser, newData) => {
+  // updating amount of wallet
+  try {
+    const q = query(
+      collection(db, "user-wallets"),
+      where("userId", "==", idUser)
+    );
+    const docSnapshot = await getDocs(q);
+    if (docSnapshot.empty) throw Error;
+
+    const currWallet = docSnapshot.docs.find(
+      (el) =>
+        el.data().userId === idUser && el.data().accountId === newData.accountId
+    );
+    const walletRef = currWallet.ref;
+
+    if (newData.type == "income") {
+      await updateDoc(walletRef, {
+        amount: currWallet.data().amount + newData.amount,
+      });
+    } else {
+      await updateDoc(walletRef, {
+        amount: currWallet.data().amount - newData.amount,
+      });
+    }
+  } catch (error) {
+    console.error(error.message);
+    throw new Error(`Failed to update amount wallet`);
+  }
+
+  // addingDoc
+  try {
+    const docRef = collection(db, `user-transactions/${idUser}/transactions`);
+    await addDoc(docRef, newData);
+  } catch (error) {
+    console.error(error.message);
+    throw new Error(`Failed to add transaction`);
+  }
+};
+
+export const loginWithEmailAndPassword = async (email: string, password: string) => {
   try {
     const { user } = await signInWithEmailAndPassword(auth, email, password);
     if (user) await getDocUserById(user.uid);
@@ -118,7 +239,7 @@ const loginWithEmailAndPassword = async (email: string, password: string) => {
   };
 };
 
-const registerWithEmailAndPassword = async (name: string, email: string, password: string) => {
+export const registerWithEmailAndPassword = async (name: string, email: string, password: string) => {
   try {
     // firebase auth
     const { user } = await createUserWithEmailAndPassword(auth, email, password);
@@ -140,13 +261,4 @@ const registerWithEmailAndPassword = async (name: string, email: string, passwor
     const errMessage = e instanceof Error ? e.message : "Something wrong!";
     console.error(errMessage);
   }
-};
-
-export {
-  loginWithEmailAndPassword,
-  registerWithEmailAndPassword,
-  getDocUserById,
-  addUser,
-  updateWalletDoc,
-  deleteWalletDoc,
 };
