@@ -13,7 +13,6 @@ export default function Home() {
   const [isAlertOpen, setIsAlertOpen] = useState<boolean>(true);
   const { currUser, loading } = useAuth();
 
-
   return loading ? (
     <LoaderPage />
   ) : (
@@ -24,16 +23,10 @@ export default function Home() {
         isOpen={isAlertOpen}
         onAlertClose={() => setIsAlertOpen(false)}
       />
-      {/* <ToastContainer
-        position="top-right"
-        limit={3}
-        className={"flex flex-col items-end rounded-lg mt-20"}
-        style={{ marginTop: "4rem" }}
-      /> */}
-
       <TitleSection className="text-3xl text-primary text-center font-header font-bold">
         Finance Tracker
       </TitleSection>
+
       <Image
         src={homeIcon}
         width={700}
