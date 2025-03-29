@@ -14,7 +14,7 @@ import useToast from "@/hooks/useToast";
 import { ExchangeRateDataType } from "@/types/common";
 import { transferBalanceSchema } from "@/types/transactionTypes";
 import { WalletType } from "@/types/walletTypes";
-import { currencyFormat } from "@/utils/currencyFormat";
+import { currencyFormat } from "@/utils/strings";
 import { zodResolver } from "@hookform/resolvers/zod";
 import React from "react";
 import { useState } from "react";

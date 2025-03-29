@@ -1,7 +1,7 @@
 import { WalletType } from "@/types/walletTypes";
 import DescriptionSection from "../ui/Description";
 import Image from "next/image";
-import { currencyFormat } from "@/utils/currencyFormat";
+import { currencyFormat } from "@/utils/strings";
 import Link from "next/link";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBarsStaggered } from "@fortawesome/free-solid-svg-icons";

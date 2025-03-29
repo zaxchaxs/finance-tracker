@@ -163,7 +163,7 @@ export default function SettingPageModule({ userDoc }: PropsType) {
         <Button variant={"destructive"}>Delete my account</Button>
       </div>
       {transactionLoading && (
-        <LoadingFullPage description="This may take a few minutes" />
+        <LoadingFullPage className="bg-primary/30 backdrop-blur-sm" description="This may take a few minutes" />
       )}
     </main>
   );

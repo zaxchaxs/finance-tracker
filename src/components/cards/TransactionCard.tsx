@@ -2,15 +2,15 @@ import { TransactionType } from "@/types/transactionTypes";
 import TitleSection from "../ui/Title";
 import DescriptionSection from "../ui/Description";
 import { Timestamp } from "firebase/firestore";
-import { dateToString } from "@/utils/dateConverts";
-import { currencyFormat } from "@/utils/currencyFormat";
+import { currencyFormat } from "@/utils/strings";
+import { firestoreDateToString } from "@/utils/strings";
 
 type PropsType = {
   data: TransactionType;
 };
 
 const TransactionCard = ({ data }: PropsType) => {
-  const date = dateToString(
+  const date = firestoreDateToString(
     new Timestamp(data.date.seconds, data.date.nanoseconds)
   );
 
