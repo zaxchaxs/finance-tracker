@@ -9,13 +9,13 @@ import { TransactionType } from "@/types/transactionTypes";
 import { faCaretRight } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useMemo, useState } from "react";
+
 type PropsType = {
   transactions: TransactionType[]
   loadingGetTransaction: boolean;
   title?: string;
   itemsPerPage?: number;
 };
-
 
 const CurrentTransactionSection = ({
   transactions,

@@ -6,6 +6,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import CurrentTransactionSection from "../Dashboards/CurrentTransactionSection";
 import { TransactionType } from "@/types/transactionTypes";
 import BalanceTransferSection from "./BalanceTransferSection";
+import DownloadTransactionSection from "./DownloadTransactionSection";
 
 const TransactionModule = () => {
   const { currUser } = useAuth();
@@ -61,6 +62,7 @@ const TransactionModule = () => {
           <BalanceTransferSection wallets={walletData} />
         </TabsContent>
       </Tabs>
+      <DownloadTransactionSection wallets={walletData} loadingGetWallets={loadingGetWallet} title="Download transactions data" />
       <CurrentTransactionSection loadingGetTransaction={transactionLoading} transactions={transactionsData} />
     </div>
   );

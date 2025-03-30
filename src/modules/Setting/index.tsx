@@ -29,8 +29,6 @@ export default function SettingPageModule({ userDoc }: PropsType) {
   const [totalWallet, setTotalWallet] = useState<number>(0);
   const router = useRouter();
   const { currUser } = useAuth();
-  const { pushToast } = useToast();
-  
 
   const {
     data: transactionsData,

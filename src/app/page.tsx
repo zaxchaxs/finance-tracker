@@ -2,19 +2,19 @@
 import Image from "next/image";
 import homeIcon from "../../public/homeIcon.svg";
 import { useAuth } from "@/contexts/AuthContext";
-import LoaderPage from "@/components/loaders/loaderPage";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { AlertModal } from "@/components/systems/AlertModal";
 import TitleSection from "@/components/ui/Title";
 import Link from "next/link";
+import LoadingFullPage from "@/components/systems/LoadingFullPage";
 
 export default function Home() {
   const [isAlertOpen, setIsAlertOpen] = useState<boolean>(true);
   const { currUser, loading } = useAuth();
 
   return loading ? (
-    <LoaderPage />
+    <LoadingFullPage className="bg-background z-0" />
   ) : (
     <main className="min-h-screen p-5 relative z-10 text-secondary bg-background w-full flex flex-col items-center justify-center py-10 gap-4">
       <AlertModal
