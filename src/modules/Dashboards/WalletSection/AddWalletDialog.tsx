@@ -25,10 +25,7 @@ type SelectedCurrValType = {
 };
 
 export function AddWalletDialog({ isOpen, setIsOpen }: PropsType) {
-  const [selectedCurrency, setSelectedCurrency] =
-    useState<SelectedCurrValType>();
   const { currUser: user } = useAuth();
-
   const { postData, loading } = usePostData();
 
   const form = useForm<z.infer<typeof addWalletSchema>>({
@@ -37,12 +34,6 @@ export function AddWalletDialog({ isOpen, setIsOpen }: PropsType) {
     reValidateMode: "onSubmit",
     shouldFocusError: true,
   });
-
-  const handleCurrencyChange = (e: string) => {
-    const selectedCurrVal: SelectedCurrValType = JSON.parse(e);
-    setSelectedCurrency(selectedCurrVal);
-    form.setValue("currency", e);
-  };
 
   const handleSubmitForm = (values: z.infer<typeof addWalletSchema>) => {
     const newData: WalletType = {
@@ -111,7 +102,7 @@ export function AddWalletDialog({ isOpen, setIsOpen }: PropsType) {
                 : "Select Currency First"
             }
             type="numeric-currency"
-            prefix={selectedCurrency?.symbol + " "}
+            prefix={form.getValues("currency") ? `${JSON.parse(form.getValues("currency")).symbol} ` : ""}
             disabled={form.getValues("currency") ? false : true}
           />
         )}

@@ -22,7 +22,7 @@ import { convertJSONToCSV, firestoreDateToString } from "@/utils/strings";
 import { faCaretRight } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Timestamp } from "firebase/firestore";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 type PropsType = {
   title?: string;
@@ -90,7 +90,7 @@ export default function DownloadTransactionSection({
         `transactions_${docUser?.name}_${new Date().getMilliseconds()}.csv`
       );
       pushToast({
-        message: "Downloading...",
+        message: "Downloaded",
         isError: false
       })
     } catch (error) {
