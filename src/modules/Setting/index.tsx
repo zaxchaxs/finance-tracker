@@ -1,3 +1,5 @@
+import { AlertModal } from "@/components/systems/AlertModal";
+import ConfirmSubmitDialog from "@/components/systems/ConfirmSubmitDialog";
 import LoadingFullPage from "@/components/systems/LoadingFullPage";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -6,15 +8,21 @@ import { Label } from "@/components/ui/label";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Switch } from "@/components/ui/switch";
 import TitleSection from "@/components/ui/Title";
+import Unauthenticate from "@/components/Unauthenticate";
 import { useAuth } from "@/contexts/AuthContext";
 import { useSnapshotDatas } from "@/hooks/FirestoreApiHooks";
 import useToast from "@/hooks/useToast";
 import { cn } from "@/lib/utils";
-import { getDocumentCount, logout } from "@/libs/firestoreMethods";
+import {
+  deleteUserAccount,
+  getDocumentCount,
+  logout,
+} from "@/libs/firestoreMethods";
 import { UserDocType } from "@/types/authenticationModel";
 import { TransactionType } from "@/types/transactionTypes";
 import { convertJSONToCSV, firestoreDateToString } from "@/utils/strings";
-import { Timestamp } from "firebase/firestore";
+import { User } from "firebase/auth";
+import { Timestamp, where } from "firebase/firestore";
 import { LucideArrowLeftRight, LucideWallet } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { ReactNode, useEffect, useState } from "react";
@@ -27,8 +35,10 @@ export default function SettingPageModule({ userDoc }: PropsType) {
   const [loading, setLoading] = useState<boolean>(false);
   const [totalTransaction, setTotalTransaction] = useState<number>(0);
   const [totalWallet, setTotalWallet] = useState<number>(0);
+  const [isAlertDelOpen, setIsAlertDelOpen] = useState<boolean>(false);
   const router = useRouter();
   const { currUser } = useAuth();
+  const { pushToast, updateToast } = useToast();
 
   const {
     data: transactionsData,
@@ -49,7 +59,7 @@ export default function SettingPageModule({ userDoc }: PropsType) {
   const getItemCount = async () => {
     setLoading(true);
     try {
-      const walletCount = await getDocumentCount("user-wallets");
+      const walletCount = await getDocumentCount("user-wallets", where("userId", "==", currUser?.uid));
       setTotalWallet(walletCount);
       const transactionCount = await getDocumentCount(
         `user-transactions/${userDoc.userId}/transactions`
@@ -92,6 +102,29 @@ export default function SettingPageModule({ userDoc }: PropsType) {
     router.push("/signIn");
   };
 
+  // using paramer to avoid typescript error
+  const handleDeleteUser = async (user: User) => {
+    const toastId = pushToast({
+      message: "Deleting account...",
+      isLoading: true,
+    })
+    try {
+      await deleteUserAccount(user);
+      updateToast({
+        toastId,
+        message: "Account deleted",
+        isError: false
+      })
+    } catch (error) {
+      const errMessage = error instanceof Error ? error.message : "Something wrong!";
+      updateToast({
+        toastId,
+        message: errMessage,
+        isError: true,
+      })
+    }
+  }
+
   const downloadCSV = (csv: string, filename: string) => {
     const blob = new Blob([csv], { type: "text/csv" });
     const url = URL.createObjectURL(blob);
@@ -105,7 +138,9 @@ export default function SettingPageModule({ userDoc }: PropsType) {
     URL.revokeObjectURL(url);
   };
 
-  return (
+  return !currUser ? (
+    <Unauthenticate />
+  ) : (
     <main className="min-h-screen text-base relative w-full flex flex-col items-center">
       <div className="w-full flex flex-col gap-3">
         <div className="bg-primary p-4 flex flex-col gap-4 items-center justify-center w-full rounded-b-5xl">
@@ -158,10 +193,28 @@ export default function SettingPageModule({ userDoc }: PropsType) {
         </div>
       </div>
       <div className="w-fit p-4">
-        <Button variant={"destructive"}>Delete my account</Button>
+        <Button
+          onClick={() => setIsAlertDelOpen(true)}
+          variant={"destructive"}
+        >
+          Delete my account
+        </Button>
       </div>
+
+      <ConfirmSubmitDialog
+        title="Delete Account"
+        description="Are you sure you want to delete your account? This action cannot be undone."
+        isOpen={isAlertDelOpen}
+        onDialogClose={() => setIsAlertDelOpen(false)}
+        onSubmit={() => handleDeleteUser(currUser)}
+        confirmText="Delete"
+      />
+
       {transactionLoading && (
-        <LoadingFullPage className="bg-primary/30 backdrop-blur-sm" description="This may take a few minutes" />
+        <LoadingFullPage
+          className="bg-primary/30 backdrop-blur-sm"
+          description="This may take a few minutes"
+        />
       )}
     </main>
   );

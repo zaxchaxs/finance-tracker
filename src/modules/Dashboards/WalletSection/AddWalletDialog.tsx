@@ -1,6 +1,6 @@
 "use client";
 
-import { Dispatch, SetStateAction, useState } from "react";
+import { Dispatch, SetStateAction } from "react";
 import { currencyIcons, listCurrency } from "@/core/AppData/currencies";
 import { useForm } from "react-hook-form";
 import { z } from "zod";

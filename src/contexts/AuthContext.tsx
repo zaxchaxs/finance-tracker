@@ -34,7 +34,7 @@ export function AuthProviderContext({ children }: PropType) {
       setDocUser(userDocument)
     } catch (e) {
       const message = e instanceof Error ? e.message : "Something wrong!"
-      console.error(message);
+      // console.error(message);
     }
   };
 

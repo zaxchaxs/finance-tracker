@@ -6,9 +6,16 @@ import {
   getCountFromServer,
   getDoc,
   setDoc,
+  deleteDoc,
+  getDocs,
+  where,
+  query,
+  QueryFieldFilterConstraint,
+  QueryConstraint,
+  QueryCompositeFilterConstraint
 } from "firebase/firestore";
 import { auth, db } from "./firebase";
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "firebase/auth";
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, deleteUser, User } from "firebase/auth";
 import { UserDocType } from "@/types/authenticationModel";
 
 export const addUser = async (idUser: string, newData: object) => {
@@ -83,10 +90,34 @@ export const logout = async () => {
   }
 }
 
-export const getDocumentCount = async (collectionName: string) => {
+export const deleteUserAccount = async (user: User) => {
   try {
-    const col = collection(db, collectionName);
-    const snapshot = await getCountFromServer(col);
+    const transactionQ = query(collection(db, "user-transactions", user.uid, "transactions"));
+    const transactionSnap = await getDocs(transactionQ);
+    transactionSnap.forEach(async doc => {
+      deleteDoc(doc.ref)
+    });
+    
+    // delete all wallets
+    const walletQ = query(collection(db, 'user-wallets'), where("userId", "==", user.uid))
+    const walletSnap = await getDocs(walletQ);
+    walletSnap.forEach(async (doc) => {  
+      await deleteDoc(doc.ref)
+    })
+
+    const userRef = doc(db, "users", user.uid);
+    await deleteDoc(userRef);
+    await deleteUser(user);
+  } catch (error) {
+    const errMessage = error instanceof Error ? error.message : "Something wrong!";
+    console.error(errMessage);
+  }
+}
+
+export const getDocumentCount = async (collectionName: string, ...queryConstainr: QueryConstraint[]) => {
+  try {
+    const q = query(collection(db, collectionName), ...queryConstainr)
+    const snapshot = await getCountFromServer(q);
     return snapshot.data().count;
   } catch (error) {
     const errMessage = error instanceof Error ? error.message : "Something wrong!";
