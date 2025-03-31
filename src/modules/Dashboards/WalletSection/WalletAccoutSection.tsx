@@ -67,13 +67,9 @@ const WalletAccountSection = ({ wallets, isGettingData }: PropsType) => {
                 />
               )}
             </div>
-
-            <AddWalletDialog
-              isOpen={isOpenDialog}
-              setIsOpen={setIsOpenDialog}
-            />
           </div>
         )}
+        <AddWalletDialog isOpen={isOpenDialog} setIsOpen={setIsOpenDialog} />
       </div>
     </div>
   );

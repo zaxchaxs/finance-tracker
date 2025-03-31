@@ -19,11 +19,6 @@ type PropsType = {
   setIsOpen: Dispatch<SetStateAction<boolean>>;
 };
 
-type SelectedCurrValType = {
-  code: string;
-  symbol: string;
-};
-
 export function AddWalletDialog({ isOpen, setIsOpen }: PropsType) {
   const { currUser: user } = useAuth();
   const { postData, loading } = usePostData();
