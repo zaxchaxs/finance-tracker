@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import DescriptionSection from "@/components/ui/Description";
 import { Form, FormField } from "@/components/ui/form";
 import useToast from "@/hooks/useToast";
-import { loginWithEmailAndPassword } from "@/libs/firestoreMethods";
+import { loginWithEmailAndPassword, registerWithGithub, registerWithGoogle } from "@/libs/firestoreMethods";
 import { signInSchema } from "@/types/authenticationModel";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
@@ -52,8 +52,60 @@ export default function SignInForm() {
     }
   };
 
+  const handleSignInWithGoole = async () => {
+    setLoading(true);
+    const toastId = pushToast({
+      message: "Loading...",
+      isLoading: true,
+    });
+    
+    try {
+      await registerWithGoogle();
+      updateToast({
+        toastId,
+        message: "Login with Google successfully",
+      });
+      router.push("/dashboard");
+    } catch (error) {
+      const message = error instanceof Error ? error.message : "Something wrong!"
+      updateToast({
+        toastId,
+        message,
+        isError: true 
+      })
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  const handleSignInWithGithub = async () => {
+    setLoading(true);
+    const toastId = pushToast({
+      message: "Loading...",
+      isLoading: true,
+    });
+    
+    try {
+      await registerWithGithub();
+      updateToast({
+        toastId,
+        message: "Login with Github successfully",
+      });
+      router.push("/dashboard");
+    } catch (error) {
+      const message = error instanceof Error ? error.message : "Something wrong!"
+      updateToast({
+        toastId,
+        message,
+        isError: true 
+      })
+    } finally {
+      setLoading(false);
+    }
+  }
+
   return (
-    <div className="h-full rounded-t-5xl p-6 bg-primary/40">
+    <div className="h-full rounded-t-5xl p-6 bg-primary/40 flex flex-col gap-4">
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(handleSignIn)}
@@ -86,27 +138,27 @@ export default function SignInForm() {
               )}
             />
           </div>
-          <div className="flex flex-col gap-4 items-center">
-            <Button disabled={loading} normalBtn className="w-fit">
-              Sign In
-            </Button>
-            <DescriptionSection>Or login with</DescriptionSection>
-            <div className="flex gap-4 items-center">
-              <Button disabled={loading} normalBtn variant={"destructive"}>
-                Google
-              </Button>
-              <Button disabled={loading} normalBtn variant={"secondary"}>
-                Github
-              </Button>
-            </div>
-            <Link href={"/signUp"}>
-              <DescriptionSection className="text-blue-600 underline">
-                Need an account?
-              </DescriptionSection>
-            </Link>
-          </div>
+          <Button disabled={loading} normalBtn className="w-fit">
+          Sign In
+        </Button>
         </form>
       </Form>
+      <div className="flex flex-col gap-4 items-center">
+        <DescriptionSection>Or login with</DescriptionSection>
+        <div className="flex gap-4 items-center">
+          <Button disabled={loading} normalBtn variant={"destructive"} onClick={handleSignInWithGoole}>
+            Google
+          </Button>
+          <Button className="bg-gray-800 group-hover:bg-gray-700" disabled={loading} normalBtn variant={"default"} onClick={handleSignInWithGithub}>
+            Github
+          </Button>
+        </div>
+        <Link href={"/signUp"}>
+          <DescriptionSection className="text-blue-600 underline">
+            Need an account?
+          </DescriptionSection>
+        </Link>
+      </div>
       <div className="h-screen" />
     </div>
   );

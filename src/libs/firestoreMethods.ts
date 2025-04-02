@@ -10,13 +10,12 @@ import {
   getDocs,
   where,
   query,
-  QueryFieldFilterConstraint,
   QueryConstraint,
-  QueryCompositeFilterConstraint
 } from "firebase/firestore";
 import { auth, db } from "./firebase";
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, deleteUser, User } from "firebase/auth";
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, deleteUser, User, GoogleAuthProvider, signInWithPopup, GithubAuthProvider } from "firebase/auth";
 import { UserDocType } from "@/types/authenticationModel";
+import { FirebaseError } from "firebase/app";
 
 export const addUser = async (idUser: string, newData: object) => {
   try {
@@ -80,6 +79,68 @@ export const registerWithEmailAndPassword = async (name: string, email: string, 
     console.error(errMessage);
   }
 };
+
+export const registerWithGoogle = async () => {
+  try {
+    const provider = new GoogleAuthProvider();
+    provider.setCustomParameters({
+      prompt: "select_account"
+    });
+    const { user } = await signInWithPopup(auth, provider);
+    if (user) {
+      const newData = {
+        userId: user.uid,
+        email: user.email,
+        name: user.displayName,
+        createdAt: new Date(),
+        photoURL: user.photoURL
+
+      }
+      await addUser(user.uid, newData);
+    } else {
+      throw new Error("Firebase error authenticating")
+    }
+  } catch (error) {    
+    const credential = GoogleAuthProvider.credentialFromError(error as FirebaseError);
+    if (credential) {
+      console.error(credential);
+    }
+    const errMessage = error instanceof Error ? error.message : "Something wrong!";
+    console.error(errMessage);
+    throw new Error(errMessage);
+  }
+}
+
+export const registerWithGithub = async () => {
+  try {
+    const provider = new GithubAuthProvider();
+    provider.setCustomParameters({
+      prompt: "select_account"
+    });
+    const { user } = await signInWithPopup(auth, provider);
+    if (user) {
+      const newData = {
+        userId: user.uid,
+        email: user.email,
+        name: user.displayName,
+        createdAt: new Date(),
+        photoURL: user.photoURL
+
+      }
+      await addUser(user.uid, newData);
+    } else {
+      throw new Error("Firebase error authenticating")
+    }
+  } catch (error) {    
+    const credential = GithubAuthProvider.credentialFromError(error as FirebaseError);
+    if (credential) {
+      console.error(credential);
+    }
+    const errMessage = error instanceof Error ? error.message : "Something wrong!";
+    console.error(errMessage);
+    throw new Error(errMessage);
+  }
+}
 
 export const logout = async () => {
   try {
