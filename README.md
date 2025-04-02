@@ -1,27 +1,24 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
-
 # Personal Finance Tracker
 
 This is an web application that helps users record their income and expenses, as well as create and manage budgets. With interactive visualizations, this app makes it easy for users to track their financial situation efficiently.
 
 ### Key Features
 - Authentication: Users can register and log in to access their financial data.
+- Custom Wallets: Users can create a wallet with multiples currencies
 - Transaction Recording: Users can log their income and expenses.
-- Budget Creation: Users can create and track their monthly budgets.
 - Financial Analysis: Provides charts and visualizations for income and expense analysis.
-- Bill Reminders: Notifications for bill payments (Not yet available).
-- Data Import/Export: Ability to import and export data in CSV format (Not yet available)
+- Data Import/Export: Ability to import and export data in CSV format
 
 ### Upcoming Features
 - Bill Reminders
-- Detailed Financial Reports
-- Data Import and Export Features
-- User settings for currency
+- Detailed Wallet
+- Data Import Features
+- Optimized the desktop layout
 
 ## Tech Stack
-- FrontEnd: React, Next.js, Tailwind CSS, Framer Motion, sweetalert, react toastify
+- FrontEnd: Next.js, Tailwind CSS, Framer Motion, React Hot Toast, React Hook Form, Zod
 - BackEnd: Firebase Firestore, Firebase Auth
-- Charts: recharts
+- Charts: Recharts
 - Deployment: Vercel
   
 ## Screenshots
