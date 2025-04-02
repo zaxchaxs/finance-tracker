@@ -19,7 +19,7 @@ export default function Home() {
     <main className="min-h-screen p-5 relative z-10 text-secondary bg-background w-full flex flex-col items-center justify-center py-10 gap-4">
       <AlertModal
         title="Hello There"
-        description="This web only works well on mobile view, and the only available currency is IDR for now. Cuz I’m just too lazy 😁."
+        description="For now, this web only works well on mobile view."
         isOpen={isAlertOpen}
         onAlertClose={() => setIsAlertOpen(false)}
       />
