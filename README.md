@@ -3,7 +3,7 @@
 This is an web application that helps users record their income and expenses, as well as create and manage budgets. With interactive visualizations, this app makes it easy for users to track their financial situation efficiently.
 
 ### Key Features
-- Authentication: Users can register and log in to access their financial data.
+- Authentication: Users can register and log in to access their financial data. And user can login with google and github account
 - Custom Wallets: Users can create a wallet with multiples currencies
 - Transaction Recording: Users can log their income and expenses.
 - Financial Analysis: Provides charts and visualizations for income and expense analysis.
