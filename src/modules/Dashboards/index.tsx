@@ -50,9 +50,7 @@ const DashboardModule = () => {
           wallets={walletData}
           isGettingData={loadingGetWallet}
         />
-
         <TransactionReportSection isGettingWallets={loadingGetWallet} wallets={walletData} />
-
         {/* Current Transaction Section */}
         <CurrentTransactionSection loadingGetTransaction={transactionLoading} transactions={transactionsData} />
       </div>
